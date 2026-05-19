@@ -14,52 +14,54 @@ import {
 
 const categories = [
   {
-    title: "Frontend",
+    title: "Next.js & Mobile (PWA)",
     icon: Code2,
     techs: [
-      { name: "React", level: 95 },
-      { name: "Next.js", level: 92 },
-      { name: "TypeScript", level: 90 },
-      { name: "Tailwind CSS", level: 95 },
+      { name: "Next.js (Domínio Principal)", level: 98 },
+      { name: "PWA (Aplicações Mobile/Web)", level: 95 },
+      { name: "React & TypeScript", level: 92 },
+      { name: "Tailwind CSS v4 & Motion", level: 90 },
     ],
   },
   {
-    title: "Backend",
+    title: "Backend & APIs",
     icon: Server,
     techs: [
-      { name: "Node.js", level: 90 },
-      { name: "Python", level: 85 },
-      { name: "PostgreSQL", level: 88 },
-      { name: "Prisma", level: 85 },
+      { name: "Node.js & Fastify", level: 90 },
+      { name: "Prisma ORM & PostgreSQL", level: 88 },
+      { name: "APIs REST & Integrações LDAP", level: 88 },
+      { name: "Supabase & Firebase", level: 82 },
     ],
   },
   {
-    title: "Mobile",
-    icon: Smartphone,
+    title: "Infraestrutura & Deploy",
+    icon: Database,
     techs: [
-      { name: "Flutter", level: 88 },
-      { name: "React Native", level: 82 },
-      { name: "Dart", level: 85 },
-      { name: "iOS/Android", level: 80 },
+      { name: "Docker & Docker Compose", level: 95 },
+      { name: "Coolify (Self-hosting & Deploy)", level: 90 },
+      { name: "GCP BigQuery & S3 Storage", level: 85 },
+      { name: "Vitest (Testes E2E/Unit)", level: 80 },
     ],
   },
   {
-    title: "Automação & DevOps",
+    title: "Automação & Dados",
     icon: Cog,
     techs: [
-      { name: "Docker", level: 85 },
-      { name: "CI/CD", level: 82 },
-      { name: "AWS", level: 78 },
-      { name: "Python Scripts", level: 90 },
+      { name: "Python (Pandas & NumPy)", level: 95 },
+      { name: "PyAutoGUI & Selenium (RPA)", level: 95 },
+      { name: "Gemini API & OpenAI SDK", level: 88 },
+      { name: "ETL & Scripting Avançado", level: 90 },
     ],
   },
 ]
 
 const additionalTools = [
-  { name: "Git", icon: Terminal },
+  { name: "Next.js / PWA", icon: Code2 },
+  { name: "Docker & Compose", icon: Server },
+  { name: "Coolify", icon: Cloud },
+  { name: "TypeScript", icon: Code2 },
+  { name: "Git & GitHub", icon: Terminal },
   { name: "Figma", icon: Palette },
-  { name: "MongoDB", icon: Database },
-  { name: "Vercel", icon: Cloud },
 ]
 
 export function TechStackSection() {

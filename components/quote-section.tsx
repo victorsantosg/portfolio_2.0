@@ -15,6 +15,7 @@ import {
   Smartphone,
   Cog,
   Building2,
+  Phone,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -38,14 +39,20 @@ const timelines = [
 const contactLinks = [
   {
     label: "Email",
-    value: "contato@victorpeixoto.dev",
-    href: "mailto:contato@victorpeixoto.dev",
+    value: "victoorsaantos16@gmail.com",
+    href: "mailto:victoorsaantos16@gmail.com",
     icon: Mail,
   },
   {
+    label: "WhatsApp / Telefone",
+    value: "(85) 99955-6385",
+    href: "https://wa.me/5585999556385",
+    icon: Phone,
+  },
+  {
     label: "GitHub",
-    value: "@victorpeixoto",
-    href: "https://github.com/victorpeixoto",
+    value: "@victorsantosg",
+    href: "https://github.com/victorsantosg",
     icon: Github,
   },
   {

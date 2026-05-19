@@ -35,7 +35,7 @@ export function Footer() {
             className="text-center"
           >
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} Victor Peixoto. Todos os direitos reservados.
+              © {new Date().getFullYear()} Victor Santos. Todos os direitos reservados.
             </p>
           </motion.div>
 

@@ -11,96 +11,97 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
+import Image from "next/image"
 
 const projects = [
   {
     id: 1,
-    title: "FinTrack Pro",
-    description: "Dashboard financeiro completo com análises em tempo real e integração bancária",
+    title: "ERP Corporativo (API & UI)",
+    description: "Sistema integrado de ERP com Módulo de Inventário Avançado, controle de estoque e dashboard financeiro.",
     category: "web",
-    image: "/api/placeholder/600/400",
-    tags: ["Next.js", "TypeScript", "Prisma", "PostgreSQL"],
-    github: "https://github.com",
-    demo: "https://demo.com",
+    image: "/inventario_img_enhanced.png",
+    tags: ["Next.js", "Fastify", "Prisma ORM", "PostgreSQL", "Tailwind CSS v4"],
+    github: "https://github.com/victorsantosg/erp-ui",
+    demo: "https://github.com/victorsantosg/erp-ui",
     details: {
-      challenge: "Criar uma plataforma que centralizasse todas as finanças pessoais e empresariais com análises preditivas.",
-      solution: "Desenvolvemos um dashboard modular com gráficos interativos, categorização automática de transações e alertas personalizados.",
-      techStack: ["Next.js 14", "TypeScript", "Prisma ORM", "PostgreSQL", "Chart.js", "Tailwind CSS", "Vercel"],
+      challenge: "Criar uma plataforma de ERP responsiva de alta fidelidade e performance com tabelas de dados complexas e sincronização segura com o banco de dados.",
+      solution: "Desenvolvi o frontend modular utilizando Next.js 15, React 19 e TanStack Table para manipulação rápida de grandes conjuntos de dados, conectado a uma API robusta construída com Fastify, Prisma e PostgreSQL.",
+      techStack: ["Next.js 15", "React 19", "Fastify", "Prisma ORM", "PostgreSQL", "Tailwind CSS v4", "TanStack Table", "Docker"],
     },
   },
   {
     id: 2,
-    title: "DeliverEats",
-    description: "Aplicativo mobile de delivery com rastreamento em tempo real e pagamento integrado",
-    category: "mobile",
-    image: "/api/placeholder/600/400",
-    tags: ["Flutter", "Firebase", "Node.js", "Stripe"],
-    github: "https://github.com",
-    demo: "https://demo.com",
+    title: "Dashboard de BI & Analytics Suite",
+    description: "Portal de Business Intelligence corporativo com gráficos dinâmicos de faturamento, margens e metas de vendas.",
+    category: "data",
+    image: "/analytics-suite.png",
+    tags: ["Flutter", "PlutoGrid", "Firebase", "Syncfusion Charts", "BigQuery"],
+    github: "https://github.com/victorsantosg/cometa_analytics",
+    demo: "https://github.com/victorsantosg/cometa_analytics",
     details: {
-      challenge: "Desenvolver um app de delivery que fosse rápido, intuitivo e oferecesse rastreamento preciso.",
-      solution: "Criamos um app Flutter com arquitetura limpa, integração com Google Maps para rastreamento e sistema de pagamento Stripe.",
-      techStack: ["Flutter", "Dart", "Firebase", "Node.js", "Express", "Stripe API", "Google Maps API"],
+      challenge: "Desenvolver uma plataforma de exploração de dados extremamente rápida, robusta e multiplataforma para acompanhar métricas de vendas e faturamento em tempo real.",
+      solution: "Implementei um app em Flutter usando PlutoGrid para renderização rápida de tabelas de dados complexas e Syncfusion Charts para visualizações interativas de dados consolidados do BigQuery e Firestore.",
+      techStack: ["Flutter (Dart)", "PlutoGrid", "Firebase Auth & Firestore", "Syncfusion Charts", "Google APIs (BigQuery)"],
     },
   },
   {
     id: 3,
-    title: "AutoBot HR",
-    description: "Sistema de automação para RH com processamento de currículos via IA",
-    category: "automation",
-    image: "/api/placeholder/600/400",
-    tags: ["Python", "OpenAI", "Docker", "AWS"],
-    github: "https://github.com",
-    demo: "https://demo.com",
+    title: "Gestão de Projetos & Dashboard de Obras",
+    description: "Dashboard administrativo de acompanhamento de projetos com mapas interativos, cronogramas de progresso e relatórios dinâmicos.",
+    category: "web",
+    image: "/mapa_calor_img_enhanced.png",
+    tags: ["Next.js 16", "Supabase", "Prisma", "Recharts", "Maps"],
+    github: "https://github.com/victorsantosg/projectGestao",
+    demo: "https://github.com/victorsantosg/projectGestao",
     details: {
-      challenge: "Automatizar a triagem de currículos e agendamento de entrevistas para grandes empresas.",
-      solution: "Implementamos um sistema com IA para análise de currículos, ranking automático de candidatos e integração com calendários.",
-      techStack: ["Python", "OpenAI API", "FastAPI", "Docker", "AWS Lambda", "PostgreSQL", "Redis"],
+      challenge: "Criar uma ferramenta de gestão interna com suporte a mapas geográficos e relatórios estruturados para controle administrativo de projetos locais.",
+      solution: "Construí um painel em Next.js 16 integrado ao Supabase para autenticação e banco PostgreSQL, com mapas de calor regionais utilizando react-simple-maps e relatórios integrados via Mammoth (.docx).",
+      techStack: ["Next.js 16", "React 19", "Supabase", "Prisma ORM", "PostgreSQL", "Recharts", "react-simple-maps", "Mammoth"],
     },
   },
   {
     id: 4,
-    title: "EcoShop",
-    description: "E-commerce sustentável com cálculo de pegada de carbono por produto",
+    title: "API de Laudos & Central de Integrações",
+    description: "API REST de alta performance para emissão de laudos técnicos e integração segura com sistemas de chamados e autenticação LDAP.",
     category: "web",
-    image: "/api/placeholder/600/400",
-    tags: ["React", "Node.js", "MongoDB", "Stripe"],
-    github: "https://github.com",
-    demo: "https://demo.com",
+    image: "/api-laudo.png",
+    tags: ["Fastify", "TypeScript", "LDAP", "GLPI API", "Vitest"],
+    github: "https://github.com/victorsantosg/api-laudo",
+    demo: "https://github.com/victorsantosg/api-laudo",
     details: {
-      challenge: "Criar uma loja virtual que incentivasse compras conscientes mostrando o impacto ambiental.",
-      solution: "Desenvolvemos um e-commerce com API própria para cálculo de carbono e sistema de gamificação para clientes eco-friendly.",
-      techStack: ["React", "Node.js", "Express", "MongoDB", "Stripe", "Redis", "Docker"],
+      challenge: "Integrar e automatizar a sincronização de chamados de suporte técnico, controle de acessos corporativos via LDAP/AD e emissão de laudos com alta confiabilidade.",
+      solution: "Criei um microsserviço com Fastify e TypeScript integrado a APIs externas e autenticação segura LDAP, com testes de integração rodando em Vitest e formatação automatizada via Biome.",
+      techStack: ["Fastify", "TypeScript", "LDAP / Active Directory", "GLPI API", "Vitest", "Biome"],
     },
   },
   {
     id: 5,
-    title: "FitPulse",
-    description: "App de fitness com treinos personalizados por IA e integração com wearables",
-    category: "mobile",
-    image: "/api/placeholder/600/400",
-    tags: ["React Native", "TensorFlow", "Node.js", "PostgreSQL"],
-    github: "https://github.com",
-    demo: "https://demo.com",
+    title: "RPA - Monitoramento de Margens & Mapa de Calor",
+    description: "Automação robótica para cruzamento de notas fiscais, custos de fornecedores e geração de planilhas com mapas de calor de rentabilidade.",
+    category: "automation",
+    image: "/monitoramento_img_enhanced.png",
+    tags: ["Python", "Pandas", "PyAutoGUI", "Selenium", "Cloud Storage"],
+    github: "https://github.com/victorsantosg/monitoramento-margem",
+    demo: "https://github.com/victorsantosg/monitoramento-margem",
     details: {
-      challenge: "Criar treinos personalizados que se adaptassem ao progresso e limitações do usuário.",
-      solution: "Implementamos ML para análise de desempenho e criação dinâmica de treinos com sincronização de smartwatches.",
-      techStack: ["React Native", "TensorFlow Lite", "Node.js", "PostgreSQL", "HealthKit", "Google Fit API"],
+      challenge: "Auditar margens de lucro de milhares de itens e transações financeiras diariamente, cruzando dados de múltiplos relatórios sem intervenção manual.",
+      solution: "Desenvolvi um robô em Python que utiliza Selenium para extração automática de dados fiscais, Pandas para o processamento de custos, formata planilhas com mapas de calor coloridos e realiza o upload seguro das auditorias para o Google Cloud Storage.",
+      techStack: ["Python", "Pandas", "PyAutoGUI", "Selenium", "Google Cloud Storage", "Openpyxl"],
     },
   },
   {
     id: 6,
-    title: "DataSync Pro",
-    description: "Pipeline de dados automatizado com ETL e dashboards analíticos",
-    category: "automation",
-    image: "/api/placeholder/600/400",
-    tags: ["Python", "Apache Airflow", "PostgreSQL", "Grafana"],
-    github: "https://github.com",
-    demo: "https://demo.com",
+    title: "Dom Barbeiro Web App",
+    description: "Aplicativo web para agendamento online de barbearias e gestão administrativa de atendimentos em tempo real.",
+    category: "web",
+    image: "/dom-barbeiro.png",
+    tags: ["React", "Node.js", "Express", "Vercel"],
+    github: "https://github.com/victorsantosg/domBarbeiro",
+    demo: "https://dombarbeiro.vercel.app",
     details: {
-      challenge: "Unificar dados de múltiplas fontes para análises centralizadas em tempo real.",
-      solution: "Criamos um pipeline robusto com Apache Airflow para orquestração e Grafana para visualização de métricas.",
-      techStack: ["Python", "Apache Airflow", "PostgreSQL", "Grafana", "Docker", "AWS S3", "dbt"],
+      challenge: "Criar uma plataforma de reservas intuitiva e responsiva para clientes com painel administrativo em tempo real.",
+      solution: "Plataforma desenvolvida em React com Tailwind CSS no frontend, conectada a uma API em Node.js hospedada na Vercel com banco de dados seguro.",
+      techStack: ["React", "Node.js", "Express", "Vercel", "Tailwind CSS"],
     },
   },
 ]
@@ -108,7 +109,7 @@ const projects = [
 const filters = [
   { id: "all", label: "Todos" },
   { id: "web", label: "Web Apps" },
-  { id: "mobile", label: "Mobile" },
+  { id: "data", label: "Dados & IA" },
   { id: "automation", label: "Automações" },
 ]
 
@@ -203,10 +204,13 @@ export function ProjectsSection() {
 
           {selectedProject && (
             <div className="space-y-6">
-              <div className="aspect-video rounded-lg bg-secondary overflow-hidden">
-                <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                  <Layers className="h-12 w-12" />
-                </div>
+              <div className="aspect-video rounded-lg bg-secondary overflow-hidden relative">
+                <Image
+                  src={selectedProject.image}
+                  alt={selectedProject.title}
+                  fill
+                  className="object-cover"
+                />
               </div>
 
               <div>
@@ -295,24 +299,33 @@ function ProjectCard({
       className="group h-full rounded-2xl bg-card border border-border/50 overflow-hidden hover:border-primary/30 transition-all duration-300"
     >
       <div className="relative aspect-video bg-secondary overflow-hidden">
-        <div className="absolute inset-0 flex items-center justify-center text-muted-foreground group-hover:text-primary transition-colors">
-          <Layers className="h-12 w-12" />
-        </div>
+        {project.image ? (
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center text-muted-foreground group-hover:text-primary transition-colors">
+            <Layers className="h-12 w-12" />
+          </div>
+        )}
 
         <div className="absolute top-3 left-3">
           <Badge
             className={`text-xs ${
               project.category === "web"
                 ? "bg-blue-500/20 text-blue-400"
-                : project.category === "mobile"
+                : project.category === "data"
                 ? "bg-purple-500/20 text-purple-400"
                 : "bg-orange-500/20 text-orange-400"
             }`}
           >
             {project.category === "web"
               ? "Web App"
-              : project.category === "mobile"
-              ? "Mobile"
+              : project.category === "data"
+              ? "Dados & IA"
               : "Automação"}
           </Badge>
         </div>

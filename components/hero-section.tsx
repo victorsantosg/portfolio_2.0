@@ -116,8 +116,8 @@ export function HeroSection() {
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary via-accent to-primary animate-gradient bg-[length:200%_200%] blur-md opacity-60" />
               <div className="relative w-full h-full rounded-full border-2 border-primary/50 overflow-hidden bg-card">
                 <Image
-                  src="/profile.jpg"
-                  alt="Victor Peixoto"
+                  src="/img_victor.jpeg"
+                  alt="Victor Santos"
                   fill
                   className="object-cover"
                   priority
@@ -144,12 +144,12 @@ export function HeroSection() {
             transition={{ delay: 0.3, duration: 0.8 }}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-balance"
           >
-            <span className="text-foreground">Construindo o </span>
+            <span className="text-foreground">Desenvolvimento </span>
             <span className="text-gradient animate-gradient bg-[length:200%_200%]">
-              Futuro
+              Next.js (PWA)
             </span>
             <br />
-            <span className="text-foreground">da Web & Mobile</span>
+            <span className="text-foreground">e Automação de Processos</span>
           </motion.h1>
 
           <motion.p
@@ -158,9 +158,7 @@ export function HeroSection() {
             transition={{ delay: 0.5, duration: 0.8 }}
             className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 text-pretty"
           >
-            Desenvolvedor Full-Stack especializado em criar aplicações web
-            modernas, apps mobile nativos e automações inteligentes que
-            transformam ideias em realidade digital.
+            Analista de Dados e Desenvolvedor Full-Stack focado no ecossistema Next.js para aplicações Web & Mobile (PWA), automações robustas com Python (RPA) e infraestrutura ágil com Docker e Coolify.
           </motion.p>
 
           <motion.div
@@ -200,9 +198,9 @@ export function HeroSection() {
             className="mt-20 flex items-center justify-center gap-12 flex-wrap"
           >
             {[
-              { value: "50+", label: "Projetos" },
-              { value: "5+", label: "Anos Exp." },
-              { value: "30+", label: "Clientes" },
+              { value: "35+", label: "Repositórios" },
+              { value: "3+", label: "Anos Exp." },
+              { value: "100%", label: "Processos Automatizados" },
             ].map((stat, index) => (
               <motion.div
                 key={stat.label}

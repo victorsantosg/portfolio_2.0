@@ -7,11 +7,11 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Victor Peixoto | Desenvolvedor Full-Stack',
-  description: 'Desenvolvedor Full-Stack especializado em aplicações web, mobile e automações. Construindo o futuro da tecnologia com soluções inovadoras.',
+  title: 'Victor Santos | Next.js Developer & Data Specialist',
+  description: 'Portfólio de Victor Santos. Especialista em desenvolvimento Next.js (Web/Mobile/PWA), automações de processos (RPA) com Python, e infraestrutura ágil com Docker e Coolify.',
   generator: 'v0.app',
-  keywords: ['desenvolvedor', 'full-stack', 'react', 'next.js', 'flutter', 'automação', 'web', 'mobile'],
-  authors: [{ name: 'Victor Peixoto' }],
+  keywords: ['next.js', 'pwa', 'docker', 'coolify', 'python', 'rpa', 'automação', 'data analyst', 'react', 'desenvolvedor full-stack'],
+  authors: [{ name: 'Victor Santos' }],
   icons: {
     icon: [
       {
