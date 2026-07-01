@@ -11,9 +11,9 @@ export const translations = {
     hero: {
       available: "Disponível para novos projetos",
       title1: "Desenvolvedor Full Stack",
-      titleGradient: "& Especialista em Automações",
+      titleGradient: "Web & Mobile",
       title2: "",
-      subtitle: "Construindo aplicações de alta performance e arquiteturas robustas em nuvem, integradas a automações inteligentes que otimizam dados e processos.",
+      subtitle: "Especialista em Next.js - Construindo aplicações de alta performance e arquiteturas robustas em nuvem, integradas a automações inteligentes que otimizam dados e processos.",
       ctaPrimary: "Iniciar Projeto",
       ctaSecondary: "Ver Projetos",
       stats: {
