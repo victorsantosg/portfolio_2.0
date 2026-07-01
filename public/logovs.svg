@@ -1,0 +1,116 @@
+<svg viewBox="250 90 530 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Filtro de Brilho Neon Cyber -->
+    <filter id="vs-cyber-glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2.1" result="blur1" />
+      <feGaussianBlur stdDeviation="4.2" result="blur2" />
+      <feGaussianBlur stdDeviation="7.8" result="blur3" />
+      <feMerge>
+        <feMergeNode in="blur3" />
+        <feMergeNode in="blur2" />
+        <feMergeNode in="blur1" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    {/* Gradiente Metalizado Cromo para Solder Nodes */}
+    <radialGradient id="chrome-node-grad" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="30%" stop-color="#d1f5ff" />
+      <stop offset="70%" stop-color="#00f3ff" />
+      <stop offset="90%" stop-color="#052c3d" />
+      <stop offset="100%" stop-color="#000e14" />
+    </radialGradient>
+
+    {/* Gradiente de Cobre/Ouro para Detalhes Solder */}
+    <radialGradient id="gold-node-grad" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="45%" stop-color="#ffd280" />
+      <stop offset="75%" stop-color="#e69d24" />
+      <stop offset="100%" stop-color="#593600" />
+    </radialGradient>
+
+    {/* Gradiente para Trilha de Circuito */}
+    <linearGradient id="vs-circuit-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f3ff" />
+      <stop offset="100%" stop-color="#0055ff" />
+    </linearGradient>
+  </defs>
+
+  {/* Letra V */}
+  <g filter="url(#vs-cyber-glow)">
+    {/* Contorno Neon V */}
+    <path d="M 370 115 L 285 115 L 420 395 L 435 395 L 485 295" stroke="#00f3ff" stroke-width="9.0" stroke-linecap="square" stroke-linejoin="miter" opacity="0.85" />
+    <path d="M 445 420 L 490 330" stroke="#0055ff" stroke-width="4.5" stroke-linecap="round" opacity="0.6" />
+    
+    {/* Linhas de Trilhas de Circuito do V */}
+    <path d="M 345 145 L 345 180 L 415 320" stroke="url(#vs-circuit-grad)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M 390 145 L 445 255" stroke="#00f3ff" stroke-width="3.3" stroke-linecap="round" opacity="0.75" />
+    
+    {/* Miolo Branco Super Brilhante */}
+    <path d="M 368 115 L 287 115 L 420 395 L 433 395 L 482 295" stroke="#ffffff" stroke-width="2.0" stroke-linecap="square" opacity="0.95" />
+  </g>
+
+  {/* Animação do Pulso Elétrico do V */}
+  <g filter="url(#vs-cyber-glow)">
+    <path d="M 345 145 L 345 180 L 415 320" stroke="#ffffff" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="30 150" style="animation: vs-dash 1.0714285714285714s linear infinite" />
+    <path d="M 370 115 L 285 115 L 420 395" stroke="#00f3ff" stroke-width="6.0" stroke-linecap="square" stroke-dasharray="40 220" style="animation: vs-dash 1.0714285714285714s linear infinite; animation-delay: -0.7s" />
+  </g>
+
+  {/* Letra S */}
+  <g filter="url(#vs-cyber-glow)">
+    {/* Contorno Neon S */}
+    <path d="M 520 115 L 725 115 A 25 25 0 0 1 750 140 L 750 142 A 25 25 0 0 1 725 167 L 550 167 A 35 35 0 0 0 515 202 L 515 210 A 35 35 0 0 0 550 245 L 655 245 A 45 45 0 0 1 700 290 L 700 310 A 45 45 0 0 1 655 355 L 490 355" stroke="#0055ff" stroke-width="9.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85" />
+    <path d="M 535 245 L 655 245 A 45 45 0 0 1 700 290 L 700 310 A 45 45 0 0 1 655 355 L 490 355" stroke="#00f3ff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+
+    {/* Trilhas do Miolo do S */}
+    <path d="M 535 141 L 710 141 C 715 141 720 145 720 150 C 720 155 715 159 710 159 L 555 159" stroke="url(#vs-circuit-grad)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M 505 205 C 505 185 540 193 570 193 L 660 193 A 15 15 0 0 1 675 208 A 15 15 0 0 1 660 223 L 560 223" stroke="#00f3ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M 545 327 L 650 327 A 15 15 0 0 0 665 312 A 15 15 0 0 0 650 297 L 575 297" stroke="#0055ff" stroke-width="4.3" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M 535 355 L 650 355 A 15 15 0 0 0 665 340 A 15 15 0 0 0 650 325 L 560 325" stroke="#00f3ff" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round" />
+
+    {/* Linha Branca de Núcleo Brilhante */}
+    <path d="M 520 115 L 725 115 A 25 25 0 0 1 750 140 L 750 142 A 25 25 0 0 1 725 167 L 550 167 A 35 35 0 0 0 515 202 L 515 210 A 35 35 0 0 0 550 245 L 655 245 A 45 45 0 0 1 700 290 L 700 310 A 45 45 0 0 1 655 355 L 490 355" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" opacity="0.95" />
+  </g>
+
+  {/* Animação do Pulso Elétrico do S */}
+  <g filter="url(#vs-cyber-glow)" opacity="0.9">
+    <path d="M 520 115 L 725 115 A 25 25 0 0 1 750 140 L 750 142 A 25 25 0 0 1 725 167 L 550 167 A 35 35 0 0 0 515 202 L 515 210 A 35 35 0 0 0 550 245 L 655 245 A 45 45 0 0 1 700 290 L 700 310 A 45 45 0 0 1 655 355 L 490 355" stroke="#ffffff" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="45 190" style="animation: vs-dash 1.0714285714285714s linear infinite; animation-delay: -0.3s" />
+    <path d="M 535 141 L 710 141 C 715 141 720 145 720 150 C 720 155 715 159 710 159 L 555 159" stroke="#00f3ff" stroke-width="5" stroke-linecap="round" stroke-dasharray="25 100" style="animation: vs-dash 1.0714285714285714s linear infinite; animation-delay: -1.1s" />
+  </g>
+
+  {/* Anéis de Conexão dos Nodes */}
+  <g filter="url(#vs-cyber-glow)" opacity="0.85">
+    <circle cx="345" cy="180" r="11.0" fill="none" stroke="#00f3ff" stroke-width="1.5" />
+    <circle cx="725" cy="115" r="12.5" fill="none" stroke="#0055ff" stroke-width="1.8" />
+    <circle cx="682" cy="193" r="10.5" fill="none" stroke="#00f3ff" stroke-width="1.5" />
+    <circle cx="560" cy="325" r="11.5" fill="none" stroke="#00f3ff" stroke-width="1.5" />
+    <circle cx="682" cy="297" r="10.0" fill="none" stroke="#0055ff" stroke-width="1.5" />
+  </g>
+
+  {/* Esferas de Solda Metalizadas (Bolinhas do circuito) */}
+  <g>
+    <circle cx="345" cy="180" r="6.5" fill="url(#chrome-node-grad)" />
+    <circle cx="345" cy="180" r="2.0" fill="#ffffff" opacity="0.6" />
+
+    <circle cx="725" cy="115" r="8.0" fill="url(#chrome-node-grad)" />
+    <circle cx="725" cy="115" r="2.5" fill="#ffffff" opacity="0.6" />
+
+    <circle cx="682" cy="193" r="6.5" fill="url(#chrome-node-grad)" />
+    <circle cx="682" cy="193" r="2.0" fill="#ffffff" opacity="0.6" />
+
+    <circle cx="560" cy="325" r="7.0" fill="url(#gold-node-grad)" />
+    <circle cx="560" cy="325" r="2.0" fill="#ffffff" opacity="0.7" />
+
+    <circle cx="682" cy="297" r="6.0" fill="url(#chrome-node-grad)" />
+    <circle cx="682" cy="297" r="1.5" fill="#ffffff" opacity="0.6" />
+  </g>
+
+  {/* Folha de Estilos CSS Embutida para a Animação */}
+  <style>{`
+    @keyframes vs-dash {
+      0% { stroke-dashoffset: 240; }
+      100% { stroke-dashoffset: 0; }
+    }
+  `}</style>
+</svg>

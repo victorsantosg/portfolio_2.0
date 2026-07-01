@@ -5,9 +5,11 @@ import { motion } from "framer-motion"
 import { ArrowRight, ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
+import { useLanguage } from "@/hooks/use-language"
 
 export function HeroSection() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const { t } = useLanguage()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -16,63 +18,191 @@ export function HeroSection() {
     const ctx = canvas.getContext("2d")
     if (!ctx) return
 
+    let radius = Math.max(window.innerWidth * 0.35, 520)
+
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
+      const rect = canvas.getBoundingClientRect()
+      canvas.width = rect.width
+      canvas.height = rect.height
+      radius = Math.max(canvas.width * 0.35, 520)
     }
     resizeCanvas()
     window.addEventListener("resize", resizeCanvas)
 
-    const particles: {
-      x: number
-      y: number
-      vx: number
-      vy: number
-      size: number
-      opacity: number
-    }[] = []
+    const tags = [
+      "Next.js", "React", "TypeScript", "Python", "Fastify", "Prisma",
+      "PostgreSQL", "Docker", "Coolify", "Flutter", "PWA", "Tailwind v4",
+      "Node.js", "Git", "Figma", "Supabase", "Firebase", "ETL",
+      "AWS", "REST APIs", "Data Analysis", "SQL", "Pandas"
+    ]
 
-    for (let i = 0; i < 50; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        size: Math.random() * 2 + 1,
-        opacity: Math.random() * 0.5 + 0.1,
-      })
+    const items = tags.map((text, i) => {
+      const phi = Math.acos(-1 + (2 * i) / tags.length)
+      const theta = Math.sqrt(tags.length * Math.PI) * phi
+      return {
+        text,
+        x: Math.cos(theta) * Math.sin(phi),
+        y: Math.sin(theta) * Math.sin(phi),
+        z: Math.cos(phi),
+      }
+    })
+
+    let targetAngleX = 0.0001
+    let targetAngleY = 0.0001
+    let currentAngleX = 0.0001
+    let currentAngleY = 0.0001
+    let pulseTime = 0
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect()
+      const cx = rect.left + rect.width / 2
+      const cy = rect.top + rect.height / 2
+      targetAngleY = (e.clientX - cx) * 0.0000008
+      targetAngleX = -(e.clientY - cy) * 0.0000008
     }
 
+    const handleMouseLeave = () => {
+      targetAngleX = 0.0001
+      targetAngleY = 0.0001
+    }
+
+    window.addEventListener("mousemove", handleMouseMove)
+    window.addEventListener("mouseleave", handleMouseLeave)
+
     const animate = () => {
+      if (!canvas || !ctx) return
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      particles.forEach((particle, i) => {
-        particle.x += particle.vx
-        particle.y += particle.vy
+      currentAngleX += (targetAngleX - currentAngleX) * 0.08
+      currentAngleY += (targetAngleY - currentAngleY) * 0.08
+      pulseTime += 0.008
 
-        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1
-        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1
+      const cosX = Math.cos(currentAngleX)
+      const sinX = Math.sin(currentAngleX)
+      const cosY = Math.cos(currentAngleY)
+      const sinY = Math.sin(currentAngleY)
 
-        ctx.beginPath()
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(34, 197, 94, ${particle.opacity})`
-        ctx.fill()
+      items.forEach((item) => {
+        // Rotate X
+        const y1 = item.y * cosX - item.z * sinX
+        const z1 = item.z * cosX + item.y * sinX
+        item.y = y1
+        item.z = z1
 
-        particles.forEach((otherParticle, j) => {
-          if (i === j) return
-          const dx = particle.x - otherParticle.x
-          const dy = particle.y - otherParticle.y
-          const distance = Math.sqrt(dx * dx + dy * dy)
+        // Rotate Y
+        const x2 = item.x * cosY - item.z * sinY
+        const z2 = item.z * cosY + item.x * sinY
+        item.x = x2
+        item.z = z2
+      })
 
-          if (distance < 150) {
-            ctx.beginPath()
-            ctx.moveTo(particle.x, particle.y)
-            ctx.lineTo(otherParticle.x, otherParticle.y)
-            ctx.strokeStyle = `rgba(34, 197, 94, ${0.1 * (1 - distance / 150)})`
-            ctx.lineWidth = 0.5
-            ctx.stroke()
+      const sortedItems = [...items].sort((a, b) => b.z - a.z)
+      const depth = 450
+      const centerX = canvas.width / 2
+      const centerY = canvas.height / 2
+
+      // Caixa de exclusão retangular para proteger o bloco de texto central
+      const excludeWidth = 420  // Metade da largura protegida (total: 840px)
+      const excludeHeight = 300 // Metade da altura protegida (total: 600px)
+      const fadePadding = 80    // Margem de transição suave
+
+      // Desenha as conexões 3D entre tags próximas
+      ctx.lineWidth = 0.6
+      for (let i = 0; i < items.length; i++) {
+        for (let j = i + 1; j < items.length; j++) {
+          const dx = items[i].x - items[j].x
+          const dy = items[i].y - items[j].y
+          const dz = items[i].z - items[j].z
+          const dist = Math.sqrt(dx * dx + dy * dy + dz * dz)
+
+          if (dist < 1.3) {
+            const scaleI = depth / (depth + items[i].z * radius)
+            const scaleJ = depth / (depth + items[j].z * radius)
+
+            const xi = (items[i].x * radius) * scaleI + centerX
+            const yi = (items[i].y * radius) * scaleI + centerY
+            const xj = (items[j].x * radius) * scaleJ + centerX
+            const yj = (items[j].y * radius) * scaleJ + centerY
+
+            // Verifica se as extremidades da linha entram na caixa central protegida
+            const dxI = Math.abs(xi - centerX)
+            const dyI = Math.abs(yi - centerY)
+            const dxJ = Math.abs(xj - centerX)
+            const dyJ = Math.abs(yj - centerY)
+
+            let lineFade = 1
+            if ((dxI < excludeWidth && dyI < excludeHeight) || (dxJ < excludeWidth && dyJ < excludeHeight)) {
+              lineFade = 0
+            } else {
+              const fadeIX = dxI < excludeWidth + fadePadding ? (dxI - excludeWidth) / fadePadding : 1
+              const fadeIY = dyI < excludeHeight + fadePadding ? (dyI - excludeHeight) / fadePadding : 1
+              const fadeJX = dxJ < excludeWidth + fadePadding ? (dxJ - excludeWidth) / fadePadding : 1
+              const fadeJY = dyJ < excludeHeight + fadePadding ? (dyJ - excludeHeight) / fadePadding : 1
+              lineFade = Math.min(Math.max(fadeIX, fadeIY), Math.max(fadeJX, fadeJY))
+            }
+
+            if (lineFade > 0) {
+              const alpha = (1 - dist / 1.3) * 0.12 * Math.min(scaleI, scaleJ) * lineFade
+              ctx.beginPath()
+              ctx.moveTo(xi, yi)
+              ctx.lineTo(xj, yj)
+              ctx.strokeStyle = `rgba(34, 197, 94, ${alpha})`
+              ctx.stroke()
+
+              // Pulso elétrico/LED correndo pela linha
+              const progress = (pulseTime + (i * 0.15) + (j * 0.07)) % 1.0
+              const px = items[i].x + progress * (items[j].x - items[i].x)
+              const py = items[i].y + progress * (items[j].y - items[i].y)
+              const pz = items[i].z + progress * (items[j].z - items[i].z)
+
+              const scaleP = depth / (depth + pz * radius)
+              if (scaleP > 0) {
+                const xPulse = (px * radius) * scaleP + centerX
+                const yPulse = (py * radius) * scaleP + centerY
+
+                ctx.beginPath()
+                ctx.arc(xPulse, yPulse, Math.max(0.1, 0.8 * scaleP), 0, Math.PI * 2)
+                ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 3.5})`
+                ctx.fill()
+              }
+            }
           }
-        })
+        }
+      }
+
+      // Desenha as tags de texto projetadas em perspectiva
+      sortedItems.forEach((item) => {
+        const scale = depth / (depth + item.z * radius)
+        if (scale <= 0) return // Ignora se estiver fora dos limites da perspectiva
+
+        const x = (item.x * radius) * scale + centerX
+        const y = (item.y * radius) * scale + centerY
+
+        const dx = Math.abs(x - centerX)
+        const dy = Math.abs(y - centerY)
+
+        let tagFade = 1
+        if (dx < excludeWidth && dy < excludeHeight) {
+          tagFade = 0
+        } else {
+          const fadeX = dx < excludeWidth + fadePadding ? (dx - excludeWidth) / fadePadding : 1
+          const fadeY = dy < excludeHeight + fadePadding ? (dy - excludeHeight) / fadePadding : 1
+          tagFade = Math.max(fadeX, fadeY)
+        }
+
+        // Desenha apenas se estiver fora da área protegida
+        if (tagFade > 0) {
+          // Pequena esfera de conexão
+          ctx.beginPath()
+          ctx.arc(x - 10 * scale, y - 4 * scale, Math.max(0.1, 3 * scale), 0, Math.PI * 2)
+          ctx.fillStyle = `rgba(34, 197, 94, ${scale * 0.8 * tagFade})`
+          ctx.fill()
+
+          // Label da tecnologia em perspectiva
+          ctx.font = `bold ${Math.round(11 * scale + 7)}px monospace`
+          ctx.fillStyle = `rgba(255, 255, 255, ${(scale * 0.8 + 0.2) * tagFade})`
+          ctx.fillText(item.text, x, y)
+        }
       })
 
       requestAnimationFrame(animate)
@@ -80,7 +210,11 @@ export function HeroSection() {
 
     animate()
 
-    return () => window.removeEventListener("resize", resizeCanvas)
+    return () => {
+      window.removeEventListener("resize", resizeCanvas)
+      window.removeEventListener("mousemove", handleMouseMove)
+      window.removeEventListener("mouseleave", handleMouseLeave)
+    }
   }, [])
 
   const scrollToSection = (href: string) => {
@@ -95,9 +229,9 @@ export function HeroSection() {
       id="inicio"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      <canvas ref={canvasRef} className="absolute inset-0 z-0" />
+      <canvas ref={canvasRef} className="absolute inset-0 z-10 pointer-events-none opacity-70" />
 
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background z-10" />
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background z-0" />
 
       <div className="relative z-20 container mx-auto px-6 py-32">
         <motion.div
@@ -134,7 +268,7 @@ export function HeroSection() {
           >
             <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
             <span className="text-sm font-medium text-primary">
-              Disponível para novos projetos
+              {t.hero.available}
             </span>
           </motion.div>
 
@@ -144,12 +278,11 @@ export function HeroSection() {
             transition={{ delay: 0.3, duration: 0.8 }}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-balance"
           >
-            <span className="text-foreground">Desenvolvimento </span>
-            <span className="text-gradient animate-gradient bg-[length:200%_200%]">
-              Next.js (PWA)
-            </span>
+            <span className="text-foreground">{t.hero.title1}</span>
             <br />
-            <span className="text-foreground">e Automação de Processos</span>
+            <span className="text-gradient animate-gradient bg-[length:200%_200%]">
+              {t.hero.titleGradient}
+            </span>
           </motion.h1>
 
           <motion.p
@@ -158,7 +291,7 @@ export function HeroSection() {
             transition={{ delay: 0.5, duration: 0.8 }}
             className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 text-pretty"
           >
-            Analista de Dados e Desenvolvedor Full-Stack focado no ecossistema Next.js para aplicações Web & Mobile (PWA), automações robustas com Python (RPA) e infraestrutura ágil com Docker e Coolify.
+            {t.hero.subtitle}
           </motion.p>
 
           <motion.div
@@ -173,7 +306,7 @@ export function HeroSection() {
                 onClick={() => scrollToSection("#orcamento")}
                 className="bg-primary text-primary-foreground font-semibold px-8 py-6 text-lg glow-border animate-pulse-glow"
               >
-                Iniciar Projeto
+                {t.hero.ctaPrimary}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </motion.div>
@@ -185,7 +318,7 @@ export function HeroSection() {
                 onClick={() => scrollToSection("#projetos")}
                 className="border-border bg-transparent hover:bg-secondary font-semibold px-8 py-6 text-lg"
               >
-                Ver Projetos
+                {t.hero.ctaSecondary}
                 <ExternalLink className="ml-2 h-5 w-5" />
               </Button>
             </motion.div>
@@ -198,9 +331,9 @@ export function HeroSection() {
             className="mt-20 flex items-center justify-center gap-12 flex-wrap"
           >
             {[
-              { value: "35+", label: "Repositórios" },
-              { value: "3+", label: "Anos Exp." },
-              { value: "100%", label: "Processos Automatizados" },
+              { value: "35+", label: t.hero.stats.repos },
+              { value: "3+", label: t.hero.stats.exp },
+              { value: "100%", label: t.hero.stats.automation },
             ].map((stat, index) => (
               <motion.div
                 key={stat.label}
@@ -240,3 +373,4 @@ export function HeroSection() {
     </section>
   )
 }
+

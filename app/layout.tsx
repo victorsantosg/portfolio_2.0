@@ -13,21 +13,8 @@ export const metadata: Metadata = {
   keywords: ['next.js', 'pwa', 'docker', 'coolify', 'python', 'rpa', 'automação', 'data analyst', 'react', 'desenvolvedor full-stack'],
   authors: [{ name: 'Victor Santos' }],
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
+    icon: '/logovs.svg',
+    apple: '/logovs.svg',
   },
 }
 

@@ -1,20 +1,23 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X } from "lucide-react"
+import { motion as motionFramer, AnimatePresence as AnimatePresenceFramer } from "framer-motion"
+import { Menu, X, Globe } from "lucide-react"
 import { Button } from "@/components/ui/button"
-
-const navLinks = [
-  { href: "#inicio", label: "Início" },
-  { href: "#stack", label: "Stack" },
-  { href: "#projetos", label: "Projetos" },
-  { href: "#contato", label: "Contato" },
-]
+import { useLanguage } from "@/hooks/use-language"
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const { language, setLanguage, t } = useLanguage()
+
+  const navLinks = [
+    { href: "#inicio", label: t.nav.home },
+    { href: "#sobre", label: t.nav.about },
+    { href: "#stack", label: t.nav.stack },
+    { href: "#projetos", label: t.nav.projects },
+    { href: "#contato", label: t.nav.contact },
+  ]
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,7 +37,7 @@ export function Navbar() {
 
   return (
     <>
-      <motion.header
+      <motionFramer.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
@@ -48,15 +51,22 @@ export function Navbar() {
           }`}
         >
           <div className="flex items-center justify-between">
-            <motion.button
+            <motionFramer.button
               onClick={() => scrollToSection("#inicio")}
-              className="text-xl font-bold tracking-tight"
+              className="flex items-center gap-2.5 text-xl font-bold tracking-tight"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <span className="text-gradient">Victor</span>
-              <span className="text-foreground">.dev</span>
-            </motion.button>
+              <img 
+                src="/logovs.png" 
+                alt="Logo VS" 
+                className="h-12 w-12 object-contain -translate-y-[2.5px]"
+              />
+              <div>
+                <span className="text-gradient">Victor</span>
+                <span className="text-foreground">.dev</span>
+              </div>
+            </motionFramer.button>
 
             <div className="hidden md:flex items-center gap-1">
               {navLinks.map((link) => (
@@ -69,31 +79,48 @@ export function Navbar() {
               ))}
             </div>
 
-            <div className="hidden md:block">
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+            <div className="hidden md:flex items-center gap-4">
+              <button
+                onClick={() => setLanguage(language === "pt" ? "en" : "pt")}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border/50 bg-secondary/50 hover:bg-secondary text-sm font-medium transition-colors"
+              >
+                <Globe className="h-4 w-4 text-primary" />
+                <span>{language === "pt" ? "EN" : "PT"}</span>
+              </button>
+
+              <motionFramer.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                 <Button
                   onClick={() => scrollToSection("#orcamento")}
                   className="relative overflow-hidden bg-primary text-primary-foreground font-semibold px-6 animate-pulse-glow"
                 >
-                  Fazer Orçamento
+                  {t.nav.cta}
                 </Button>
-              </motion.div>
+              </motionFramer.div>
             </div>
 
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-secondary transition-colors"
-              aria-label="Toggle menu"
-            >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            <div className="md:hidden flex items-center gap-2">
+              <button
+                onClick={() => setLanguage(language === "pt" ? "en" : "pt")}
+                className="flex items-center gap-1 px-2.5 py-1 rounded border border-border/50 bg-secondary/55 text-xs font-semibold hover:bg-secondary transition-colors"
+              >
+                {language === "pt" ? "EN" : "PT"}
+              </button>
+
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="flex items-center p-2 rounded-lg hover:bg-secondary transition-colors"
+                aria-label="Toggle menu"
+              >
+                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
           </div>
         </nav>
-      </motion.header>
+      </motionFramer.header>
 
-      <AnimatePresence>
+      <AnimatePresenceFramer>
         {isMobileMenuOpen && (
-          <motion.div
+          <motionFramer.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -114,13 +141,13 @@ export function Navbar() {
                   onClick={() => scrollToSection("#orcamento")}
                   className="mt-4 w-full bg-primary text-primary-foreground font-semibold"
                 >
-                  Fazer Orçamento
+                  {t.nav.cta}
                 </Button>
               </div>
             </div>
-          </motion.div>
+          </motionFramer.div>
         )}
-      </AnimatePresence>
+      </AnimatePresenceFramer>
     </>
   )
 }
@@ -144,3 +171,4 @@ function NavLink({
     </button>
   )
 }
+

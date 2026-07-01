@@ -2,8 +2,11 @@
 
 import { motion } from "framer-motion"
 import { Heart, ArrowUp } from "lucide-react"
+import { useLanguage } from "@/hooks/use-language"
 
 export function Footer() {
+  const { language, t } = useLanguage()
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
@@ -18,12 +21,22 @@ export function Footer() {
             viewport={{ once: true }}
             className="text-center md:text-left"
           >
-            <div className="text-xl font-bold mb-2">
-              <span className="text-gradient">Victor</span>
-              <span className="text-foreground">.dev</span>
+            <div className="flex items-center gap-2.5 justify-center md:justify-start text-xl font-bold mb-2">
+              <img 
+                src="/logovs.png" 
+                alt="Logo VS" 
+                className="h-12 w-12 object-contain -translate-y-[3px]"
+              />
+              <div>
+                <span className="text-gradient">Victor</span>
+                <span className="text-foreground">.dev</span>
+              </div>
             </div>
-            <p className="text-sm text-muted-foreground flex items-center gap-1 justify-center md:justify-start">
-              Feito com <Heart className="h-3 w-3 text-red-500 fill-red-500" /> no Brasil
+            <p className="text-sm text-muted-foreground mb-1 max-w-xs leading-normal">
+              {t.footer.description}
+            </p>
+            <p className="text-xs text-muted-foreground/80 flex items-center gap-1 justify-center md:justify-start">
+       
             </p>
           </motion.div>
 
@@ -35,7 +48,7 @@ export function Footer() {
             className="text-center"
           >
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} Victor Santos. Todos os direitos reservados.
+              © {new Date().getFullYear()} Victor Santos. {t.footer.rights}
             </p>
           </motion.div>
 
@@ -48,7 +61,7 @@ export function Footer() {
             whileHover={{ y: -3 }}
             whileTap={{ scale: 0.95 }}
             className="p-3 rounded-full bg-secondary hover:bg-primary hover:text-primary-foreground transition-colors"
-            aria-label="Voltar ao topo"
+            aria-label={language === "pt" ? "Voltar ao topo" : "Back to top"}
           >
             <ArrowUp className="h-5 w-5" />
           </motion.button>
@@ -57,3 +70,4 @@ export function Footer() {
     </footer>
   )
 }
+

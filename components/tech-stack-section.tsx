@@ -11,49 +11,7 @@ import {
   Palette,
   Terminal,
 } from "lucide-react"
-
-const categories = [
-  {
-    title: "Next.js & Mobile (PWA)",
-    icon: Code2,
-    techs: [
-      { name: "Next.js (Domínio Principal)", level: 98 },
-      { name: "PWA (Aplicações Mobile/Web)", level: 95 },
-      { name: "React & TypeScript", level: 92 },
-      { name: "Tailwind CSS v4 & Motion", level: 90 },
-    ],
-  },
-  {
-    title: "Backend & APIs",
-    icon: Server,
-    techs: [
-      { name: "Node.js & Fastify", level: 90 },
-      { name: "Prisma ORM & PostgreSQL", level: 88 },
-      { name: "APIs REST & Integrações LDAP", level: 88 },
-      { name: "Supabase & Firebase", level: 82 },
-    ],
-  },
-  {
-    title: "Infraestrutura & Deploy",
-    icon: Database,
-    techs: [
-      { name: "Docker & Docker Compose", level: 95 },
-      { name: "Coolify (Self-hosting & Deploy)", level: 90 },
-      { name: "GCP BigQuery & S3 Storage", level: 85 },
-      { name: "Vitest (Testes E2E/Unit)", level: 80 },
-    ],
-  },
-  {
-    title: "Automação & Dados",
-    icon: Cog,
-    techs: [
-      { name: "Python (Pandas & NumPy)", level: 95 },
-      { name: "PyAutoGUI & Selenium (RPA)", level: 95 },
-      { name: "Gemini API & OpenAI SDK", level: 88 },
-      { name: "ETL & Scripting Avançado", level: 90 },
-    ],
-  },
-]
+import { useLanguage } from "@/hooks/use-language"
 
 const additionalTools = [
   { name: "Next.js / PWA", icon: Code2 },
@@ -65,6 +23,51 @@ const additionalTools = [
 ]
 
 export function TechStackSection() {
+  const { t } = useLanguage()
+
+  const categories = [
+    {
+      title: t.stack.categories.web,
+      icon: Code2,
+      techs: [
+        { name: "Next.js", level: 98 },
+        { name: "PWA (Mobile/Web Apps)", level: 95 },
+        { name: "React & TypeScript", level: 92 },
+        { name: "Tailwind CSS v4 & Motion", level: 90 },
+      ],
+    },
+    {
+      title: t.stack.categories.backend,
+      icon: Server,
+      techs: [
+        { name: "Node.js & Fastify", level: 90 },
+        { name: "Prisma ORM & PostgreSQL", level: 88 },
+        { name: "REST APIs & LDAP/AD Integration", level: 88 },
+        { name: "Supabase & Firebase", level: 82 },
+      ],
+    },
+    {
+      title: t.stack.categories.infra,
+      icon: Database,
+      techs: [
+        { name: "Docker & Docker Compose", level: 95 },
+        { name: "Coolify (Self-hosting & CI/CD)", level: 90 },
+        { name: "GCP BigQuery & S3 Storage", level: 85 },
+        { name: "Vitest (E2E & Unit Testing)", level: 80 },
+      ],
+    },
+    {
+      title: t.stack.categories.automation,
+      icon: Cog,
+      techs: [
+        { name: "Python (Pandas & NumPy)", level: 95 },
+        { name: "PyAutoGUI & Selenium (RPA)", level: 95 },
+        { name: "Gemini API & OpenAI SDK", level: 88 },
+        { name: "ETL & Advanced Scripting", level: 90 },
+      ],
+    },
+  ]
+
   return (
     <section id="stack" className="relative py-32 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-background via-secondary/20 to-background" />
@@ -86,11 +89,10 @@ export function TechStackSection() {
             {"<TechStack />"}
           </motion.span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-balance">
-            Tecnologias & <span className="text-gradient">Habilidades</span>
+            {t.stack.title.split(" & ")[0]} & <span className="text-gradient">{t.stack.title.split(" & ")[1]}</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
-            Domínio em tecnologias modernas para entregar soluções completas e
-            escaláveis
+            {t.stack.subtitle}
           </p>
         </motion.div>
 
@@ -138,7 +140,11 @@ export function TechStackSection() {
 function TechCard({
   category,
 }: {
-  category: (typeof categories)[0]
+  category: {
+    title: string
+    icon: any
+    techs: { name: string; level: number }[]
+  }
 }) {
   return (
     <motion.div
@@ -175,3 +181,4 @@ function TechCard({
     </motion.div>
   )
 }
+
