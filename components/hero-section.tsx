@@ -37,14 +37,14 @@ export function HeroSection() {
       currentStep++
       const progress = currentStep / steps
       
-      setReposCount(Math.round(progress * 35))
-      setYearsCount(Math.round(progress * 3))
+      setReposCount(Math.round(progress * 60))
+      setYearsCount(Math.round(progress * 2))
       setAutoCount(Math.round(progress * 100))
 
       if (currentStep >= steps) {
         clearInterval(counterInterval)
-        setReposCount(35)
-        setYearsCount(3)
+        setReposCount(60)
+        setYearsCount(2)
         setAutoCount(100)
       }
     }, intervalTime)
