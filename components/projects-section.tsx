@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   ExternalLink,
@@ -20,7 +20,9 @@ import {
   Building2,
   TrendingUp,
   Cpu,
-  X
+  X,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -38,12 +40,12 @@ export function ProjectsSection() {
   const { language, t } = useLanguage()
   const [activeFilter, setActiveFilter] = useState("all")
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null)
-  const [activeTab, setActiveTab] = useState<"overview" | "simulator">("overview")
   const [zoomImage, setZoomImage] = useState<string | null>(null)
 
   const projects = [
     {
       id: 1,
+      isPrivate: true,
       title: t.projects.list.erp.title,
       description: t.projects.list.erp.description,
       category: "corporate",
@@ -59,6 +61,7 @@ export function ProjectsSection() {
     },
     {
       id: 2,
+      isPrivate: true,
       title: t.projects.list.bi.title,
       description: t.projects.list.bi.description,
       category: "corporate",
@@ -74,6 +77,7 @@ export function ProjectsSection() {
     },
     {
       id: 3,
+      isPrivate: true,
       title: t.projects.list.projects.title,
       description: t.projects.list.projects.description,
       category: "corporate",
@@ -89,6 +93,7 @@ export function ProjectsSection() {
     },
     {
       id: 4,
+      isPrivate: true,
       title: t.projects.list.laudo.title,
       description: t.projects.list.laudo.description,
       category: "corporate",
@@ -104,6 +109,7 @@ export function ProjectsSection() {
     },
     {
       id: 5,
+      isPrivate: true,
       title: t.projects.list.rpa.title,
       description: t.projects.list.rpa.description,
       category: "corporate",
@@ -299,6 +305,7 @@ export function ProjectsSection() {
     },
     {
       id: 18,
+      isPrivate: true,
       title: t.projects.list.cupons.title,
       description: t.projects.list.cupons.description,
       category: "corporate",
@@ -329,7 +336,6 @@ export function ProjectsSection() {
 
   const openProjectDetails = (project: any) => {
     setSelectedProjectId(project.id)
-    setActiveTab("overview")
   }
 
   return (
@@ -380,29 +386,51 @@ export function ProjectsSection() {
           ))}
         </motion.div>
 
-        <motion.div
-          layout
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          <AnimatePresence mode="popLayout">
-            {filteredProjects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ delay: index * 0.05, duration: 0.4 }}
-              >
-                <ProjectCard
-                  project={project}
-                  onViewDetails={() => openProjectDetails(project)}
-                  onImageClick={(img) => setZoomImage(img)}
-                />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+        <div className="space-y-12">
+          {/* Row 1: Corporativos */}
+          {(activeFilter === "all" || activeFilter === "corporate") && (
+            <motion.div
+              layout
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              className="space-y-4"
+            >
+              <div className="flex items-center justify-between border-b border-border/20 pb-2">
+                <h3 className="text-lg font-semibold flex items-center gap-2 border-l-4 border-primary pl-3">
+                  {t.projects.filters.corporate}
+                </h3>
+              </div>
+              <HorizontalScrollRow
+                projects={projects.filter((p) => p.category === "corporate")}
+                openProjectDetails={openProjectDetails}
+                setZoomImage={setZoomImage}
+              />
+            </motion.div>
+          )}
+
+          {/* Row 2: Pessoais */}
+          {(activeFilter === "all" || activeFilter === "personal") && (
+            <motion.div
+              layout
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              className="space-y-4"
+            >
+              <div className="flex items-center justify-between border-b border-border/20 pb-2">
+                <h3 className="text-lg font-semibold flex items-center gap-2 border-l-4 border-primary pl-3">
+                  {t.projects.filters.personal}
+                </h3>
+              </div>
+              <HorizontalScrollRow
+                projects={projects.filter((p) => p.category === "personal")}
+                openProjectDetails={openProjectDetails}
+                setZoomImage={setZoomImage}
+              />
+            </motion.div>
+          )}
+        </div>
       </div>
 
       <Dialog open={!!selectedProject} onOpenChange={(open) => !open && setSelectedProjectId(null)}>
@@ -415,122 +443,100 @@ export function ProjectsSection() {
 
           {selectedProject && (
             <div className="flex flex-col h-[75vh]">
-              {/* Tab Selector */}
-              <div className="flex border-b border-border bg-secondary/10 px-4">
-                <button
-                  onClick={() => setActiveTab("overview")}
-                  className={`px-4 py-3 text-sm font-medium border-b-2 transition-all ${
-                    activeTab === "overview"
-                      ? "border-primary text-primary"
-                      : "border-transparent text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  {language === "pt" ? "Visão Geral" : "Overview"}
-                </button>
-                <button
-                  onClick={() => setActiveTab("simulator")}
-                  className={`px-4 py-3 text-sm font-medium border-b-2 transition-all flex items-center gap-1.5 ${
-                    activeTab === "simulator"
-                      ? "border-primary text-primary"
-                      : "border-transparent text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  <Cpu className="h-4 w-4" />
-                  {t.projects.simulatorTitle}
-                </button>
-              </div>
-
-              {/* Tab Content */}
+              {/* Content */}
               <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                {activeTab === "overview" ? (
-                  <>
-                    <div 
-                      className="aspect-video rounded-xl bg-secondary overflow-hidden relative border border-border/50 shadow-inner cursor-zoom-in"
-                      onClick={() => setZoomImage(selectedProject.image)}
-                    >
-                      <Image
-                        src={selectedProject.image}
-                        alt={selectedProject.title}
-                        fill
-                        className="object-cover"
-                      />
+                <div 
+                  className="aspect-video rounded-xl bg-secondary overflow-hidden relative border border-border/50 shadow-inner cursor-zoom-in"
+                  onClick={() => setZoomImage(selectedProject.image)}
+                >
+                  <Image
+                    src={selectedProject.image}
+                    alt={selectedProject.title}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-semibold text-primary flex items-center gap-2 mb-2">
+                        <Zap className="h-4 w-4" />
+                        {t.projects.challenge}
+                      </h4>
+                      <p className="text-muted-foreground text-sm leading-relaxed">
+                        {selectedProject.details.challenge}
+                      </p>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="space-y-4">
-                        <div>
-                          <h4 className="font-semibold text-primary flex items-center gap-2 mb-2">
-                            <Zap className="h-4 w-4" />
-                            {t.projects.challenge}
-                          </h4>
-                          <p className="text-muted-foreground text-sm leading-relaxed">
-                            {selectedProject.details.challenge}
-                          </p>
-                        </div>
-
-                        <div>
-                          <h4 className="font-semibold text-primary flex items-center gap-2 mb-2">
-                            <Code className="h-4 w-4" />
-                            {t.projects.solution}
-                          </h4>
-                          <p className="text-muted-foreground text-sm leading-relaxed">
-                            {selectedProject.details.solution}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div>
-                        <h4 className="font-semibold mb-3">{t.projects.stackTitle}</h4>
-                        <div className="flex flex-wrap gap-1.5">
-                          {selectedProject.details.techStack.map((tech: string) => (
-                            <Badge
-                              key={tech}
-                              variant="secondary"
-                              className="bg-secondary text-foreground hover:bg-secondary/80 border border-border/30"
-                            >
-                              {tech}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
+                    <div>
+                      <h4 className="font-semibold text-primary flex items-center gap-2 mb-2">
+                        <Code className="h-4 w-4" />
+                        {t.projects.solution}
+                      </h4>
+                      <p className="text-muted-foreground text-sm leading-relaxed">
+                        {selectedProject.details.solution}
+                      </p>
                     </div>
-                  </>
-                ) : (
-                  <div className="h-full min-h-[350px]">
-                    <ProjectSimulator projectId={selectedProject.id} language={language} />
                   </div>
-                )}
+
+                  <div>
+                    <h4 className="font-semibold mb-3">{t.projects.stackTitle}</h4>
+                    <div className="flex flex-wrap gap-1.5">
+                      {selectedProject.details.techStack.map((tech: string) => (
+                        <Badge
+                          key={tech}
+                          variant="secondary"
+                          className="bg-secondary text-foreground hover:bg-secondary/80 border border-border/30"
+                        >
+                          {tech}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* Dialog Footer */}
-              <div className="border-t border-border bg-secondary/20 p-4 flex gap-3">
-                <Button
-                  asChild
-                  className="flex-1 bg-primary text-primary-foreground font-semibold"
-                >
-                  <a
-                    href={selectedProject.demo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <ExternalLink className="mr-2 h-4 w-4" />
-                    {t.projects.btnDemo}
-                  </a>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="flex-1 font-semibold"
-                >
-                  <a
-                    href={selectedProject.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Github className="mr-2 h-4 w-4" />
-                    {t.projects.btnCode}
-                  </a>
-                </Button>
+              <div className="border-t border-border bg-secondary/20 p-4 flex flex-col sm:flex-row items-center gap-3">
+                {selectedProject.isPrivate ? (
+                  <div className="w-full sm:flex-1 text-xs text-amber-500 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2.5 flex items-center gap-2 font-medium">
+                    <span className="h-2 w-2 rounded-full bg-amber-500 shrink-0 animate-pulse" />
+                    {language === "pt"
+                      ? "Código-fonte restrito e projeto não publicado externamente por questões de confidencialidade/uso interno."
+                      : "Source code restricted and project not published externally due to confidentiality/internal use."}
+                  </div>
+                ) : (
+                  <>
+                    <Button
+                      asChild
+                      className="w-full sm:flex-1 bg-primary text-primary-foreground font-semibold"
+                    >
+                      <a
+                        href={selectedProject.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <ExternalLink className="mr-2 h-4 w-4" />
+                        {t.projects.btnDemo}
+                      </a>
+                    </Button>
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="w-full sm:flex-1 font-semibold"
+                    >
+                      <a
+                        href={selectedProject.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Github className="mr-2 h-4 w-4" />
+                        {t.projects.btnCode}
+                      </a>
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           )}
@@ -540,7 +546,7 @@ export function ProjectsSection() {
       {/* Image Zoom Modal (Lightbox) */}
       <Dialog open={!!zoomImage} onOpenChange={(open) => !open && setZoomImage(null)}>
         <DialogContent 
-          className="max-w-[95vw] md:max-w-[85vw] max-h-[90vh] p-1 bg-black/95 border-none flex items-center justify-center overflow-hidden shadow-2xl relative"
+          className="max-w-[95vw] md:max-w-[85vw] max-h-[90vh] p-1 bg-black/95 border-none flex items-center justify-center overflow-hidden shadow-2xl"
           showCloseButton={false}
         >
           {zoomImage && (
@@ -565,6 +571,111 @@ export function ProjectsSection() {
   )
 }
 
+function HorizontalScrollRow({
+  projects,
+  openProjectDetails,
+  setZoomImage,
+}: {
+  projects: any[]
+  openProjectDetails: (project: any) => void
+  setZoomImage: (img: string) => void
+}) {
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const [showLeftArrow, setShowLeftArrow] = useState(false)
+  const [showRightArrow, setShowRightArrow] = useState(true)
+
+  const checkScrollLimits = () => {
+    const el = scrollRef.current
+    if (!el) return
+    setShowLeftArrow(el.scrollLeft > 5)
+    setShowRightArrow(el.scrollLeft < el.scrollWidth - el.clientWidth - 5)
+  }
+
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+
+    const handleWheel = (e: WheelEvent) => {
+      if (e.deltaY !== 0) {
+        e.preventDefault()
+        el.scrollLeft += e.deltaY * 1.5
+      }
+    }
+
+    el.addEventListener("wheel", handleWheel, { passive: false })
+    el.addEventListener("scroll", checkScrollLimits)
+
+    checkScrollLimits()
+    const timer = setTimeout(checkScrollLimits, 300)
+    window.addEventListener("resize", checkScrollLimits)
+
+    return () => {
+      el.removeEventListener("wheel", handleWheel)
+      el.removeEventListener("scroll", checkScrollLimits)
+      window.removeEventListener("resize", checkScrollLimits)
+      clearTimeout(timer)
+    }
+  }, [projects])
+
+  const scroll = (direction: "left" | "right") => {
+    const el = scrollRef.current
+    if (!el) return
+    const cardWidth = 330
+    const scrollAmount = direction === "left" ? -cardWidth : cardWidth
+    el.scrollBy({ left: scrollAmount, behavior: "smooth" })
+  }
+
+  return (
+    <div className="relative group/row w-full">
+      {showLeftArrow && (
+        <button
+          onClick={() => scroll("left")}
+          className="absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2.5 rounded-full bg-background/90 hover:bg-background border border-border text-foreground shadow-lg hover:scale-110 active:scale-95 transition-all cursor-pointer flex items-center justify-center"
+          aria-label="Rolar para esquerda"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+      )}
+
+      {showRightArrow && (
+        <button
+          onClick={() => scroll("right")}
+          className="absolute right-2 top-1/2 -translate-y-1/2 z-10 p-2.5 rounded-full bg-background/90 hover:bg-background border border-border text-foreground shadow-lg hover:scale-110 active:scale-95 transition-all cursor-pointer flex items-center justify-center"
+          aria-label="Rolar para direita"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
+      )}
+
+      <div
+        ref={scrollRef}
+        className="flex overflow-x-auto gap-5 pb-4 pt-1 no-scrollbar select-none snap-x snap-mandatory"
+        style={{
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+        }}
+      >
+        {projects.map((project, index) => (
+          <motion.div
+            key={project.id}
+            className="min-w-[280px] sm:min-w-[310px] max-w-[310px] flex-shrink-0 snap-start"
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.05, duration: 0.5, ease: "easeOut" }}
+          >
+            <ProjectCard
+              project={project}
+              onViewDetails={() => openProjectDetails(project)}
+              onImageClick={setZoomImage}
+            />
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function ProjectCard({
   project,
   onViewDetails,
@@ -577,21 +688,21 @@ function ProjectCard({
   const { language, t } = useLanguage()
   return (
     <motion.div
-      whileHover={{ y: -5 }}
+      whileHover={{ y: -8, scale: 1.02 }}
       transition={{ duration: 0.2 }}
-      className="group h-full rounded-2xl bg-card border border-border/50 overflow-hidden hover:border-primary/30 transition-all duration-300 flex flex-col justify-between"
+      className="group h-full rounded-2xl bg-card border border-border/50 overflow-hidden hover:border-primary/50 hover:shadow-[0_15px_30px_rgba(99,102,241,0.15)] dark:hover:shadow-[0_15px_30px_rgba(99,102,241,0.08)] transition-all duration-300 flex flex-col justify-between"
     >
       <div>
         <div 
-          className="relative aspect-video bg-secondary overflow-hidden cursor-zoom-in group/img"
-          onClick={() => onImageClick(project.image)}
+          className={`relative aspect-video overflow-hidden cursor-pointer group/img ${!project.image ? "bg-secondary" : "bg-card"}`}
+          onClick={onViewDetails}
         >
           {project.image ? (
             <Image
               src={project.image}
               alt={project.title}
               fill
-              className="object-cover group-hover:scale-105 transition-transform duration-500"
+              className="object-cover group-hover:scale-110 transition-transform duration-500"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center text-muted-foreground group-hover:text-primary transition-colors">
@@ -613,28 +724,28 @@ function ProjectCard({
             </Badge>
           </div>
 
-          <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
 
-        <div className="p-5">
-          <h3 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors">
+        <div className="p-4">
+          <h3 className="font-bold text-base mb-1.5 group-hover:text-primary transition-colors">
             {project.title}
           </h3>
-          <p className="text-sm text-muted-foreground mb-4 line-clamp-2 leading-relaxed">
+          <p className="text-xs text-muted-foreground mb-3 line-clamp-2 leading-relaxed">
             {project.description}
           </p>
 
-          <div className="flex flex-wrap gap-1.5 mb-4">
+          <div className="flex flex-wrap gap-1.5 mb-3">
             {project.tags.slice(0, 4).map((tag: string) => (
               <span
                 key={tag}
-                className="text-xs px-2 py-1 rounded-md bg-secondary text-muted-foreground border border-border/20"
+                className="text-[10px] px-1.5 py-0.5 rounded-md bg-secondary text-muted-foreground border border-border/20"
               >
                 {tag}
               </span>
             ))}
             {project.tags.length > 4 && (
-              <span className="text-xs px-2 py-1 rounded-md bg-secondary text-muted-foreground">
+              <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-secondary text-muted-foreground">
                 +{project.tags.length - 4}
               </span>
             )}
@@ -642,690 +753,53 @@ function ProjectCard({
         </div>
       </div>
 
-      <div className="p-5 pt-0 flex items-center gap-2">
-        <Button
-          size="sm"
-          onClick={onViewDetails}
-          className="flex-1 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-semibold"
-        >
-          {t.projects.btnDetails}
-        </Button>
-        <Button
-          size="sm"
-          variant="outline"
-          asChild
-          className="border-border hover:border-primary transition-colors"
-        >
-          <a
-            href={project.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Ver código no GitHub"
+      <div className="p-4 pt-0 flex flex-col gap-2">
+        {project.isPrivate && (
+          <div className="text-[10px] text-amber-500/80 bg-amber-500/10 border border-amber-500/20 rounded-md px-2 py-1 flex items-center gap-1.5 font-medium">
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0 animate-pulse" />
+            {language === "pt"
+              ? "Código privado (Projeto interno de rede)"
+              : "Private code (Internal network project)"}
+          </div>
+        )}
+        <div className="flex items-center gap-2">
+          <Button
+            size="sm"
+            onClick={onViewDetails}
+            className="flex-1 text-xs py-1 h-8 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-semibold"
           >
-            <Github className="h-4 w-4" />
-          </a>
-        </Button>
+            {t.projects.btnDetails}
+          </Button>
+          {!project.isPrivate ? (
+            <Button
+              size="sm"
+              variant="outline"
+              asChild
+              className="h-8 w-8 p-0 border-border hover:border-primary transition-colors flex items-center justify-center"
+            >
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Ver código no GitHub"
+              >
+                <Github className="h-3.5 w-3.5" />
+              </a>
+            </Button>
+          ) : (
+            <div
+              className="h-8 w-8 rounded-md border border-border bg-muted/30 text-muted-foreground flex items-center justify-center cursor-help"
+              title={
+                language === "pt"
+                  ? "Código privado por se tratar de um projeto interno."
+                  : "Private code due to being an internal project."
+              }
+            >
+              <Github className="h-3.5 w-3.5 opacity-40" />
+            </div>
+          )}
+        </div>
       </div>
     </motion.div>
-  )
-}
-
-function ProjectSimulator({ projectId, language }: { projectId: number; language: string }) {
-  switch (projectId) {
-    case 1:
-      return <ERPSimulator language={language} />
-    case 2:
-      return <BISimulator language={language} />
-    case 3:
-      return <ProjectTrackerSimulator language={language} />
-    case 4:
-      return <APISimulator language={language} />
-    case 5:
-      return <RPASimulator language={language} />
-    case 6:
-      return <BarberSimulator language={language} />
-    default:
-      return <div className="text-center py-10 text-muted-foreground">Simulator not found</div>
-  }
-}
-
-/* 1. ERP Simulator Component */
-function ERPSimulator({ language }: { language: string }) {
-  const isPt = language === "pt"
-  const [items, setItems] = useState([
-    { id: 1, name: "Fio de Cobre Flexível 2.5mm", stock: 120, unit: "m", minStock: 50 },
-    { id: 2, name: "Disjuntor Termomagnético 20A", stock: 15, unit: "un", minStock: 20 },
-    { id: 3, name: "Painel Solar Fotovoltaico 400W", stock: 45, unit: "un", minStock: 10 },
-    { id: 4, name: "Eletroduto Corrugado 3/4", stock: 210, unit: "m", minStock: 100 },
-  ])
-  const [search, setSearch] = useState("")
-  const [newItemName, setNewItemName] = useState("")
-  const [newItemQty, setNewItemQty] = useState(10)
-
-  const handleAddItem = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!newItemName.trim()) return
-    setItems([
-      ...items,
-      {
-        id: Date.now(),
-        name: newItemName,
-        stock: Number(newItemQty),
-        unit: "un",
-        minStock: 5,
-      },
-    ])
-    setNewItemName("")
-    setNewItemQty(10)
-  }
-
-  const handleDeleteItem = (id: number) => {
-    setItems(items.filter((item) => item.id !== id))
-  }
-
-  const filteredItems = items.filter((item) =>
-    item.name.toLowerCase().includes(search.toLowerCase())
-  )
-
-  return (
-    <div className="space-y-4 font-sans text-sm">
-      <div className="flex items-center justify-between border-b border-border pb-3">
-        <h5 className="font-semibold text-primary">{isPt ? "Controle de Inventário Avançado" : "Advanced Inventory System"}</h5>
-        <span className="text-xs text-muted-foreground">Frontend: NextJS / React | Backend: Prisma + Fastify</span>
-      </div>
-
-      <div className="flex gap-2">
-        <div className="relative flex-1">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder={isPt ? "Pesquisar item..." : "Search item..."}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 bg-secondary/50 border-border"
-          />
-        </div>
-      </div>
-
-      <div className="border border-border rounded-xl overflow-hidden bg-secondary/20 max-h-[160px] overflow-y-auto">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-secondary/50 text-muted-foreground text-xs font-semibold border-b border-border">
-              <th className="p-3">{isPt ? "Item" : "Product"}</th>
-              <th className="p-3 text-center">{isPt ? "Estoque" : "Stock"}</th>
-              <th className="p-3 text-center">Status</th>
-              <th className="p-3 text-center">{isPt ? "Ação" : "Action"}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredItems.map((item) => {
-              const isLow = item.stock < item.minStock
-              return (
-                <tr key={item.id} className="border-b border-border/50 hover:bg-secondary/30 transition-colors">
-                  <td className="p-3 font-medium">{item.name}</td>
-                  <td className="p-3 text-center">{item.stock} {item.unit}</td>
-                  <td className="p-3 text-center">
-                    <span
-                      className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                        isLow ? "bg-red-500/20 text-red-400" : "bg-green-500/20 text-green-400"
-                      }`}
-                    >
-                      {isLow ? (isPt ? "Estoque Baixo" : "Low Stock") : (isPt ? "Ok" : "Normal")}
-                    </span>
-                  </td>
-                  <td className="p-3 text-center">
-                    <button
-                      onClick={() => handleDeleteItem(item.id)}
-                      className="text-red-400 hover:text-red-300 p-1"
-                    >
-                      <Trash className="h-4 w-4" />
-                    </button>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </div>
-
-      <form onSubmit={handleAddItem} className="flex gap-2 items-end pt-2">
-        <div className="flex-1 space-y-1">
-          <label className="text-xs text-muted-foreground font-medium">{isPt ? "Novo Item" : "New Item Name"}</label>
-          <Input
-            value={newItemName}
-            onChange={(e) => setNewItemName(e.target.value)}
-            placeholder={isPt ? "Nome do item..." : "Item name..."}
-            className="bg-secondary/50 border-border"
-          />
-        </div>
-        <div className="w-24 space-y-1">
-          <label className="text-xs text-muted-foreground font-medium">{isPt ? "Quantidade" : "Quantity"}</label>
-          <Input
-            type="number"
-            value={newItemQty}
-            onChange={(e) => setNewItemQty(Number(e.target.value))}
-            className="bg-secondary/50 border-border"
-          />
-        </div>
-        <Button type="submit" size="sm" className="bg-primary text-primary-foreground font-bold">
-          <Plus className="h-4 w-4 mr-1" /> {isPt ? "Adicionar" : "Add"}
-        </Button>
-      </form>
-    </div>
-  )
-}
-
-/* 2. BI / Dashboard Simulator Component */
-function BISimulator({ language }: { language: string }) {
-  const isPt = language === "pt"
-  const [metric, setMetric] = useState<"faturamento" | "margem" | "metas">("faturamento")
-  const [activeMonth, setActiveMonth] = useState<"Jan" | "Fev" | "Mar" | "Abr">("Abr")
-
-  const data = {
-    Jan: { faturamento: 120000, margem: 32, metas: 95 },
-    Fev: { faturamento: 145000, margem: 34, metas: 98 },
-    Mar: { faturamento: 168000, margem: 36, metas: 104 },
-    Abr: { faturamento: 195000, margem: 38, metas: 110 },
-  }
-
-  return (
-    <div className="space-y-4 font-sans text-sm h-full flex flex-col justify-between">
-      <div className="flex items-center justify-between border-b border-border pb-3">
-        <h5 className="font-semibold text-primary flex items-center gap-1.5">
-          <TrendingUp className="h-4 w-4" />
-          {isPt ? "Analytics Suite - Monitoramento Operacional" : "Analytics Suite - Operational Dashboard"}
-        </h5>
-        <span className="text-xs text-muted-foreground">Flutter Web Engine & Real BigQuery Data Mock</span>
-      </div>
-
-      <div className="flex gap-2">
-        {(["faturamento", "margem", "metas"] as const).map((m) => (
-          <button
-            key={m}
-            onClick={() => setMetric(m)}
-            className={`flex-1 py-2 px-3 rounded-lg text-xs font-semibold transition-all border ${
-              metric === m
-                ? "bg-primary/10 border-primary text-primary"
-                : "bg-secondary/30 border-border/50 text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            {m === "faturamento" ? (isPt ? "Faturamento" : "Revenue") : m === "margem" ? (isPt ? "Margem Bruta" : "Gross Margin") : (isPt ? "Ating. Meta" : "Goal Target")}
-          </button>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-4 gap-3 bg-secondary/15 p-4 rounded-2xl border border-border/50 items-end min-h-[160px]">
-        {(["Jan", "Fev", "Mar", "Abr"] as const).map((month) => {
-          const val = data[month][metric]
-          // Calculate height percentage
-          const maxVal = metric === "faturamento" ? 220000 : metric === "margem" ? 45 : 120
-          const pct = Math.min((val / maxVal) * 100, 100)
-
-          return (
-            <div
-              key={month}
-              onClick={() => setActiveMonth(month)}
-              className="flex flex-col items-center gap-2 cursor-pointer group"
-            >
-              <div className="w-full relative flex justify-center items-end h-[100px]">
-                {/* Bar */}
-                <motion.div
-                  initial={{ height: 0 }}
-                  animate={{ height: `${pct}%` }}
-                  transition={{ type: "spring", stiffness: 100 }}
-                  className={`w-8 rounded-t-lg transition-colors ${
-                    activeMonth === month
-                      ? "bg-gradient-to-t from-primary to-primary/80 shadow-[0_0_12px_rgba(34,197,94,0.4)]"
-                      : "bg-secondary hover:bg-secondary/80"
-                  }`}
-                />
-                {/* Tooltip on active */}
-                {activeMonth === month && (
-                  <div className="absolute -top-7 px-2 py-1 rounded bg-popover text-popover-foreground text-[10px] font-bold border border-border shadow-md">
-                    {metric === "faturamento"
-                      ? `R$ ${(val / 1000).toFixed(0)}k`
-                      : metric === "margem"
-                      ? `${val}%`
-                      : `${val}%`}
-                  </div>
-                )}
-              </div>
-              <span className={`text-xs font-semibold ${activeMonth === month ? "text-primary" : "text-muted-foreground"}`}>
-                {month}
-              </span>
-            </div>
-          )
-        })}
-      </div>
-
-      <div className="bg-secondary/30 border border-border/50 rounded-xl p-3 flex justify-between items-center text-xs">
-        <div>
-          <span className="text-muted-foreground block">{isPt ? "Mês Selecionado" : "Selected Month"}</span>
-          <span className="font-bold text-foreground text-sm">{activeMonth}</span>
-        </div>
-        <div className="text-right">
-          <span className="text-muted-foreground block">{isPt ? "Valor Consolidado" : "Consolidated Value"}</span>
-          <span className="font-bold text-primary text-sm">
-            {metric === "faturamento"
-              ? `R$ ${data[activeMonth].faturamento.toLocaleString("pt-BR")}`
-              : metric === "margem"
-              ? `${data[activeMonth].margem}%`
-              : `${data[activeMonth].metas}%`}
-          </span>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-/* 3. Project Tracker / Construct Simulator Component */
-function ProjectTrackerSimulator({ language }: { language: string }) {
-  const isPt = language === "pt"
-  const [tasks, setTasks] = useState([
-    { id: 1, text: isPt ? "Cronograma Físico-Financeiro" : "Financial Timeline Schedule", done: true },
-    { id: 2, text: isPt ? "Sincronização com Banco Supabase" : "Supabase Database Synchronization", done: true },
-    { id: 3, text: isPt ? "Integração do Google Maps SDK" : "Google Maps SDK Integration", done: false },
-    { id: 4, text: isPt ? "Geração Automática de Relatórios (.docx)" : "Automated Docx Report Generation", done: false },
-  ])
-
-  const toggleTask = (id: number) => {
-    setTasks(tasks.map(t => t.id === id ? { ...t, done: !t.done } : t))
-  }
-
-  const doneCount = tasks.filter(t => t.done).length
-  const percent = Math.round((doneCount / tasks.length) * 100)
-
-  return (
-    <div className="space-y-4 font-sans text-sm">
-      <div className="flex items-center justify-between border-b border-border pb-3">
-        <h5 className="font-semibold text-primary flex items-center gap-1.5">
-          <Building2 className="h-4 w-4" />
-          {isPt ? "Gestão de Obras & Projetos" : "Construction Project Management"}
-        </h5>
-        <span className="text-xs text-muted-foreground">NextJS 16 + Supabase Postgres Database Mock</span>
-      </div>
-
-      <div className="space-y-2">
-        <div className="flex justify-between items-center text-xs font-semibold">
-          <span className="text-muted-foreground">{isPt ? "Progresso do Projeto" : "Project Progress"}</span>
-          <span className="text-primary">{percent}%</span>
-        </div>
-        <div className="h-2.5 bg-secondary rounded-full overflow-hidden border border-border/50 shadow-inner">
-          <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: `${percent}%` }}
-            transition={{ duration: 0.5 }}
-            className="h-full bg-gradient-to-r from-primary to-primary/80 rounded-full"
-          />
-        </div>
-      </div>
-
-      <div className="space-y-2.5 bg-secondary/25 p-4 rounded-xl border border-border/50">
-        <span className="text-xs text-muted-foreground font-semibold block mb-1">
-          {isPt ? "Marcos e Entregas Administrativas" : "Administrative Milestones"}
-        </span>
-        {tasks.map(task => (
-          <div
-            key={task.id}
-            onClick={() => toggleTask(task.id)}
-            className="flex items-center gap-3 cursor-pointer select-none group"
-          >
-            <div
-              className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${
-                task.done
-                  ? "bg-primary border-primary text-primary-foreground"
-                  : "border-border bg-secondary/50 group-hover:border-primary/50"
-              }`}
-            >
-              {task.done && <Check className="h-3 w-3 stroke-[3]" />}
-            </div>
-            <span className={`text-xs font-medium transition-colors ${task.done ? "line-through text-muted-foreground" : "text-foreground"}`}>
-              {task.text}
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-/* 4. API Sandbox Simulator Component */
-function APISimulator({ language }: { language: string }) {
-  const isPt = language === "pt"
-  const [route, setRoute] = useState("/api/laudos/emitir")
-  const [loading, setLoading] = useState(false)
-  const [response, setResponse] = useState<any>(null)
-
-  const routesResponses: Record<string, any> = {
-    "/api/laudos/emitir": {
-      status: 201,
-      statusText: "Created",
-      headers: {
-        "content-type": "application/json",
-        "x-powered-by": "Fastify",
-        "cache-control": "no-store",
-      },
-      body: {
-        success: true,
-        laudo_id: "laudo_2026_06_9876",
-        emissao: new Date().toISOString(),
-        colaborador: "Victor Santos",
-        sistema: "Central de Laudos Corporativos",
-        ldap_status: "SYNCHRONIZED",
-      },
-    },
-    "/api/auth/ldap": {
-      status: 200,
-      statusText: "OK",
-      headers: {
-        "content-type": "application/json",
-        "x-powered-by": "Fastify",
-      },
-      body: {
-        authenticated: true,
-        uid: "victor.peixoto",
-        mail: "victor.peixoto@cometa.com.br",
-        roles: ["ADM_TI", "DEVELOPER_FULLSTACK"],
-        session_expires: "4h",
-      },
-    },
-    "/api/glpi/sync": {
-      status: 200,
-      statusText: "OK",
-      headers: {
-        "content-type": "application/json",
-        "x-powered-by": "Fastify",
-      },
-      body: {
-        sync_completed: true,
-        tickets_imported: 42,
-        unassigned_tickets: 3,
-        execution_time_ms: 182,
-        glpi_api_version: "2.1.0",
-      },
-    },
-  }
-
-  const handleSendRequest = () => {
-    setLoading(true)
-    setResponse(null)
-    setTimeout(() => {
-      setResponse(routesResponses[route])
-      setLoading(false)
-    }, 600)
-  }
-
-  return (
-    <div className="space-y-4 font-mono text-sm h-full flex flex-col justify-between">
-      <div className="flex items-center justify-between border-b border-border pb-3 font-sans">
-        <h5 className="font-semibold text-primary">{isPt ? "Fastify API Playground" : "Fastify API Playground"}</h5>
-        <span className="text-xs text-muted-foreground">LDAP Auth & GLPI Integrations Microservice</span>
-      </div>
-
-      <div className="flex gap-2">
-        <select
-          value={route}
-          onChange={(e) => setRoute(e.target.value)}
-          className="flex-1 bg-secondary border border-border rounded-lg px-3 py-2 text-xs font-semibold text-foreground focus:outline-none focus:border-primary"
-        >
-          <option value="/api/laudos/emitir">POST /api/laudos/emitir</option>
-          <option value="/api/auth/ldap">POST /api/auth/ldap</option>
-          <option value="/api/glpi/sync">GET /api/glpi/sync</option>
-        </select>
-
-        <Button
-          onClick={handleSendRequest}
-          disabled={loading}
-          size="sm"
-          className="bg-primary text-primary-foreground font-bold"
-        >
-          {loading ? (isPt ? "Enviando..." : "Sending...") : (isPt ? "ENVIAR REQUISIÇÃO" : "SEND REQUEST")}
-        </Button>
-      </div>
-
-      <div className="flex-1 min-h-[170px] border border-border bg-black rounded-xl p-3 overflow-y-auto text-xs flex flex-col">
-        {loading && (
-          <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground gap-2">
-            <span className="w-5 h-5 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-            <span>CONNECTING TO FASTIFY SERVER...</span>
-          </div>
-        )}
-
-        {!loading && !response && (
-          <div className="flex-1 flex items-center justify-center text-muted-foreground text-center px-4 font-sans">
-            {isPt ? "Selecione uma rota e clique em ENVIAR REQUISIÇÃO para testar a resposta JSON em tempo real." : "Select a route and click SEND REQUEST to inspect the live REST API JSON response."}
-          </div>
-        )}
-
-        {response && (
-          <div className="space-y-3 font-mono text-[11px] leading-normal text-green-400">
-            <div>
-              <span className="text-slate-400 font-bold">HTTP/1.1 </span>
-              <span className={`font-bold ${response.status === 201 || response.status === 200 ? "text-emerald-400" : "text-rose-400"}`}>
-                {response.status} {response.statusText}
-              </span>
-            </div>
-
-            <div>
-              <span className="text-slate-500 font-semibold block">{isPt ? "// Headers de Resposta" : "// Response Headers"}</span>
-              {Object.entries(response.headers).map(([k, v]: any) => (
-                <div key={k}>
-                  <span className="text-slate-400 font-medium">{k}:</span> <span className="text-yellow-400">{v}</span>
-                </div>
-              ))}
-            </div>
-
-            <div>
-              <span className="text-slate-500 font-semibold block">{isPt ? "// Payload da Resposta" : "// Response Body JSON"}</span>
-              <pre className="text-emerald-300 font-medium overflow-x-auto whitespace-pre-wrap">
-                {JSON.stringify(response.body, null, 2)}
-              </pre>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
-
-/* 5. RPA / Terminal Simulator Component */
-function RPASimulator({ language }: { language: string }) {
-  const isPt = language === "pt"
-  const [running, setRunning] = useState(false)
-  const [logs, setLogs] = useState<string[]>([])
-
-  const runRpaScript = () => {
-    if (running) return
-    setRunning(true)
-    setLogs([])
-
-    const scriptLogs = isPt
-      ? [
-          "[$] python bot_auditor.py --env production",
-          "[+] Inicializando headless Chrome Driver via Selenium...",
-          "[+] Efetuando login no portal SEFAZ com certificado digital...",
-          "[+] Crawling de notas fiscais emitidas nas últimas 24 horas concluído.",
-          "[+] Processando margens de lucro dos itens usando Pandas DataFrame...",
-          "[!] Alerta: 2 notas fiscais apresentaram divergência de margem de custos.",
-          "[+] Gerando planilha Excel formatada com mapa de calor de rentabilidade...",
-          "[+] Exportando arquivo auditoria_margem_20260622.xlsx...",
-          "[+] Efetuando upload seguro para Google Cloud Storage (Bucket: audit-margens)...",
-          "[√] Robô finalizado com sucesso. 182 itens auditados. Tempo total: 4.8s."
-        ]
-      : [
-          "[$] python bot_auditor.py --env production",
-          "[+] Initializing headless Chrome Driver via Selenium...",
-          "[+] Logging into SEFAZ Tax Portal using digital certificate...",
-          "[+] Crawling of tax invoices issued in the last 24h completed.",
-          "[+] Processing items profit margins using Pandas DataFrame...",
-          "[!] Warning: 2 tax invoices presented margin/cost divergence.",
-          "[+] Generating formatted Excel spreadsheet with profitability heatmap...",
-          "[+] Exporting audit_margin_20260622.xlsx report file...",
-          "[+] Securing upload to Google Cloud Storage (Bucket: audit-margins)...",
-          "[√] Bot finished successfully. 182 items audited. Total time: 4.8s."
-        ]
-
-    let currentLogIndex = 0
-    const addNextLog = () => {
-      if (currentLogIndex < scriptLogs.length) {
-        setLogs((prev) => [...prev, scriptLogs[currentLogIndex]])
-        currentLogIndex++
-        setTimeout(addNextLog, 450)
-      } else {
-        setRunning(false)
-      }
-    }
-    addNextLog()
-  }
-
-  return (
-    <div className="space-y-4 font-mono text-sm h-full flex flex-col justify-between">
-      <div className="flex items-center justify-between border-b border-border pb-3 font-sans">
-        <h5 className="font-semibold text-primary flex items-center gap-1.5">
-          <TermIcon className="h-4 w-4" />
-          {isPt ? "Auditor RPA - Terminal de Execução" : "RPA Auditor - Script Terminal"}
-        </h5>
-        <span className="text-xs text-muted-foreground">Python 3.12 (Pandas / Selenium) Script Exec</span>
-      </div>
-
-      <div className="flex-1 min-h-[180px] border border-border bg-[#050508] rounded-xl p-4 overflow-y-auto text-xs space-y-1.5 shadow-inner">
-        {logs.length === 0 && (
-          <div className="text-muted-foreground h-full flex items-center justify-center font-sans text-center px-4">
-            {isPt ? "Clique em RODAR SCRIPT AUTOMATIZADO para ver a simulação de logs do robô em tempo real." : "Click RUN AUTOMATED SCRIPT to watch the robotic logs execute in real time."}
-          </div>
-        )}
-        {logs.map((log, index) => {
-          let color = "text-slate-300"
-          if (log.startsWith("[+]")) color = "text-emerald-400"
-          else if (log.startsWith("[!]")) color = "text-yellow-400"
-          else if (log.startsWith("[√]")) color = "text-cyan-400 font-bold"
-          else if (log.startsWith("[$]")) color = "text-slate-400 font-bold"
-
-          return (
-            <div key={index} className={`${color} leading-relaxed`}>
-              {log}
-            </div>
-          )
-        })}
-      </div>
-
-      <Button
-        onClick={runRpaScript}
-        disabled={running}
-        className="w-full bg-primary hover:bg-primary/95 text-primary-foreground font-bold flex items-center justify-center gap-2"
-      >
-        <Play className="h-4 w-4 fill-current" />
-        {running ? (isPt ? "Executando Robô..." : "Bot Running...") : (isPt ? "RODAR SCRIPT AUTOMATIZADO" : "RUN AUTOMATED SCRIPT")}
-      </Button>
-    </div>
-  )
-}
-
-/* 6. Barber App Simulator Component */
-function BarberSimulator({ language }: { language: string }) {
-  const isPt = language === "pt"
-  const [selectedService, setSelectedService] = useState<string | null>(null)
-  const [selectedTime, setSelectedTime] = useState<string | null>(null)
-  const [bookingConfirmed, setBookingConfirmed] = useState(false)
-
-  const services = [
-    { id: "corte", name: isPt ? "Corte Clássico" : "Classic Haircut", price: "R$ 45" },
-    { id: "barba", name: isPt ? "Barba Terapia" : "Beard Shave Therapy", price: "R$ 35" },
-    { id: "combo", name: isPt ? "Cabelo & Barba" : "Haircut & Beard Combo", price: "R$ 70" },
-  ]
-
-  const times = ["09:00", "10:30", "14:00", "15:30", "17:00"]
-
-  const handleBooking = () => {
-    if (!selectedService || !selectedTime) return
-    setBookingConfirmed(true)
-  }
-
-  return (
-    <div className="space-y-4 font-sans text-sm h-full flex flex-col justify-between">
-      <div className="flex items-center justify-between border-b border-border pb-3">
-        <h5 className="font-semibold text-primary flex items-center gap-1.5">
-          <Calendar className="h-4 w-4" />
-          {isPt ? "Dom Barbeiro - Agendamento Online" : "Dom Barbeiro - Online Booking Client"}
-        </h5>
-        <span className="text-xs text-muted-foreground">React PWA + Firebase Firestore Real-Time Sync Mock</span>
-      </div>
-
-      {bookingConfirmed ? (
-        <div className="flex-1 flex flex-col items-center justify-center text-center p-6 bg-secondary/15 rounded-xl border border-primary/30 space-y-3">
-          <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary">
-            <Check className="h-6 w-6 stroke-[3]" />
-          </div>
-          <div>
-            <h6 className="font-bold text-sm text-foreground">{isPt ? "Agendamento Confirmado!" : "Appointment Confirmed!"}</h6>
-            <p className="text-xs text-muted-foreground mt-1 max-w-[240px]">
-              {isPt
-                ? `Seu horário para ${services.find(s => s.id === selectedService)?.name} foi reservado para hoje às ${selectedTime}.`
-                : `Your appointment for ${services.find(s => s.id === selectedService)?.name} is successfully scheduled for today at ${selectedTime}.`}
-            </p>
-          </div>
-          <button
-            onClick={() => {
-              setBookingConfirmed(false)
-              setSelectedService(null)
-              setSelectedTime(null)
-            }}
-            className="text-xs text-primary font-bold hover:underline"
-          >
-            {isPt ? "Fazer outro agendamento" : "Make another appointment"}
-          </button>
-        </div>
-      ) : (
-        <div className="space-y-3 flex-1 overflow-y-auto">
-          {/* Services Selector */}
-          <div>
-            <span className="text-xs font-semibold text-muted-foreground block mb-2">{isPt ? "Escolha o Serviço" : "Select Service"}</span>
-            <div className="grid grid-cols-3 gap-2">
-              {services.map(s => (
-                <button
-                  key={s.id}
-                  onClick={() => setSelectedService(s.id)}
-                  className={`p-2.5 rounded-lg border text-left flex flex-col justify-between transition-all ${
-                    selectedService === s.id
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-border bg-secondary/35 text-foreground hover:border-primary/50"
-                  }`}
-                >
-                  <span className="text-xs font-semibold block">{s.name}</span>
-                  <span className="text-xs text-muted-foreground font-bold mt-1.5">{s.price}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Time Selector */}
-          <div>
-            <span className="text-xs font-semibold text-muted-foreground block mb-2">{isPt ? "Horários Disponíveis (Hoje)" : "Available Times (Today)"}</span>
-            <div className="flex flex-wrap gap-1.5">
-              {times.map(time => (
-                <button
-                  key={time}
-                  onClick={() => setSelectedTime(time)}
-                  className={`px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all ${
-                    selectedTime === time
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-border bg-secondary/35 text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  {time}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <Button
-            onClick={handleBooking}
-            disabled={!selectedService || !selectedTime}
-            className="w-full bg-primary text-primary-foreground font-bold mt-2"
-          >
-            {isPt ? "CONFIRMAR RESERVA" : "BOOK APPOINTMENT"}
-          </Button>
-        </div>
-      )}
-    </div>
   )
 }

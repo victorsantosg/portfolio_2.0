@@ -90,13 +90,23 @@ export function QuoteSection() {
     e.preventDefault()
     setSubmitting(true)
     try {
-      await fetch("/api/quote", {
+      await fetch("https://formspree.io/f/mzdlkzyl", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          projectType: formData.projectType,
+          timeline: formData.timeline,
+          budget: formData.budget[0],
+          description: formData.description
+        }),
       })
     } catch (err) {
-      console.error("API error, falling back to local simulation", err)
+      console.error("Formspree submit error", err)
     }
     setSubmitting(false)
     setIsSubmitted(true)
