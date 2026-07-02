@@ -37,7 +37,7 @@ export const translations = {
       title: "Minha",
       titleGradient: "Trajetória",
       paragraph1: "Olá, eu sou o Victor! Sou formado em Análise e Desenvolvimento de Sistemas pela UNIFOR e tenho uma Pós-Graduação em Desenvolvimento Web Full Stack pela Faculdade INFNET, referência em tecnologia.",
-      paragraph2: "Minha paixão por tecnologia começou cedo, aos 10 anos, quando comecei a estudar programação. Hoje, atuo no desenvolvimento de soluções robustas utilizando Next.js, Flutter, Fastify, Prisma, PostgreSQL, Docker e Coolify, além de automação de processos e análise de dados com Python. Meu foco atual é buscar novos parceiros e clientes dispostos a avançar tecnologicamente, escalando e melhorando a eficiência de suas empresas.",
+      paragraph2: "Minha paixão por tecnologia começou cedo, aos 10 anos, quando comecei a desmontar um computador que havia em casa para ver como funcionavam. Hoje, atuo no desenvolvimento de soluções robustas utilizando Next.js, Flutter, Fastify, Prisma, PostgreSQL, Docker e Coolify, além de automação de processos e análise de dados com Python. Meu foco atual é buscar novos parceiros e clientes dispostos a avançar tecnologicamente, escalando e melhorando a eficiência de suas empresas.",
       paragraph3: "Durante minha atuação como Desenvolvedor Web e Mobile Full Stack no Cometa Supermercados, desenvolvi do zero soluções e sistemas de missão crítica para a rede:",
       cometaProjects: [
         {
