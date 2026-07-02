@@ -41,7 +41,7 @@ export const translations = {
       paragraph3: "Durante minha atuação como Desenvolvedor Web e Mobile Full Stack no Cometa Supermercados, desenvolvi do zero soluções e sistemas de missão crítica para a rede:",
       cometaProjects: [
         {
-          title: "Inventário Corporativo 📦",
+          title: "Inventário Corporativo (Cometa) 📦",
           desc: "Painel gerencial integrado ao banco de dados ERP (RPINFO) para auditoria rigorosa de perdas, confrontando estoque físico com o sistêmico.",
           techs: "Next.js, Fastify, Prisma ORM, PostgreSQL"
         },
@@ -51,22 +51,22 @@ export const translations = {
           techs: "Next.js, React, Tailwind CSS"
         },
         {
-          title: "NPS Solares 💬",
+          title: "NPS Solares (Solares) 💬",
           desc: "Aplicação voltada para experiência e satisfação do cliente, integrada à ouvidoria administrativa com envio de fotos.",
           techs: "React, Firebase Firestore"
         },
         {
-          title: "Analytics API & Banco de Dados 📊",
+          title: "Analytics API & Banco de Dados (Cometa) 📊",
           desc: "Migração completa de banco analítico legado (Firestore/BigQuery) para PostgreSQL no Coolify, estruturando dados de mais de 144 mil produtos.",
           techs: "Fastify, TypeScript, PostgreSQL, Coolify"
         },
         {
-          title: "Transmissão para TVs (Tauri) 📺",
+          title: "Transmissão para TVs (Cometa) 📺",
           desc: "App nativo multiplataforma com atualização remota de SDK para gerenciamento e exibição de mídia e anúncios nas filiais.",
           techs: "Tauri, Rust, TypeScript, SDK Updates"
         }
       ],
-      paragraph4: "Além disso, atuei na engenharia de dados estruturando rotinas de ETL diárias em Python com alertas no Telegram, e trabalhei em evolutivos de alta relevância como a refatoração do app Cometa Checks (Flutter) para otimização de memória, integração do Laudo Técnico com a API do GLPI e assinatura digital, criação de Dashboards de Monitoramento do ERP em tempo real e um quadro Kanban integrado para a equipe de TI.",
+      paragraph4: "Além disso, atuei estruturando rotinas de ETL diárias em Python com alertas no Telegram, e trabalhei em evolutivos de refatoração de alguns sistemas: App Cometa Checks (Flutter) para otimização de memória, integração do Laudo Técnico com a API do GLPI e assinatura digital, criação de Dashboards de Monitoramento do ERP em tempo real e um quadro Kanban integrado para a equipe de TI.",
       skillsTitle: "Principais Entregas & Soluções",
       skillsList: [
         "Painel de Inventário: Auditoria de acuracidade de estoque físico versus sistêmico (ERP RPINFO) com cálculo de perdas sob custo de compra e filtros multidimensionais.",
