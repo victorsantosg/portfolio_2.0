@@ -63,7 +63,7 @@ export function Navbar() {
                 src="/logovs.png" 
                 alt="Logo VS" 
                 className={`object-contain -translate-y-[2.5px] transition-all duration-500 ease-in-out ${
-                  isScrolled ? "h-10 w-10 md:h-10 md:w-10" : "h-14 w-14 md:h-12 md:w-12"
+                  isScrolled ? "h-12 w-12 md:h-10 md:w-10" : "h-20 w-20 md:h-16 md:w-16"
                 }`}
               />
               <div className="hidden md:block">
