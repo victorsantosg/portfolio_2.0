@@ -23,6 +23,12 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { useLanguage } from "@/hooks/use-language"
 
 export function QuoteSection() {
@@ -416,21 +422,34 @@ export function QuoteSection() {
               </div>
 
               {/* Download CV */}
-              <motion.a
-                href="https://drive.google.com/file/d/1gdDbgXD7UKc8hjmY5wgNlEpxk7jhDPW1/view?usp=sharing"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ x: 5 }}
-                className="mt-4 flex items-center gap-4 p-4 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors group"
-              >
-                <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                  <Download className="h-5 w-5" />
-                </div>
-                <div>
-                  <div className="text-sm text-muted-foreground text-left">PDF</div>
-                  <div className="font-medium text-left">{language === "pt" ? "Baixar Currículo" : "Download Resume"}</div>
-                </div>
-              </motion.a>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <motion.button
+                    whileHover={{ x: 5 }}
+                    className="mt-4 w-full flex items-center gap-4 p-4 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors group outline-none"
+                  >
+                    <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                      <Download className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <div className="text-sm text-muted-foreground text-left">PDF</div>
+                      <div className="font-medium text-left">{language === "pt" ? "Baixar Currículo" : "Download Resume"}</div>
+                    </div>
+                  </motion.button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48 bg-card border-border/50">
+                  <DropdownMenuItem asChild className="cursor-pointer">
+                    <a href="https://drive.google.com/file/d/1gdDbgXD7UKc8hjmY5wgNlEpxk7jhDPW1/view?usp=sharing" target="_blank" rel="noopener noreferrer">
+                      Português (PT-BR)
+                    </a>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="cursor-pointer">
+                    <a href="https://drive.google.com/file/d/1Yu5czn-78k2OQ21_yywjbTX4b0QEAvZ_/view?usp=sharing" target="_blank" rel="noopener noreferrer">
+                      English (EN-US)
+                    </a>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </motion.div>
 
