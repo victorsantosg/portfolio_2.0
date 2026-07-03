@@ -155,7 +155,7 @@ export function QuoteSection() {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto">
+        <div className="grid lg:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -181,7 +181,7 @@ export function QuoteSection() {
                 }}
               />
             ) : (
-              <div className="rounded-2xl bg-card border border-border/50 p-8">
+              <div className="rounded-2xl bg-card border border-border/50 p-8 lg:h-[440px] flex flex-col">
                 <div className="flex items-center gap-2 mb-8">
                   {[1, 2, 3].map((s) => (
                     <div key={s} className="flex items-center">
@@ -432,10 +432,17 @@ export function QuoteSection() {
                 </div>
               </motion.a>
             </div>
+          </motion.div>
 
-            <div className="rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30 p-8">
-              <h3 className="text-xl font-semibold mb-4">{t.quote.whyChooseMe}</h3>
-              <ul className="space-y-3">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+          >
+            <div className="rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30 p-8 lg:h-[440px] flex flex-col">
+              <h3 className="text-xl font-semibold mb-6">{t.quote.whyChooseMe}</h3>
+              <ul className="space-y-4 flex-1">
                 {t.quote.reasons.map((item) => (
                   <li key={item} className="flex items-center gap-3">
                     <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />

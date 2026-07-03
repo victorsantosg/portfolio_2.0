@@ -58,6 +58,29 @@ export function AboutSection() {
                 </li>
               </ul>
             </div>
+
+            {/* Cursos / Certificações (Movido para a coluna da esquerda) */}
+            <div className="space-y-4 pt-4 lg:pt-8">
+              <h3 className="text-lg md:text-xl font-bold text-foreground flex items-center gap-2">
+                <Award className="h-5 w-5 text-primary shrink-0" />
+                {t.about.skillsTitle}
+              </h3>
+              {/* 1 coluna no desktop (lg), 2 colunas em telas médias */}
+              <div className="grid sm:grid-cols-2 lg:grid-cols-1 gap-3">
+                {t.about.skillsList.map((skill: string, index: number) => (
+                  <motion.div
+                    key={index}
+                    whileHover={{ x: 4 }}
+                    className="glass rounded-xl border border-border/30 p-3 sm:p-4 flex items-start gap-3 hover:border-primary/30 transition-all duration-300"
+                  >
+                    <Code className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                    <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed text-justify hyphens-auto">
+                      {skill}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
           </motion.div>
 
           {/* Coluna da Direita: Trajetória e Cursos */}
@@ -70,13 +93,13 @@ export function AboutSection() {
           >
             {/* Textos de Trajetória */}
             <div className="space-y-4 text-sm sm:text-base md:text-[17px] text-muted-foreground leading-relaxed">
-              <p className="text-foreground font-medium text-base md:text-lg leading-relaxed text-justify">
+              <p className="text-foreground font-medium text-base md:text-lg leading-relaxed text-justify hyphens-auto">
                 {t.about.paragraph1}
               </p>
-              <p className="text-justify">
+              <p className="text-justify hyphens-auto">
                 {t.about.paragraph2}
               </p>
-              <p className="text-justify">
+              <p className="text-justify hyphens-auto">
                 {t.about.paragraph3}
               </p>
 
@@ -89,7 +112,7 @@ export function AboutSection() {
                   >
                     <div>
                       <h5 className="font-semibold text-foreground text-xs sm:text-sm leading-snug">{proj.title}</h5>
-                      <p className="text-[11px] sm:text-xs text-muted-foreground mt-1 leading-relaxed">{proj.desc}</p>
+                      <p className="text-[11px] sm:text-xs text-muted-foreground mt-1 leading-relaxed text-justify hyphens-auto">{proj.desc}</p>
                     </div>
                     <span className="text-[10px] font-mono text-primary bg-primary/5 px-2 py-0.5 rounded self-start border border-primary/10 leading-normal">
                       {proj.techs}
@@ -99,33 +122,10 @@ export function AboutSection() {
               </div>
 
               {t.about.paragraph4 && (
-                <p>
+                <p className="text-justify hyphens-auto">
                   {t.about.paragraph4}
                 </p>
               )}
-            </div>
-
-            {/* Cursos / Certificações */}
-            <div className="space-y-4">
-              <h3 className="text-lg md:text-xl font-bold text-foreground flex items-center gap-2">
-                <Award className="h-5 w-5 text-primary shrink-0" />
-                {t.about.skillsTitle}
-              </h3>
-              {/* 2 colunas em md+ para aproveitar o espaço */}
-              <div className="grid md:grid-cols-2 gap-3">
-                {t.about.skillsList.map((skill, index) => (
-                  <motion.div
-                    key={index}
-                    whileHover={{ x: 4 }}
-                    className="glass rounded-xl border border-border/30 p-3 sm:p-4 flex items-start gap-3 hover:border-primary/30 transition-all duration-300"
-                  >
-                    <Code className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                    <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                      {skill}
-                    </p>
-                  </motion.div>
-                ))}
-              </div>
             </div>
           </motion.div>
         </div>
