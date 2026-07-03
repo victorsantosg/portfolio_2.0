@@ -39,7 +39,7 @@ export function AboutSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="lg:col-span-4 space-y-5"
+            className="lg:col-span-4 space-y-5 order-2 lg:order-1"
           >
             {/* Card de Formação Acadêmica */}
             <div className="glass rounded-2xl border border-border/50 p-5 sm:p-6">
@@ -89,7 +89,7 @@ export function AboutSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="lg:col-span-8 space-y-7"
+            className="lg:col-span-8 space-y-7 order-1 lg:order-2"
           >
             {/* Textos de Trajetória */}
             <div className="space-y-4 text-sm sm:text-base md:text-[17px] text-muted-foreground leading-relaxed">
