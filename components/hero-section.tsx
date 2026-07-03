@@ -30,7 +30,7 @@ export function HeroSection() {
     setAutoCount(0)
 
     const steps = 30
-    const intervalTime = 1500 / steps
+    const intervalTime = 3000 / steps
     let currentStep = 0
 
     const counterInterval = setInterval(() => {
@@ -51,7 +51,7 @@ export function HeroSection() {
 
     const timer = setTimeout(() => {
       setAssemblyState("assembled")
-    }, 1600)
+    }, 3100)
 
     return () => {
       clearInterval(counterInterval)
@@ -313,15 +313,7 @@ export function HeroSection() {
 
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background z-0" />
 
-      {assemblyState === "assembling" && (
-        <div 
-          className="absolute left-0 right-0 h-[3px] z-50 pointer-events-none animate-vs-laser-scan-viewport"
-          style={{
-            background: "linear-gradient(90deg, transparent, var(--primary), #fff, var(--primary), transparent)",
-            boxShadow: "0 0 15px var(--primary), 0 0 30px var(--primary)"
-          }}
-        />
-      )}
+
 
       <div className="relative z-20 container mx-auto py-24 md:py-28">
         <motion.div
@@ -332,19 +324,7 @@ export function HeroSection() {
         >
           {/* Avatar / Portrait with Holographic Targets */}
           <div className="relative group mb-8">
-            {assemblyState === "assembling" && (
-              <>
-                <div 
-                  className="absolute -inset-6 rounded-full border-2 border-dashed pointer-events-none animate-spin" 
-                  style={{ borderColor: "rgba(34, 197, 94, 0.3)", animationDuration: "12s" }}
-                />
-                <div 
-                  className="absolute -inset-10 rounded-full border border-dotted pointer-events-none animate-spin" 
-                  style={{ borderColor: "rgba(34, 197, 94, 0.15)", animationDuration: "25s", animationDirection: "reverse" }}
-                />
-                <div className="absolute -top-12 left-1/2 -translate-x-1/2 text-[10px] font-mono select-none text-primary">[ CALIBRATING LOCK-ON ]</div>
-              </>
-            )}
+
 
             <motion.div 
               initial={{ scale: 0.1, rotate: -180, opacity: 0 }}
