@@ -12,6 +12,7 @@ import {
   Terminal,
 } from "lucide-react"
 import { useLanguage } from "@/hooks/use-language"
+import { jarvisVariants } from "@/lib/animations"
 
 const additionalTools = [
   { name: "Next.js / PWA", icon: Code2 },
@@ -74,15 +75,18 @@ export function TechStackSection() {
 
       <div className="relative container mx-auto px-4 md:px-6">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={jarvisVariants}
+          custom={{ direction: "top" }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
           <motion.span
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            variants={jarvisVariants}
+            custom={{ direction: "scale", delay: 0.2 }}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
             className="inline-block text-primary font-mono text-sm mb-4"
           >
@@ -100,10 +104,11 @@ export function TechStackSection() {
           {categories.map((category, index) => (
             <motion.div
               key={category.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              variants={jarvisVariants}
+              custom={{ direction: "bottom", delay: index * 0.1 }}
+              initial="hidden"
+              whileInView="visible"
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1, duration: 0.6 }}
             >
               <TechCard category={category} />
             </motion.div>
@@ -111,19 +116,21 @@ export function TechStackSection() {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={jarvisVariants}
+          custom={{ direction: "bottom", delay: 0.4 }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true }}
-          transition={{ delay: 0.4, duration: 0.6 }}
           className="flex flex-wrap items-center justify-center gap-2 sm:gap-3"
         >
           {additionalTools.map((tool, index) => (
             <motion.div
               key={tool.name}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              variants={jarvisVariants}
+              custom={{ direction: "scale", delay: 0.5 + index * 0.05 }}
+              initial="hidden"
+              whileInView="visible"
               viewport={{ once: true }}
-              transition={{ delay: 0.5 + index * 0.05, duration: 0.4 }}
               whileHover={{ scale: 1.05, y: -2 }}
               className="flex items-center gap-2 px-4 py-2 rounded-full bg-secondary border border-border/50 hover:border-primary/50 transition-colors"
             >

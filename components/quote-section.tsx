@@ -30,6 +30,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useLanguage } from "@/hooks/use-language"
+import { jarvisVariants } from "@/lib/animations"
 
 export function QuoteSection() {
   const { language, t } = useLanguage()
@@ -139,15 +140,18 @@ export function QuoteSection() {
 
       <div className="relative container mx-auto px-4 md:px-6">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={jarvisVariants}
+          custom={{ direction: "top" }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
           <motion.span
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            variants={jarvisVariants}
+            custom={{ direction: "scale", delay: 0.2 }}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
             className="inline-block text-primary font-mono text-sm mb-4"
           >
@@ -163,10 +167,11 @@ export function QuoteSection() {
 
         <div className="grid lg:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={jarvisVariants}
+            custom={{ direction: "left", delay: 0.2 }}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
           >
             {isSubmitted ? (
               <SuccessMessage
@@ -392,10 +397,11 @@ export function QuoteSection() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={jarvisVariants}
+            custom={{ direction: "right", delay: 0.3 }}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ delay: 0.2, duration: 0.8 }}
             className="space-y-6"
           >
             <div className="rounded-2xl bg-card border border-border/50 p-8">
@@ -454,10 +460,11 @@ export function QuoteSection() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={jarvisVariants}
+            custom={{ direction: "right", delay: 0.4 }}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ delay: 0.4, duration: 0.8 }}
           >
             <div className="rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30 p-8 lg:h-[440px] flex flex-col">
               <h3 className="text-xl font-semibold mb-6">{t.quote.whyChooseMe}</h3>

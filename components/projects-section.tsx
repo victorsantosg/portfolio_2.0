@@ -35,6 +35,7 @@ import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
 import { useLanguage } from "@/hooks/use-language"
 import { Input } from "@/components/ui/input"
+import { jarvisVariants } from "@/lib/animations"
 
 export function ProjectsSection() {
   const { language, t } = useLanguage()
@@ -342,15 +343,18 @@ export function ProjectsSection() {
     <section id="projetos" className="relative py-20 md:py-28 overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={jarvisVariants}
+          custom={{ direction: "top" }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
           <motion.span
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            variants={jarvisVariants}
+            custom={{ direction: "scale", delay: 0.2 }}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
             className="inline-block text-primary font-mono text-sm mb-4"
           >
@@ -365,10 +369,11 @@ export function ProjectsSection() {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={jarvisVariants}
+          custom={{ direction: "bottom", delay: 0.2 }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true }}
-          transition={{ delay: 0.2, duration: 0.6 }}
           className="flex flex-wrap items-center justify-center gap-2 mb-12"
         >
           {filters.map((filter) => (
@@ -391,8 +396,11 @@ export function ProjectsSection() {
           {(activeFilter === "all" || activeFilter === "corporate") && (
             <motion.div
               layout
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              variants={jarvisVariants}
+              custom={{ direction: "left", delay: 0.3 }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
               exit={{ opacity: 0, y: 20 }}
               className="space-y-4"
             >
@@ -413,8 +421,11 @@ export function ProjectsSection() {
           {(activeFilter === "all" || activeFilter === "personal") && (
             <motion.div
               layout
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              variants={jarvisVariants}
+              custom={{ direction: "right", delay: 0.4 }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
               exit={{ opacity: 0, y: 20 }}
               className="space-y-4"
             >

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { GraduationCap, Code, Award } from "lucide-react"
 import { useLanguage } from "@/hooks/use-language"
+import { jarvisVariants } from "@/lib/animations"
 
 export function AboutSection() {
   const { t } = useLanguage()
@@ -13,15 +14,18 @@ export function AboutSection() {
 
       <div className="relative container mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={jarvisVariants}
+          custom={{ direction: "top" }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
           className="text-center mb-12 md:mb-16"
         >
           <motion.span
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            variants={jarvisVariants}
+            custom={{ direction: "scale", delay: 0.2 }}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
             className="inline-block text-primary font-mono text-sm mb-4"
           >
@@ -35,10 +39,11 @@ export function AboutSection() {
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           {/* Coluna da Esquerda: Contato e Formação */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={jarvisVariants}
+            custom={{ direction: "left", delay: 0.2 }}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
             className="lg:col-span-4 space-y-5 order-2 lg:order-1"
           >
             {/* Card de Formação Acadêmica */}
@@ -85,10 +90,11 @@ export function AboutSection() {
 
           {/* Coluna da Direita: Trajetória e Cursos */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={jarvisVariants}
+            custom={{ direction: "right", delay: 0.3 }}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
             className="lg:col-span-8 space-y-7 order-1 lg:order-2"
           >
             {/* Textos de Trajetória */}
