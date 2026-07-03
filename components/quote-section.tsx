@@ -127,10 +127,10 @@ export function QuoteSection() {
   }
 
   return (
-    <section id="orcamento" className="relative py-32">
+    <section id="orcamento" className="relative py-20 md:py-28">
       <div className="absolute inset-0 bg-gradient-to-b from-background via-secondary/10 to-background" />
 
-      <div className="relative container mx-auto px-6">
+      <div className="relative container mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -154,7 +154,7 @@ export function QuoteSection() {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}

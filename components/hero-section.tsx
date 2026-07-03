@@ -323,7 +323,7 @@ export function HeroSection() {
         />
       )}
 
-      <div className="relative z-20 container mx-auto px-6 py-32">
+      <div className="relative z-20 container mx-auto py-24 md:py-28">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -483,23 +483,25 @@ export function HeroSection() {
             initial={{ y: 100, opacity: 0 }}
             animate={assemblyState === "disassembled" ? { y: 150, opacity: 0 } : { y: 0, opacity: 1 }}
             transition={getTransition(1.6)}
-            className="mt-20 flex items-center justify-center gap-12 flex-wrap"
+            className="mt-16 flex items-center justify-center"
           >
-            {[
-              { value: `${reposCount}+`, label: t.hero.stats.repos },
-              { value: `${yearsCount}+`, label: t.hero.stats.exp },
-              { value: `${autoCount}%`, label: t.hero.stats.automation },
-            ].map((stat) => (
-              <div
-                key={stat.label}
-                className="text-center"
-              >
-                <div className="text-3xl md:text-4xl font-bold text-gradient">
-                  {stat.value}
+            <div className="inline-flex items-center gap-0 glass rounded-2xl border border-border/40 overflow-hidden divide-x divide-border/40">
+              {[
+                { value: `${reposCount}+`, label: t.hero.stats.repos },
+                { value: `${yearsCount}+`, label: t.hero.stats.exp },
+                { value: `${autoCount}%`, label: t.hero.stats.automation },
+              ].map((stat, i) => (
+                <div
+                  key={stat.label}
+                  className="text-center px-6 py-4 sm:px-8 sm:py-5"
+                >
+                  <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-gradient">
+                    {stat.value}
+                  </div>
+                  <div className="text-xs sm:text-sm text-muted-foreground mt-0.5 whitespace-nowrap">{stat.label}</div>
                 </div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
-              </div>
-            ))}
+              ))}
+            </div>
           </motion.div>
         </motion.div>
       </div>

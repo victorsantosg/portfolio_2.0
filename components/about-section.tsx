@@ -1,29 +1,23 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { GraduationCap, Code, Briefcase, Award, Phone, Mail, MapPin } from "lucide-react"
+import { GraduationCap, Code, Award } from "lucide-react"
 import { useLanguage } from "@/hooks/use-language"
 
 export function AboutSection() {
   const { t } = useLanguage()
 
-  const contactInfo = [
-    { icon: Phone, text: "(85) 99955-6385", href: "tel:+5585999556385" },
-    { icon: Mail, text: "victoorsaantos16@gmail.com", href: "mailto:victoorsaantos16@gmail.com" },
-    { icon: MapPin, text: "Fortaleza / Ceará", href: null }
-  ]
-
   return (
-    <section id="sobre" className="relative py-32 overflow-hidden bg-background">
+    <section id="sobre" className="relative py-20 md:py-28 overflow-hidden bg-background">
       <div className="absolute inset-0 bg-linear-to-b from-background via-secondary/10 to-background" />
 
-      <div className="relative container mx-auto px-6">
+      <div className="relative container mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center mb-12 md:mb-16"
         >
           <motion.span
             initial={{ opacity: 0 }}
@@ -38,60 +32,29 @@ export function AboutSection() {
           </h2>
         </motion.div>
 
-        <div className="grid lg:grid-cols-12 gap-12 items-start">
-          {/* Coluna da Esquerda: Contato e Resumo */}
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+          {/* Coluna da Esquerda: Contato e Formação */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="lg:col-span-4 space-y-6"
+            className="lg:col-span-4 space-y-5"
           >
-            <div className="glass rounded-2xl border border-border/50 p-6 space-y-6">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-primary/10 rounded-xl">
-                  <Briefcase className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-foreground">Victor Santos</h3>
-                  <p className="text-sm text-muted-foreground">Full Stack & Data Analyst</p>
-                </div>
-              </div>
-
-              <hr className="border-border/50" />
-
-              <div className="space-y-4">
-                {contactInfo.map((info, idx) => {
-                  const Icon = info.icon
-                  return (
-                    <div key={idx} className="flex items-center gap-3">
-                      <Icon className="h-5 w-5 text-primary shrink-0" />
-                      {info.href ? (
-                        <a href={info.href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                          {info.text}
-                        </a>
-                      ) : (
-                        <span className="text-sm text-muted-foreground">{info.text}</span>
-                      )}
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-
-            <div className="glass rounded-2xl border border-border/50 p-6">
+            {/* Card de Formação Acadêmica */}
+            <div className="glass rounded-2xl border border-border/50 p-5 sm:p-6">
               <h4 className="font-semibold text-foreground mb-4 flex items-center gap-2">
-                <GraduationCap className="h-5 w-5 text-primary" />
+                <GraduationCap className="h-5 w-5 text-primary shrink-0" />
                 Formação Acadêmica
               </h4>
               <ul className="space-y-4 text-sm">
-                <li>
-                  <p className="font-medium text-foreground">Graduação em Análise e Desenvolvimento de Sistemas</p>
-                  <p className="text-xs text-muted-foreground">UNIFOR (Universidade de Fortaleza)</p>
+                <li className="relative pl-4 before:absolute before:left-0 before:top-2 before:w-1.5 before:h-1.5 before:rounded-full before:bg-primary/60">
+                  <p className="font-medium text-foreground leading-snug">Graduação em Análise e Desenvolvimento de Sistemas</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">UNIFOR (Universidade de Fortaleza)</p>
                 </li>
-                <li>
-                  <p className="font-medium text-foreground">Pós-Graduação em Dev Web Full Stack</p>
-                  <p className="text-xs text-muted-foreground">Faculdade INFNET (Concluído)</p>
+                <li className="relative pl-4 before:absolute before:left-0 before:top-2 before:w-1.5 before:h-1.5 before:rounded-full before:bg-primary/60">
+                  <p className="font-medium text-foreground leading-snug">Pós-Graduação em Dev Web Full Stack</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">Faculdade INFNET (Concluído)</p>
                 </li>
               </ul>
             </div>
@@ -103,10 +66,11 @@ export function AboutSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="lg:col-span-8 space-y-8"
+            className="lg:col-span-8 space-y-7"
           >
-            <div className="space-y-6 text-base md:text-lg text-muted-foreground leading-relaxed">
-              <p className="text-foreground font-medium text-xl">
+            {/* Textos de Trajetória */}
+            <div className="space-y-4 text-sm sm:text-base md:text-[17px] text-muted-foreground leading-relaxed">
+              <p className="text-foreground font-medium text-base md:text-lg leading-relaxed">
                 {t.about.paragraph1}
               </p>
               <p>
@@ -115,20 +79,25 @@ export function AboutSection() {
               <p>
                 {t.about.paragraph3}
               </p>
-              {/* Projetos do Cometa com Explicação e Techs */}
-              <div className="grid sm:grid-cols-2 gap-4 my-6">
+
+              {/* Projetos do Cometa — 2 colunas sempre */}
+              <div className="grid grid-cols-2 gap-3 my-5">
                 {t.about.cometaProjects?.map((proj: any, idx: number) => (
-                  <div key={idx} className="p-4 rounded-xl border border-border/30 bg-secondary/10 flex flex-col justify-between space-y-2">
+                  <div
+                    key={idx}
+                    className="p-3 sm:p-4 rounded-xl border border-border/30 bg-secondary/10 flex flex-col justify-between gap-2"
+                  >
                     <div>
-                      <h5 className="font-semibold text-foreground text-sm md:text-base">{proj.title}</h5>
-                      <p className="text-xs text-muted-foreground mt-1">{proj.desc}</p>
+                      <h5 className="font-semibold text-foreground text-xs sm:text-sm leading-snug">{proj.title}</h5>
+                      <p className="text-[11px] sm:text-xs text-muted-foreground mt-1 leading-relaxed">{proj.desc}</p>
                     </div>
-                    <span className="text-[10px] font-mono text-primary bg-primary/5 px-2 py-0.5 rounded self-start border border-primary/10">
+                    <span className="text-[10px] font-mono text-primary bg-primary/5 px-2 py-0.5 rounded self-start border border-primary/10 leading-normal">
                       {proj.techs}
                     </span>
                   </div>
                 ))}
               </div>
+
               {t.about.paragraph4 && (
                 <p>
                   {t.about.paragraph4}
@@ -138,19 +107,20 @@ export function AboutSection() {
 
             {/* Cursos / Certificações */}
             <div className="space-y-4">
-              <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
-                <Award className="h-5 w-5 text-primary" />
+              <h3 className="text-lg md:text-xl font-bold text-foreground flex items-center gap-2">
+                <Award className="h-5 w-5 text-primary shrink-0" />
                 {t.about.skillsTitle}
               </h3>
-              <div className="grid gap-4">
+              {/* 2 colunas em md+ para aproveitar o espaço */}
+              <div className="grid md:grid-cols-2 gap-3">
                 {t.about.skillsList.map((skill, index) => (
                   <motion.div
                     key={index}
                     whileHover={{ x: 4 }}
-                    className="glass rounded-xl border border-border/30 p-4 flex items-start gap-3 hover:border-primary/30 transition-all duration-300"
+                    className="glass rounded-xl border border-border/30 p-3 sm:p-4 flex items-start gap-3 hover:border-primary/30 transition-all duration-300"
                   >
-                    <Code className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                    <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+                    <Code className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                    <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                       {skill}
                     </p>
                   </motion.div>

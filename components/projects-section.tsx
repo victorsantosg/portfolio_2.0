@@ -339,8 +339,8 @@ export function ProjectsSection() {
   }
 
   return (
-    <section id="projetos" className="relative py-32">
-      <div className="container mx-auto px-6">
+    <section id="projetos" className="relative py-20 md:py-28">
+      <div className="container mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -620,8 +620,7 @@ function HorizontalScrollRow({
   const scroll = (direction: "left" | "right") => {
     const el = scrollRef.current
     if (!el) return
-    const cardWidth = 330
-    const scrollAmount = direction === "left" ? -cardWidth : cardWidth
+    const scrollAmount = direction === "left" ? -el.clientWidth * 0.8 : el.clientWidth * 0.8
     el.scrollBy({ left: scrollAmount, behavior: "smooth" })
   }
 
@@ -658,7 +657,7 @@ function HorizontalScrollRow({
         {projects.map((project, index) => (
           <motion.div
             key={project.id}
-            className="min-w-[280px] sm:min-w-[310px] max-w-[310px] flex-shrink-0 snap-start"
+            className="w-[44vw] min-w-[160px] max-w-[200px] sm:w-auto sm:min-w-[280px] sm:max-w-[310px] flex-shrink-0 snap-start"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -693,7 +692,7 @@ function ProjectCard({
       className="group h-full rounded-2xl bg-card border border-border/50 overflow-hidden hover:border-primary/50 hover:shadow-[0_15px_30px_rgba(99,102,241,0.15)] dark:hover:shadow-[0_15px_30px_rgba(99,102,241,0.08)] transition-all duration-300 flex flex-col justify-between"
     >
       <div>
-        <div 
+        <div
           className={`relative aspect-video overflow-hidden cursor-pointer group/img ${!project.image ? "bg-secondary" : "bg-card"}`}
           onClick={onViewDetails}
         >
@@ -710,9 +709,9 @@ function ProjectCard({
             </div>
           )}
 
-          <div className="absolute top-3 left-3">
+          <div className="absolute top-2 left-2 sm:top-3 sm:left-3">
             <Badge
-              className={`text-xs font-semibold ${
+              className={`text-[9px] sm:text-xs font-semibold ${
                 project.category === "corporate"
                   ? "bg-blue-500/20 text-blue-400"
                   : "bg-purple-500/20 text-purple-400"
@@ -727,46 +726,48 @@ function ProjectCard({
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
 
-        <div className="p-4">
-          <h3 className="font-bold text-base mb-1.5 group-hover:text-primary transition-colors">
+        {/* Conteúdo principal */}
+        <div className="p-2.5 sm:p-4">
+          <h3 className="font-bold text-[11px] sm:text-base leading-snug mb-1 sm:mb-1.5 group-hover:text-primary transition-colors line-clamp-2">
             {project.title}
           </h3>
-          <p className="text-xs text-muted-foreground mb-3 line-clamp-2 leading-relaxed">
+          <p className="hidden sm:block text-xs text-muted-foreground mb-3 line-clamp-2 leading-relaxed">
             {project.description}
           </p>
 
-          <div className="flex flex-wrap gap-1.5 mb-3">
-            {project.tags.slice(0, 4).map((tag: string) => (
+          <div className="flex flex-wrap gap-1 sm:gap-1.5 mb-0 sm:mb-1">
+            {project.tags.slice(0, 2).map((tag: string) => (
               <span
                 key={tag}
-                className="text-[10px] px-1.5 py-0.5 rounded-md bg-secondary text-muted-foreground border border-border/20"
+                className="text-[9px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded-md bg-secondary text-muted-foreground border border-border/20"
               >
                 {tag}
               </span>
             ))}
-            {project.tags.length > 4 && (
-              <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-secondary text-muted-foreground">
-                +{project.tags.length - 4}
+            {project.tags.length > 2 && (
+              <span className="text-[9px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded-md bg-secondary text-muted-foreground">
+                +{project.tags.length - 2}
               </span>
             )}
           </div>
         </div>
       </div>
 
-      <div className="p-4 pt-0 flex flex-col gap-2">
+      {/* Footer */}
+      <div className="p-2.5 sm:p-4 pt-0 flex flex-col gap-1.5 sm:gap-2">
         {project.isPrivate && (
-          <div className="text-[10px] text-amber-500/80 bg-amber-500/10 border border-amber-500/20 rounded-md px-2 py-1 flex items-center gap-1.5 font-medium">
+          <div className="text-[9px] sm:text-[10px] text-amber-500/80 bg-amber-500/10 border border-amber-500/20 rounded-md px-1.5 sm:px-2 py-1 flex items-center gap-1.5 font-medium">
             <span className="h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0 animate-pulse" />
-            {language === "pt"
-              ? "Código privado (Projeto interno de rede)"
-              : "Private code (Internal network project)"}
+            <span className="line-clamp-1">
+              {language === "pt" ? "Código privado" : "Private code"}
+            </span>
           </div>
         )}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <Button
             size="sm"
             onClick={onViewDetails}
-            className="flex-1 text-xs py-1 h-8 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-semibold"
+            className="flex-1 text-[10px] sm:text-xs py-0.5 h-7 sm:h-8 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-semibold"
           >
             {t.projects.btnDetails}
           </Button>
@@ -775,7 +776,7 @@ function ProjectCard({
               size="sm"
               variant="outline"
               asChild
-              className="h-8 w-8 p-0 border-border hover:border-primary transition-colors flex items-center justify-center"
+              className="h-7 sm:h-8 w-7 sm:w-8 p-0 border-border hover:border-primary transition-colors flex items-center justify-center"
             >
               <a
                 href={project.github}
@@ -788,7 +789,7 @@ function ProjectCard({
             </Button>
           ) : (
             <div
-              className="h-8 w-8 rounded-md border border-border bg-muted/30 text-muted-foreground flex items-center justify-center cursor-help"
+              className="h-7 sm:h-8 w-7 sm:w-8 rounded-md border border-border bg-muted/30 text-muted-foreground flex items-center justify-center cursor-help"
               title={
                 language === "pt"
                   ? "Código privado por se tratar de um projeto interno."

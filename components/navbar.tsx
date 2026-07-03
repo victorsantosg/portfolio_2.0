@@ -62,7 +62,7 @@ export function Navbar() {
                 alt="Logo VS" 
                 className="h-12 w-12 object-contain -translate-y-[2.5px]"
               />
-              <div>
+              <div className="hidden md:block">
                 <span className="text-gradient">Victor</span>
                 <span className="text-foreground">.dev</span>
               </div>
@@ -124,9 +124,9 @@ export function Navbar() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 z-40 pt-24 px-4 md:hidden"
+            className="fixed inset-0 z-40 pt-24 px-4 md:hidden bg-background/95 backdrop-blur-sm"
           >
-            <div className="glass rounded-2xl border border-border/50 p-6">
+            <div className="bg-background border border-border/50 rounded-2xl p-6 shadow-2xl">
               <div className="flex flex-col gap-4">
                 {navLinks.map((link) => (
                   <button

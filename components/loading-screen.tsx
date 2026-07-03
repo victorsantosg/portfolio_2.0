@@ -17,9 +17,9 @@ export function LoadingScreen() {
       initial={{ opacity: 1 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.6, ease: "easeInOut" }}
-      className="fixed inset-0 z-[9999] bg-[#030303] flex flex-col items-center justify-center p-6"
+      className="fixed inset-0 z-[9999] bg-[#030303] flex flex-col items-center justify-center p-2 sm:p-6"
     >
-      <div className="w-full max-w-[600px] flex flex-col justify-center items-center">
+      <div className="w-full max-w-[95vw] sm:max-w-[600px] flex flex-col justify-center items-center">
         {/* SVG da Logo Animada */}
         <svg
           id="vs-cyber-logo-svg"

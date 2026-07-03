@@ -69,10 +69,10 @@ export function TechStackSection() {
   ]
 
   return (
-    <section id="stack" className="relative py-32 overflow-hidden">
+    <section id="stack" className="relative py-20 md:py-28 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-background via-secondary/20 to-background" />
 
-      <div className="relative container mx-auto px-6">
+      <div className="relative container mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -96,7 +96,7 @@ export function TechStackSection() {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5 mb-10">
           {categories.map((category, index) => (
             <motion.div
               key={category.title}
@@ -115,7 +115,7 @@ export function TechStackSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.4, duration: 0.6 }}
-          className="flex flex-wrap items-center justify-center gap-4"
+          className="flex flex-wrap items-center justify-center gap-2 sm:gap-3"
         >
           {additionalTools.map((tool, index) => (
             <motion.div
@@ -150,23 +150,25 @@ function TechCard({
     <motion.div
       whileHover={{ y: -5, scale: 1.02 }}
       transition={{ duration: 0.2 }}
-      className="h-full p-6 rounded-2xl bg-card border border-border/50 hover:border-primary/30 transition-all duration-300 group"
+      className="h-full p-3 sm:p-5 lg:p-6 rounded-2xl bg-card border border-border/50 hover:border-primary/30 transition-all duration-300 group"
     >
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-          <category.icon className="h-5 w-5" />
+      {/* Header do card */}
+      <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-5">
+        <div className="p-1.5 sm:p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors shrink-0">
+          <category.icon className="h-3.5 w-3.5 sm:h-5 sm:w-5" />
         </div>
-        <h3 className="font-semibold text-lg">{category.title}</h3>
+        <h3 className="font-semibold text-xs sm:text-base leading-tight">{category.title}</h3>
       </div>
 
-      <div className="space-y-4">
+      {/* Barras de progresso */}
+      <div className="space-y-2.5 sm:space-y-4">
         {category.techs.map((tech) => (
           <div key={tech.name}>
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-sm font-medium">{tech.name}</span>
-              <span className="text-xs text-muted-foreground">{tech.level}%</span>
+            <div className="flex items-center justify-between mb-0.5 sm:mb-1">
+              <span className="text-[10px] sm:text-sm font-medium leading-snug">{tech.name}</span>
+              <span className="text-[9px] sm:text-xs text-muted-foreground shrink-0 ml-1">{tech.level}%</span>
             </div>
-            <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
+            <div className="h-1 sm:h-1.5 bg-secondary rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 whileInView={{ width: `${tech.level}%` }}
@@ -181,4 +183,3 @@ function TechCard({
     </motion.div>
   )
 }
-
