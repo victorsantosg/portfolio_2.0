@@ -441,7 +441,7 @@ export function HeroSection() {
           </motion.p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="flex flex-row items-center justify-center gap-3">
             <motion.div
               initial={{ x: -200, opacity: 0 }}
               animate={assemblyState === "disassembled" ? { x: -300, opacity: 0 } : { x: 0, opacity: 1 }}
@@ -452,10 +452,10 @@ export function HeroSection() {
               <Button
                 size="lg"
                 onClick={() => scrollToSection("#orcamento")}
-                className="bg-primary text-primary-foreground font-semibold px-8 py-6 text-lg glow-border animate-pulse-glow"
+                className="bg-primary text-primary-foreground font-semibold px-5 py-4 text-sm sm:px-8 sm:py-6 sm:text-lg glow-border animate-pulse-glow"
               >
                 {t.hero.ctaPrimary}
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRight className="ml-1.5 h-4 w-4 sm:ml-2 sm:h-5 sm:w-5" />
               </Button>
             </motion.div>
 
@@ -470,10 +470,10 @@ export function HeroSection() {
                 size="lg"
                 variant="outline"
                 onClick={() => scrollToSection("#projetos")}
-                className="border-border bg-transparent hover:bg-secondary font-semibold px-8 py-6 text-lg"
+                className="border-border bg-transparent hover:bg-secondary font-semibold px-5 py-4 text-sm sm:px-8 sm:py-6 sm:text-lg"
               >
                 {t.hero.ctaSecondary}
-                <ExternalLink className="ml-2 h-5 w-5" />
+                <ExternalLink className="ml-1.5 h-4 w-4 sm:ml-2 sm:h-5 sm:w-5" />
               </Button>
             </motion.div>
           </div>
@@ -485,7 +485,7 @@ export function HeroSection() {
             transition={getTransition(1.6)}
             className="mt-16 flex items-center justify-center"
           >
-            <div className="inline-flex items-center gap-0 glass rounded-2xl border border-border/40 overflow-hidden divide-x divide-border/40">
+            <div className="inline-flex items-center gap-0 glass rounded-2xl border border-border/40 overflow-hidden divide-x divide-border/40 w-full max-w-xs sm:max-w-none sm:w-auto">
               {[
                 { value: `${reposCount}+`, label: t.hero.stats.repos },
                 { value: `${yearsCount}+`, label: t.hero.stats.exp },
@@ -493,12 +493,12 @@ export function HeroSection() {
               ].map((stat, i) => (
                 <div
                   key={stat.label}
-                  className="text-center px-6 py-4 sm:px-8 sm:py-5"
+                  className="text-center px-3 py-3 sm:px-8 sm:py-5 flex-1"
                 >
-                  <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-gradient">
+                  <div className="text-xl sm:text-3xl md:text-4xl font-bold text-gradient">
                     {stat.value}
                   </div>
-                  <div className="text-xs sm:text-sm text-muted-foreground mt-0.5 whitespace-nowrap">{stat.label}</div>
+                  <div className="text-[10px] sm:text-sm text-muted-foreground mt-0.5 leading-tight">{stat.label}</div>
                 </div>
               ))}
             </div>

@@ -16,6 +16,7 @@ import {
   Cog,
   Building2,
   Phone,
+  Download,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -220,18 +221,18 @@ export function QuoteSection() {
                               key={type.id}
                               type="button"
                               onClick={() => handleProjectTypeSelect(type.id)}
-                              className={`p-4 rounded-xl border-2 transition-all duration-200 text-left ${formData.projectType === type.id
+                              className={`p-4 rounded-xl border-2 transition-all duration-200 text-center flex flex-col items-center justify-center gap-1 ${formData.projectType === type.id
                                 ? "border-primary bg-primary/10"
                                 : "border-border hover:border-primary/50"
                                 }`}
                             >
                               <type.icon
-                                className={`h-6 w-6 mb-2 ${formData.projectType === type.id
+                                className={`h-6 w-6 ${formData.projectType === type.id
                                   ? "text-primary"
                                   : "text-muted-foreground"
                                   }`}
                               />
-                              <span className="block font-medium">{type.label}</span>
+                              <span className="block font-medium text-sm">{type.label}</span>
                             </button>
                           ))}
                         </div>
@@ -257,7 +258,7 @@ export function QuoteSection() {
                               key={timeline.id}
                               type="button"
                               onClick={() => handleTimelineSelect(timeline.id)}
-                              className={`w-full p-4 rounded-xl border-2 transition-all duration-200 text-left ${formData.timeline === timeline.id
+                              className={`w-full p-4 rounded-xl border-2 transition-all duration-200 text-center flex flex-col items-center justify-center ${formData.timeline === timeline.id
                                 ? "border-primary bg-primary/10"
                                 : "border-border hover:border-primary/50"
                                 }`}
@@ -413,6 +414,23 @@ export function QuoteSection() {
                   </motion.a>
                 ))}
               </div>
+
+              {/* Download CV */}
+              <motion.a
+                href="https://drive.google.com/file/d/1gdDbgXD7UKc8hjmY5wgNlEpxk7jhDPW1/view?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ x: 5 }}
+                className="mt-4 flex items-center gap-4 p-4 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors group"
+              >
+                <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                  <Download className="h-5 w-5" />
+                </div>
+                <div>
+                  <div className="text-sm text-muted-foreground text-left">PDF</div>
+                  <div className="font-medium text-left">{language === "pt" ? "Baixar Currículo" : "Download Resume"}</div>
+                </div>
+              </motion.a>
             </div>
 
             <div className="rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30 p-8">

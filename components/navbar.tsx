@@ -60,7 +60,7 @@ export function Navbar() {
               <img 
                 src="/logovs.png" 
                 alt="Logo VS" 
-                className="h-12 w-12 object-contain -translate-y-[2.5px]"
+                className="h-14 w-14 md:h-12 md:w-12 object-contain -translate-y-[2.5px]"
               />
               <div className="hidden md:block">
                 <span className="text-gradient">Victor</span>
