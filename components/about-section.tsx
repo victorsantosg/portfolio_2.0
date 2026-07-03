@@ -35,8 +35,8 @@ export function AboutSection() {
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           {/* Coluna da Esquerda: Contato e Formação */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
             className="lg:col-span-4 space-y-5"
@@ -62,21 +62,21 @@ export function AboutSection() {
 
           {/* Coluna da Direita: Trajetória e Cursos */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
             className="lg:col-span-8 space-y-7"
           >
             {/* Textos de Trajetória */}
             <div className="space-y-4 text-sm sm:text-base md:text-[17px] text-muted-foreground leading-relaxed">
-              <p className="text-foreground font-medium text-base md:text-lg leading-relaxed">
+              <p className="text-foreground font-medium text-base md:text-lg leading-relaxed text-justify">
                 {t.about.paragraph1}
               </p>
-              <p>
+              <p className="text-justify">
                 {t.about.paragraph2}
               </p>
-              <p>
+              <p className="text-justify">
                 {t.about.paragraph3}
               </p>
 

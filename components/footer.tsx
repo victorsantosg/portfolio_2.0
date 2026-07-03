@@ -21,16 +21,12 @@ export function Footer() {
             viewport={{ once: true }}
             className="text-center md:text-left"
           >
-            <div className="flex items-center gap-2.5 justify-center md:justify-start text-xl font-bold mb-2">
+            <div className="flex items-center justify-center md:justify-start mb-4">
               <img 
                 src="/logovs.png" 
                 alt="Logo VS" 
-                className="h-12 w-12 object-contain -translate-y-[3px]"
+                className="h-16 w-16 md:h-20 md:w-20 object-contain hover:scale-105 transition-transform duration-300"
               />
-              <div>
-                <span className="text-gradient">Victor</span>
-                <span className="text-foreground">.dev</span>
-              </div>
             </div>
             <p className="text-sm text-muted-foreground mb-1 max-w-xs leading-normal">
               {t.footer.description}

@@ -41,13 +41,15 @@ export function Navbar() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ${
-          isScrolled ? "w-[95%] max-w-5xl" : "w-[95%] max-w-6xl"
+        className={`fixed left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ease-in-out ${
+          isScrolled 
+            ? "top-2 w-[90%] md:w-[95%] max-w-5xl" 
+            : "top-4 w-[95%] max-w-6xl"
         }`}
       >
         <nav
-          className={`glass rounded-2xl border border-border/50 px-6 py-3 transition-all duration-300 ${
-            isScrolled ? "py-2" : "py-4"
+          className={`glass border border-border/50 transition-all duration-500 ease-in-out ${
+            isScrolled ? "py-2 px-4 md:px-6 rounded-[2rem] shadow-lg shadow-primary/10" : "py-4 px-6 rounded-2xl"
           }`}
         >
           <div className="flex items-center justify-between">
@@ -60,7 +62,9 @@ export function Navbar() {
               <img 
                 src="/logovs.png" 
                 alt="Logo VS" 
-                className="h-14 w-14 md:h-12 md:w-12 object-contain -translate-y-[2.5px]"
+                className={`object-contain -translate-y-[2.5px] transition-all duration-500 ease-in-out ${
+                  isScrolled ? "h-10 w-10 md:h-10 md:w-10" : "h-14 w-14 md:h-12 md:w-12"
+                }`}
               />
               <div className="hidden md:block">
                 <span className="text-gradient">Victor</span>
