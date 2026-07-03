@@ -58,7 +58,7 @@ export function Footer() {
             className="md:col-span-3 lg:col-span-3 lg:col-start-6 text-center md:text-left"
           >
             <h4 className="font-semibold text-foreground mb-6">{language === "pt" ? "Links Rápidos" : "Quick Links"}</h4>
-            <ul className="space-y-4 text-sm text-muted-foreground">
+            <ul className="flex flex-wrap justify-center md:flex-col gap-4 md:gap-4 text-sm text-muted-foreground">
               <li><a href="#inicio" className="hover:text-primary transition-colors">{t.nav.home}</a></li>
               <li><a href="#sobre" className="hover:text-primary transition-colors">{t.nav.about}</a></li>
               <li><a href="#stack" className="hover:text-primary transition-colors">{t.nav.stack}</a></li>
@@ -75,18 +75,18 @@ export function Footer() {
             className="md:col-span-4 lg:col-span-4 text-center md:text-left"
           >
             <h4 className="font-semibold text-foreground mb-6">{t.nav.contact}</h4>
-            <ul className="space-y-4 text-sm text-muted-foreground flex flex-col items-center md:items-start">
-              <li className="flex items-center gap-3">
+            <ul className="flex flex-wrap justify-center md:flex-col gap-5 md:gap-4 text-sm text-muted-foreground">
+              <li className="flex items-center gap-3 w-full sm:w-auto justify-center md:justify-start">
                 <div className="p-2 rounded-lg bg-primary/10 text-primary"><Mail className="h-4 w-4" /></div>
-                victoorsaantos16@gmail.com
+                <span>victoorsaantos16@gmail.com</span>
               </li>
               <li className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-primary/10 text-primary"><Phone className="h-4 w-4" /></div>
-                (85) 99955-6385
+                <span>(85) 99955-6385</span>
               </li>
               <li className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-primary/10 text-primary"><MapPin className="h-4 w-4" /></div>
-                Fortaleza, Ceará, {language === "pt" ? "Brasil" : "Brazil"}
+                <span>Fortaleza, {language === "pt" ? "CE" : "BR"}</span>
               </li>
             </ul>
           </motion.div>
