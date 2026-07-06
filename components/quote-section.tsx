@@ -172,6 +172,7 @@ export function QuoteSection() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
+            className="lg:col-span-2 h-full"
           >
             {isSubmitted ? (
               <SuccessMessage
@@ -192,7 +193,7 @@ export function QuoteSection() {
                 }}
               />
             ) : (
-              <div className="rounded-2xl bg-card border border-border/50 p-8 lg:h-[440px] flex flex-col">
+              <div className="rounded-2xl bg-card border border-border/50 p-8 min-h-[440px] flex flex-col justify-between h-full">
                 <div className="flex items-center gap-2 mb-8">
                   {[1, 2, 3].map((s) => (
                     <div key={s} className="flex items-center">
@@ -212,6 +213,81 @@ export function QuoteSection() {
                       )}
                     </div>
                   ))}
+                </div>
+
+                {/* Painel de Monitoramento Jarvis (Desktop Only para Preenchimento Dinâmico) */}
+                <div className="hidden lg:flex items-center justify-center p-6 border-y border-border/20 my-4 bg-secondary/10 rounded-xl relative overflow-hidden min-h-[140px] group/viz">
+                  {/* Grid overlay futurista */}
+                  <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-size-[16px_16px] pointer-events-none" />
+                  
+                  {step === 1 && (
+                    <motion.div 
+                      key="step1-viz"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="relative flex items-center gap-6 z-10 w-full"
+                    >
+                      <div className="relative w-16 h-16 shrink-0 flex items-center justify-center rounded-full border border-primary/20 bg-primary/5">
+                        <div className="absolute inset-0 border border-primary/30 border-t-transparent rounded-full animate-spin" />
+                        <Globe className="h-6 w-6 text-primary animate-pulse" />
+                      </div>
+                      <div className="space-y-1">
+                        <div className="font-mono text-[10px] text-primary font-bold tracking-wider">{"// INITIALIZING_MODULE: TYPE_SCAN"}</div>
+                        <h4 className="font-semibold text-foreground text-sm">{language === 'pt' ? 'Categoria do Projeto' : 'Project Category'}</h4>
+                        <p className="text-xs text-muted-foreground">
+                          {language === 'pt' 
+                            ? 'Defina a natureza do sistema para ajustarmos as tecnologias base.' 
+                            : 'Define the system nature to adjust baseline technologies.'}
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {step === 2 && (
+                    <motion.div 
+                      key="step2-viz"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="relative flex items-center gap-6 z-10 w-full"
+                    >
+                      <div className="relative w-16 h-16 shrink-0 flex items-center justify-center rounded-full border border-primary/20 bg-primary/5">
+                        <div className="absolute inset-1.5 border border-dashed border-primary/30 rounded-full animate-spin" style={{ animationDuration: '8s' }} />
+                        <Clock className="h-6 w-6 text-primary animate-pulse" />
+                      </div>
+                      <div className="space-y-1">
+                        <div className="font-mono text-[10px] text-primary font-bold tracking-wider">{"// CALIBRATING_MODULE: TIMELINE_ESTIMATE"}</div>
+                        <h4 className="font-semibold text-foreground text-sm">{language === 'pt' ? 'Prazo de Desenvolvimento' : 'Development Timeframe'}</h4>
+                        <p className="text-xs text-muted-foreground">
+                          {language === 'pt' 
+                            ? 'Estime o tempo de entrega para organizarmos o fluxo de sprints.' 
+                            : 'Estimate delivery time to organize sprint flow.'}
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {step === 3 && (
+                    <motion.div 
+                      key="step3-viz"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="relative flex items-center gap-6 z-10 w-full"
+                    >
+                      <div className="relative w-16 h-16 shrink-0 flex items-center justify-center rounded-full border border-primary/20 bg-primary/5">
+                        <div className="absolute inset-0.5 border border-primary/40 rounded-full animate-ping" style={{ animationDuration: '2.5s' }} />
+                        <Wallet className="h-6 w-6 text-primary animate-pulse" />
+                      </div>
+                      <div className="space-y-1">
+                        <div className="font-mono text-[10px] text-primary font-bold tracking-wider">{"// SYNCHRONIZING_MODULE: ESTIMATED_BUDGET"}</div>
+                        <h4 className="font-semibold text-foreground text-sm">{language === 'pt' ? 'Dados e Orçamento' : 'Budget & Contact'}</h4>
+                        <p className="text-xs text-muted-foreground">
+                          {language === 'pt' 
+                            ? 'Informe sua estimativa e contato para criarmos uma proposta personalizada.' 
+                            : 'Enter your estimate and contact details to generate a custom proposal.'}
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
                 </div>
 
                 <form onSubmit={handleSubmit}>
@@ -396,88 +472,90 @@ export function QuoteSection() {
             )}
           </motion.div>
 
-          <motion.div
-            variants={jarvisVariants}
-            custom={{ direction: "right", delay: 0.3 }}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="space-y-6"
-          >
-            <div className="rounded-2xl bg-card border border-border/50 p-8">
-              <h3 className="text-xl font-semibold mb-6">{t.quote.channelsTitle}</h3>
-              <div className="space-y-4">
-                {contactLinks.map((link) => (
-                  <motion.a
-                    key={link.label}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ x: 5 }}
-                    className="flex items-center gap-4 p-4 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors group"
-                  >
-                    <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                      <link.icon className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <div className="text-sm text-muted-foreground">{link.label}</div>
-                      <div className="font-medium">{link.value}</div>
-                    </div>
-                  </motion.a>
-                ))}
+          {/* Coluna da Direita: Canais de Contato & Escolha */}
+          <div className="lg:col-span-1 space-y-6">
+            <motion.div
+              variants={jarvisVariants}
+              custom={{ direction: "right", delay: 0.3 }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <div className="rounded-2xl bg-card border border-border/50 p-8">
+                <h3 className="text-xl font-semibold mb-6">{t.quote.channelsTitle}</h3>
+                <div className="space-y-4">
+                  {contactLinks.map((link) => (
+                    <motion.a
+                      key={link.label}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ x: 5 }}
+                      className="flex items-center gap-4 p-4 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors group"
+                    >
+                      <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                        <link.icon className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <div className="text-sm text-muted-foreground">{link.label}</div>
+                        <div className="font-medium">{link.value}</div>
+                      </div>
+                    </motion.a>
+                  ))}
+                </div>
+
+                {/* Download CV */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <motion.button
+                      whileHover={{ x: 5 }}
+                      className="mt-4 w-full flex items-center gap-4 p-4 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors group outline-none"
+                    >
+                      <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                        <Download className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <div className="text-sm text-muted-foreground text-left">PDF</div>
+                        <div className="font-medium text-left">{language === "pt" ? "Baixar Currículo" : "Download Resume"}</div>
+                      </div>
+                    </motion.button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48 bg-card border-border/50">
+                    <DropdownMenuItem asChild className="cursor-pointer">
+                      <a href="https://drive.google.com/file/d/1gdDbgXD7UKc8hjmY5wgNlEpxk7jhDPW1/view?usp=sharing" target="_blank" rel="noopener noreferrer">
+                        Português (PT-BR)
+                      </a>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild className="cursor-pointer">
+                      <a href="https://drive.google.com/file/d/1Yu5czn-78k2OQ21_yywjbTX4b0QEAvZ_/view?usp=sharing" target="_blank" rel="noopener noreferrer">
+                        English (EN-US)
+                      </a>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
+            </motion.div>
 
-              {/* Download CV */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <motion.button
-                    whileHover={{ x: 5 }}
-                    className="mt-4 w-full flex items-center gap-4 p-4 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors group outline-none"
-                  >
-                    <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                      <Download className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <div className="text-sm text-muted-foreground text-left">PDF</div>
-                      <div className="font-medium text-left">{language === "pt" ? "Baixar Currículo" : "Download Resume"}</div>
-                    </div>
-                  </motion.button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48 bg-card border-border/50">
-                  <DropdownMenuItem asChild className="cursor-pointer">
-                    <a href="https://drive.google.com/file/d/1gdDbgXD7UKc8hjmY5wgNlEpxk7jhDPW1/view?usp=sharing" target="_blank" rel="noopener noreferrer">
-                      Português (PT-BR)
-                    </a>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild className="cursor-pointer">
-                    <a href="https://drive.google.com/file/d/1Yu5czn-78k2OQ21_yywjbTX4b0QEAvZ_/view?usp=sharing" target="_blank" rel="noopener noreferrer">
-                      English (EN-US)
-                    </a>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </motion.div>
-
-          <motion.div
-            variants={jarvisVariants}
-            custom={{ direction: "right", delay: 0.4 }}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            <div className="rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30 p-8 lg:h-[440px] flex flex-col">
-              <h3 className="text-xl font-semibold mb-6">{t.quote.whyChooseMe}</h3>
-              <ul className="space-y-4 flex-1">
-                {t.quote.reasons.map((item) => (
-                  <li key={item} className="flex items-center gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
-                    <span className="text-muted-foreground">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.div>
+            <motion.div
+              variants={jarvisVariants}
+              custom={{ direction: "right", delay: 0.4 }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <div className="rounded-2xl bg-gradient-to-br from-primary/15 via-primary/5 to-transparent border border-primary/25 p-8 flex flex-col">
+                <h3 className="text-xl font-semibold mb-6">{t.quote.whyChooseMe}</h3>
+                <ul className="space-y-4">
+                  {t.quote.reasons.map((item) => (
+                    <li key={item} className="flex items-center gap-3">
+                      <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                      <span className="text-muted-foreground">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </div>
     </section>

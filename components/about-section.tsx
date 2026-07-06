@@ -97,28 +97,38 @@ export function AboutSection() {
             viewport={{ once: true }}
             className="lg:col-span-8 space-y-7 order-1 lg:order-2"
           >
-            {/* Textos de Trajetória */}
-            <div className="space-y-4 text-sm sm:text-base md:text-[17px] text-muted-foreground leading-relaxed">
-              <p className="text-foreground font-medium text-base md:text-lg leading-relaxed text-justify hyphens-auto">
-                {t.about.paragraph1}
-              </p>
-              <p className="text-justify hyphens-auto">
-                {t.about.paragraph2}
-              </p>
-              <p className="text-justify hyphens-auto">
-                {t.about.paragraph3}
-              </p>
+            {/* Trajetória estruturada em Cards */}
+            <div className="space-y-6 text-sm sm:text-base md:text-[16px] text-muted-foreground leading-relaxed">
+              <div className="glass rounded-2xl border border-border/40 p-6 space-y-4">
+                <p className="text-foreground font-semibold text-base md:text-lg leading-relaxed text-justify hyphens-auto">
+                  {t.about.paragraph1}
+                </p>
+                <p className="text-justify hyphens-auto">
+                  {t.about.paragraph2}
+                </p>
+              </div>
+
+              <div className="glass rounded-2xl border border-border/40 p-6 space-y-4">
+                <p className="text-justify hyphens-auto">
+                  {t.about.paragraph3}
+                </p>
+                {t.about.paragraph4 && (
+                  <p className="text-justify hyphens-auto">
+                    {t.about.paragraph4}
+                  </p>
+                )}
+              </div>
 
               {/* Projetos do Cometa — 2 colunas sempre */}
               <div className="grid grid-cols-2 gap-3 my-5">
                 {t.about.cometaProjects?.map((proj: any, idx: number) => (
                   <div
                     key={idx}
-                    className="p-3 sm:p-4 rounded-xl border border-border/30 bg-secondary/10 flex flex-col justify-between gap-2"
+                    className="p-4 rounded-xl border border-border/40 bg-secondary/10 flex flex-col justify-between gap-2 hover:border-primary/30 transition-all duration-300"
                   >
                     <div>
-                      <h5 className="font-semibold text-foreground text-xs sm:text-sm leading-snug">{proj.title}</h5>
-                      <p className="text-[11px] sm:text-xs text-muted-foreground mt-1 leading-relaxed text-justify hyphens-auto">{proj.desc}</p>
+                       <h5 className="font-semibold text-foreground text-xs sm:text-sm leading-snug">{proj.title}</h5>
+                       <p className="text-[11px] sm:text-xs text-muted-foreground mt-1 leading-relaxed text-justify hyphens-auto">{proj.desc}</p>
                     </div>
                     <span className="text-[10px] font-mono text-primary bg-primary/5 px-2 py-0.5 rounded self-start border border-primary/10 leading-normal">
                       {proj.techs}
@@ -126,12 +136,6 @@ export function AboutSection() {
                   </div>
                 ))}
               </div>
-
-              {t.about.paragraph4 && (
-                <p className="text-justify hyphens-auto">
-                  {t.about.paragraph4}
-                </p>
-              )}
             </div>
           </motion.div>
         </div>

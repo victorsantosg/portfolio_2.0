@@ -100,17 +100,81 @@ export function TechStackSection() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5 mb-10">
-          {categories.map((category, index) => (
+        {/* Painel Dashboard 2x2 */}
+        <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:gap-8 max-w-6xl mx-auto mb-12">
+          {categories.map((category, catIndex) => (
             <motion.div
               key={category.title}
               variants={jarvisVariants}
-              custom={{ direction: "bottom", delay: index * 0.1 }}
+              custom={{ direction: "bottom", delay: catIndex * 0.1 }}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
+              className="glass rounded-2xl border border-border/40 p-3 sm:p-5 lg:p-6 flex flex-col justify-between hover:border-primary/30 transition-all duration-300 relative group overflow-hidden"
             >
-              <TechCard category={category} />
+              {/* Header do Servidor */}
+              <div>
+                <div className="flex items-center justify-between mb-3 sm:mb-6 pb-2 sm:pb-4 border-b border-border/30">
+                  <div className="flex items-center gap-1.5 sm:gap-3">
+                    <div className="p-1 sm:p-2 rounded-lg bg-primary/10 text-primary border border-primary/20 shrink-0">
+                      <category.icon className="h-3.5 w-3.5 sm:h-5 sm:w-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-[10px] xs:text-xs sm:text-base text-foreground leading-tight truncate max-w-[80px] xs:max-w-none">{category.title}</h3>
+                      <p className="hidden sm:block text-[10px] text-muted-foreground font-mono mt-0.5">
+                        {catIndex === 0 && "SYSTEM.WEB_UI // ACTIVE"}
+                        {catIndex === 1 && "SYSTEM.BACKEND // RUNNING"}
+                        {catIndex === 2 && "SYSTEM.INFRA // READY"}
+                        {catIndex === 3 && "SYSTEM.AUTO // COMPLETED"}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_var(--primary)] shrink-0" />
+                </div>
+
+                {/* Lista de Tecnologias */}
+                <div className="space-y-2.5 sm:space-y-4">
+                  {category.techs.map((tech) => {
+                    // Determinar labels do Jarvis baseados no nível
+                    let mastery = "INTERMEDIATE"
+                    let ledColor = "bg-purple-500 shadow-[0_0_6px_#c084fc]"
+                    if (tech.level >= 95) {
+                      mastery = "EXPERT"
+                      ledColor = "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"
+                    } else if (tech.level >= 90) {
+                      mastery = "ADVANCED"
+                      ledColor = "bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.6)]"
+                    } else if (tech.level >= 80) {
+                      mastery = "FLUENT"
+                      ledColor = "bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.6)]"
+                    }
+
+                    return (
+                      <div key={tech.name} className="space-y-1 group/row">
+                        <div className="flex items-center justify-between text-[10px] sm:text-sm">
+                          <div className="flex items-center gap-2">
+                            <span className={`w-1.5 h-1.5 rounded-full ${ledColor}`} />
+                            <span className="font-semibold text-foreground/90 group-hover/row:text-primary transition-colors text-[9px] xs:text-[11px] sm:text-sm truncate max-w-[70px] xs:max-w-none">{tech.name}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-[10px] sm:text-xs">
+                            <span className="font-mono text-muted-foreground hidden md:inline">{mastery}</span>
+                            <span className="font-mono text-primary font-bold text-[9px] sm:text-xs">{tech.level}%</span>
+                          </div>
+                        </div>
+                        <div className="h-[3px] bg-secondary/80 rounded-full overflow-hidden">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            whileInView={{ width: `${tech.level}%` }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, ease: "easeOut" }}
+                            className="h-full bg-linear-to-r from-primary to-primary/50 rounded-full"
+                          />
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -141,52 +205,5 @@ export function TechStackSection() {
         </motion.div>
       </div>
     </section>
-  )
-}
-
-function TechCard({
-  category,
-}: {
-  category: {
-    title: string
-    icon: any
-    techs: { name: string; level: number }[]
-  }
-}) {
-  return (
-    <motion.div
-      whileHover={{ y: -5, scale: 1.02 }}
-      transition={{ duration: 0.2 }}
-      className="h-full p-3 sm:p-5 lg:p-6 rounded-2xl bg-card border border-border/50 hover:border-primary/30 transition-all duration-300 group"
-    >
-      {/* Header do card */}
-      <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-5">
-        <div className="p-1.5 sm:p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors shrink-0">
-          <category.icon className="h-3.5 w-3.5 sm:h-5 sm:w-5" />
-        </div>
-        <h3 className="font-semibold text-xs sm:text-base leading-tight">{category.title}</h3>
-      </div>
-
-      {/* Barras de progresso */}
-      <div className="space-y-2.5 sm:space-y-4">
-        {category.techs.map((tech) => (
-          <div key={tech.name}>
-            <div className="flex items-center justify-between mb-0.5 sm:mb-1">
-              <span className="text-[10px] sm:text-sm font-medium leading-snug">{tech.name}</span>
-              <span className="text-[9px] sm:text-xs text-muted-foreground shrink-0 ml-1">{tech.level}%</span>
-            </div>
-            <div className="h-1 sm:h-1.5 bg-secondary rounded-full overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                whileInView={{ width: `${tech.level}%` }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" }}
-                className="h-full bg-gradient-to-r from-primary to-primary/70 rounded-full"
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-    </motion.div>
   )
 }

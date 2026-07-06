@@ -315,36 +315,192 @@ export function HeroSection() {
 
 
 
-      <div className="relative z-20 container mx-auto py-24 md:py-28">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-5xl mx-auto text-center"
-        >
-          {/* Avatar / Portrait with Holographic Targets */}
-          <div className="relative group mb-8">
+      <div className="relative z-20 container mx-auto px-4 md:px-6 py-12 md:py-20">
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center max-w-6xl mx-auto">
+          {/* Left Column: Info & CTAs */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="lg:col-span-7 text-center lg:text-left flex flex-col items-center lg:items-start"
+          >
+            {/* Avatar - Mobile Only */}
+            <div className="relative group mb-8 lg:hidden">
+              <motion.div 
+                initial={{ scale: 0.1, rotate: -180, opacity: 0 }}
+                animate={assemblyState === "disassembled" ? { scale: 0.05, rotate: -240, opacity: 0, y: -200 } : { scale: 1, rotate: 0, opacity: 1, y: 0 }}
+                transition={getTransition(0.1)}
+                className="relative w-32 h-32 rounded-full p-1.5 flex items-center justify-center bg-gray-950 border-2"
+                style={{ 
+                  borderColor: "var(--primary)",
+                  boxShadow: "0 0 25px rgba(34, 197, 94, 0.3), inset 0 0 15px rgba(34, 197, 94, 0.2)" 
+                }}
+              >
+                {assemblyState === "assembling" && (
+                  <div 
+                    className="absolute bottom-[-40px] left-1/2 -translate-x-1/2 w-8 h-16 pointer-events-none bg-gradient-to-t blur-md opacity-80"
+                    style={{
+                      backgroundImage: "linear-gradient(to top, transparent, var(--primary), #fff)"
+                    }}
+                  />
+                )}
+                <div className="relative w-full h-full rounded-full overflow-hidden border border-gray-800 bg-gray-900 flex items-center justify-center">
+                  <Image
+                    src="/img_victor.jpeg"
+                    alt="Victor Santos"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+                <div 
+                  className="absolute bottom-0 right-1 w-8 h-8 rounded-full border border-black bg-primary flex items-center justify-center shadow-lg animate-pulse"
+                  style={{ boxShadow: "0 0 10px var(--primary)" }}
+                >
+                  <Cpu className="w-4 h-4 text-white" />
+                </div>
+              </motion.div>
+            </div>
 
+            {/* Status Badge */}
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              animate={assemblyState === "disassembled" ? { scale: 0, opacity: 0 } : { scale: 1, opacity: 1 }}
+              transition={getTransition(0.4)}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/5 mb-8 text-sm font-medium text-primary"
+            >
+              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+              <span>{t.hero.available}</span>
+            </motion.div>
 
+            {/* Flying Titles */}
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-balance">
+              <span className="flex flex-wrap justify-center lg:justify-start gap-x-3 gap-y-1">
+                {title1.split(" ").map((word, i) => (
+                  <motion.span
+                    key={i}
+                    initial={{ opacity: 0 }}
+                    animate={getAssemblyVariants(i, i % 2 === 0 ? "left" : "right")}
+                    transition={getTransition(0.3 + i * 0.12)}
+                    className="inline-block relative text-foreground"
+                  >
+                    {word}
+                    {assemblyState === "assembling" && (
+                      <span className="absolute left-0 right-0 bottom-0 h-[2px] bg-white animate-pulse" />
+                    )}
+                  </motion.span>
+                ))}
+              </span>
+              <span className="flex flex-wrap justify-center lg:justify-start gap-x-4">
+                {title2.split(" ").map((word, i) => (
+                  <motion.span
+                    key={i}
+                    initial={{ opacity: 0 }}
+                    animate={getAssemblyVariants(i, i === 1 ? "scale" : i === 0 ? "left" : "right")}
+                    transition={getTransition(0.8 + i * 0.15)}
+                    className="inline-block text-gradient animate-gradient bg-[length:200%_200%]"
+                  >
+                    {word}
+                  </motion.span>
+                ))}
+              </span>
+            </h1>
+
+            {/* Subtitle */}
+            <motion.p
+              initial={{ opacity: 0, y: 100 }}
+              animate={assemblyState === "disassembled" ? { opacity: 0, y: 150 } : { opacity: 1, y: 0 }}
+              transition={getTransition(1.1)}
+              className="text-lg md:text-xl text-muted-foreground max-w-2xl lg:max-w-none lg:text-left mb-10 text-pretty"
+            >
+              {t.hero.subtitle}
+            </motion.p>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-row items-center justify-center lg:justify-start gap-3 w-full">
+              <motion.div
+                initial={{ x: -200, opacity: 0 }}
+                animate={assemblyState === "disassembled" ? { x: -300, opacity: 0 } : { x: 0, opacity: 1 }}
+                transition={getTransition(1.3)}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Button
+                  size="lg"
+                  onClick={() => scrollToSection("#orcamento")}
+                  className="bg-primary text-primary-foreground font-semibold px-5 py-4 text-sm sm:px-8 sm:py-6 sm:text-lg glow-border animate-pulse-glow"
+                >
+                  {t.hero.ctaPrimary}
+                  <ArrowRight className="ml-1.5 h-4 w-4 sm:ml-2 sm:h-5 sm:w-5" />
+                </Button>
+              </motion.div>
+
+              <motion.div
+                initial={{ x: 200, opacity: 0 }}
+                animate={assemblyState === "disassembled" ? { x: 300, opacity: 0 } : { x: 0, opacity: 1 }}
+                transition={getTransition(1.4)}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Button
+                  size="lg"
+                  variant="outline"
+                  onClick={() => scrollToSection("#projetos")}
+                  className="border-border bg-transparent hover:bg-secondary font-semibold px-5 py-4 text-sm sm:px-8 sm:py-6 sm:text-lg"
+                >
+                  {t.hero.ctaSecondary}
+                  <ExternalLink className="ml-1.5 h-4 w-4 sm:ml-2 sm:h-5 sm:w-5" />
+                </Button>
+              </motion.div>
+            </div>
+
+            {/* Stats Bar */}
+            <motion.div
+              initial={{ y: 100, opacity: 0 }}
+              animate={assemblyState === "disassembled" ? { y: 150, opacity: 0 } : { y: 0, opacity: 1 }}
+              transition={getTransition(1.6)}
+              className="mt-16 flex items-center justify-center lg:justify-start w-full"
+            >
+              <div className="inline-flex items-center gap-0 glass rounded-2xl border border-border/40 overflow-hidden divide-x divide-border/40 w-full max-w-xs sm:max-w-none sm:w-auto">
+                {[
+                  { value: `${reposCount}+`, label: t.hero.stats.repos },
+                  { value: `${yearsCount}+`, label: t.hero.stats.exp },
+                  { value: `${autoCount}%`, label: t.hero.stats.automation },
+                ].map((stat, i) => (
+                  <div
+                    key={stat.label}
+                    className="text-center px-3 py-3 sm:px-8 sm:py-5 flex-1"
+                  >
+                    <div className="text-xl sm:text-3xl md:text-4xl font-bold text-gradient">
+                      {stat.value}
+                    </div>
+                    <div className="text-[10px] sm:text-sm text-muted-foreground mt-0.5 leading-tight">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* Right Column: Visual Avatar/Jarvis Assembly - Desktop Only */}
+          <div className="lg:col-span-5 hidden lg:flex items-center justify-center h-[500px] relative">
             <motion.div 
               initial={{ scale: 0.1, rotate: -180, opacity: 0 }}
               animate={assemblyState === "disassembled" ? { scale: 0.05, rotate: -240, opacity: 0, y: -200 } : { scale: 1, rotate: 0, opacity: 1, y: 0 }}
               transition={getTransition(0.1)}
-              className="relative w-32 h-32 md:w-40 md:h-40 mx-auto rounded-full p-1.5 flex items-center justify-center bg-gray-950 border-2"
+              className="relative w-64 h-64 xl:w-80 xl:h-80 rounded-full p-2 flex items-center justify-center bg-gray-950 border-2"
               style={{ 
                 borderColor: "var(--primary)",
-                boxShadow: "0 0 25px rgba(34, 197, 94, 0.3), inset 0 0 15px rgba(34, 197, 94, 0.2)" 
+                boxShadow: "0 0 35px rgba(34, 197, 94, 0.25), inset 0 0 25px rgba(34, 197, 94, 0.15)" 
               }}
             >
               {assemblyState === "assembling" && (
                 <div 
-                  className="absolute bottom-[-40px] left-1/2 -translate-x-1/2 w-8 h-16 pointer-events-none bg-gradient-to-t blur-md opacity-80"
+                  className="absolute bottom-[-60px] left-1/2 -translate-x-1/2 w-12 h-24 pointer-events-none bg-linear-to-t blur-md opacity-80"
                   style={{
                     backgroundImage: "linear-gradient(to top, transparent, var(--primary), #fff)"
                   }}
                 />
               )}
-
               <div className="relative w-full h-full rounded-full overflow-hidden border border-gray-800 bg-gray-900 flex items-center justify-center">
                 <Image
                   src="/img_victor.jpeg"
@@ -354,136 +510,15 @@ export function HeroSection() {
                   priority
                 />
               </div>
-
               <div 
-                className="absolute bottom-0 right-1 w-8 h-8 rounded-full border border-black bg-primary flex items-center justify-center shadow-lg animate-pulse"
-                style={{ 
-                  boxShadow: "0 0 10px var(--primary)"
-                }}
+                className="absolute bottom-2 right-2 w-12 h-12 rounded-full border border-black bg-primary flex items-center justify-center shadow-lg animate-pulse"
+                style={{ boxShadow: "0 0 15px var(--primary)" }}
               >
-                <Cpu className="w-4 h-4 text-white" />
+                <Cpu className="w-6 h-6 text-white" />
               </div>
             </motion.div>
           </div>
-
-          {/* Status Badge */}
-          <motion.div
-            initial={{ scale: 0, opacity: 0 }}
-            animate={assemblyState === "disassembled" ? { scale: 0, opacity: 0 } : { scale: 1, opacity: 1 }}
-            transition={getTransition(0.4)}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/5 mb-8 text-sm font-medium text-primary"
-          >
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <span>{t.hero.available}</span>
-          </motion.div>
-
-          {/* Flying Titles */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-balance">
-            <span className="flex flex-wrap justify-center gap-x-3 gap-y-1">
-              {title1.split(" ").map((word, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0 }}
-                  animate={getAssemblyVariants(i, i % 2 === 0 ? "left" : "right")}
-                  transition={getTransition(0.3 + i * 0.12)}
-                  className="inline-block relative text-foreground"
-                >
-                  {word}
-                  {assemblyState === "assembling" && (
-                    <span className="absolute left-0 right-0 bottom-0 h-[2px] bg-white animate-pulse" />
-                  )}
-                </motion.span>
-              ))}
-            </span>
-            <span className="flex flex-wrap justify-center gap-x-4">
-              {title2.split(" ").map((word, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0 }}
-                  animate={getAssemblyVariants(i, i === 1 ? "scale" : i === 0 ? "left" : "right")}
-                  transition={getTransition(0.8 + i * 0.15)}
-                  className="inline-block text-gradient animate-gradient bg-[length:200%_200%]"
-                >
-                  {word}
-                </motion.span>
-              ))}
-            </span>
-          </h1>
-
-          {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 100 }}
-            animate={assemblyState === "disassembled" ? { opacity: 0, y: 150 } : { opacity: 1, y: 0 }}
-            transition={getTransition(1.1)}
-            className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 text-pretty"
-          >
-            {t.hero.subtitle}
-          </motion.p>
-
-          {/* CTA Buttons */}
-          <div className="flex flex-row items-center justify-center gap-3">
-            <motion.div
-              initial={{ x: -200, opacity: 0 }}
-              animate={assemblyState === "disassembled" ? { x: -300, opacity: 0 } : { x: 0, opacity: 1 }}
-              transition={getTransition(1.3)}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Button
-                size="lg"
-                onClick={() => scrollToSection("#orcamento")}
-                className="bg-primary text-primary-foreground font-semibold px-5 py-4 text-sm sm:px-8 sm:py-6 sm:text-lg glow-border animate-pulse-glow"
-              >
-                {t.hero.ctaPrimary}
-                <ArrowRight className="ml-1.5 h-4 w-4 sm:ml-2 sm:h-5 sm:w-5" />
-              </Button>
-            </motion.div>
-
-            <motion.div
-              initial={{ x: 200, opacity: 0 }}
-              animate={assemblyState === "disassembled" ? { x: 300, opacity: 0 } : { x: 0, opacity: 1 }}
-              transition={getTransition(1.4)}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={() => scrollToSection("#projetos")}
-                className="border-border bg-transparent hover:bg-secondary font-semibold px-5 py-4 text-sm sm:px-8 sm:py-6 sm:text-lg"
-              >
-                {t.hero.ctaSecondary}
-                <ExternalLink className="ml-1.5 h-4 w-4 sm:ml-2 sm:h-5 sm:w-5" />
-              </Button>
-            </motion.div>
-          </div>
-
-          {/* Stats Bar */}
-          <motion.div
-            initial={{ y: 100, opacity: 0 }}
-            animate={assemblyState === "disassembled" ? { y: 150, opacity: 0 } : { y: 0, opacity: 1 }}
-            transition={getTransition(1.6)}
-            className="mt-16 flex items-center justify-center"
-          >
-            <div className="inline-flex items-center gap-0 glass rounded-2xl border border-border/40 overflow-hidden divide-x divide-border/40 w-full max-w-xs sm:max-w-none sm:w-auto">
-              {[
-                { value: `${reposCount}+`, label: t.hero.stats.repos },
-                { value: `${yearsCount}+`, label: t.hero.stats.exp },
-                { value: `${autoCount}%`, label: t.hero.stats.automation },
-              ].map((stat, i) => (
-                <div
-                  key={stat.label}
-                  className="text-center px-3 py-3 sm:px-8 sm:py-5 flex-1"
-                >
-                  <div className="text-xl sm:text-3xl md:text-4xl font-bold text-gradient">
-                    {stat.value}
-                  </div>
-                  <div className="text-[10px] sm:text-sm text-muted-foreground mt-0.5 leading-tight">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </motion.div>
+        </div>
       </div>
 
       <motion.div

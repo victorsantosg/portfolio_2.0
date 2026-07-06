@@ -591,86 +591,15 @@ function HorizontalScrollRow({
   openProjectDetails: (project: any) => void
   setZoomImage: (img: string) => void
 }) {
-  const scrollRef = useRef<HTMLDivElement>(null)
-  const [showLeftArrow, setShowLeftArrow] = useState(false)
-  const [showRightArrow, setShowRightArrow] = useState(true)
-
-  const checkScrollLimits = () => {
-    const el = scrollRef.current
-    if (!el) return
-    setShowLeftArrow(el.scrollLeft > 5)
-    setShowRightArrow(el.scrollLeft < el.scrollWidth - el.clientWidth - 5)
-  }
-
-  useEffect(() => {
-    const el = scrollRef.current
-    if (!el) return
-
-    const handleWheel = (e: WheelEvent) => {
-      if (e.deltaY !== 0) {
-        e.preventDefault()
-        el.scrollLeft += e.deltaY * 1.5
-      }
-    }
-
-    el.addEventListener("wheel", handleWheel, { passive: false })
-    el.addEventListener("scroll", checkScrollLimits)
-
-    checkScrollLimits()
-    const timer = setTimeout(checkScrollLimits, 300)
-    window.addEventListener("resize", checkScrollLimits)
-
-    return () => {
-      el.removeEventListener("wheel", handleWheel)
-      el.removeEventListener("scroll", checkScrollLimits)
-      window.removeEventListener("resize", checkScrollLimits)
-      clearTimeout(timer)
-    }
-  }, [projects])
-
-  const scroll = (direction: "left" | "right") => {
-    const el = scrollRef.current
-    if (!el) return
-    const scrollAmount = direction === "left" ? -el.clientWidth * 0.8 : el.clientWidth * 0.8
-    el.scrollBy({ left: scrollAmount, behavior: "smooth" })
-  }
-
   return (
-    <div className="relative group/row w-full">
-      {showLeftArrow && (
-        <button
-          onClick={() => scroll("left")}
-          className="absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2.5 rounded-full bg-background/90 hover:bg-background border border-border text-foreground shadow-lg hover:scale-110 active:scale-95 transition-all cursor-pointer flex items-center justify-center"
-          aria-label="Rolar para esquerda"
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </button>
-      )}
-
-      {showRightArrow && (
-        <button
-          onClick={() => scroll("right")}
-          className="absolute right-2 top-1/2 -translate-y-1/2 z-10 p-2.5 rounded-full bg-background/90 hover:bg-background border border-border text-foreground shadow-lg hover:scale-110 active:scale-95 transition-all cursor-pointer flex items-center justify-center"
-          aria-label="Rolar para direita"
-        >
-          <ChevronRight className="h-5 w-5" />
-        </button>
-      )}
-
-      <div
-        ref={scrollRef}
-        className="flex overflow-x-auto gap-5 pb-4 pt-1 no-scrollbar select-none snap-x snap-mandatory"
-        style={{
-          scrollbarWidth: "none",
-          msOverflowStyle: "none",
-        }}
-      >
+    <div className="w-full">
+      <div className="grid grid-cols-3 gap-3 sm:gap-6 lg:grid-cols-4 pt-1">
         {projects.map((project, index) => (
           <motion.div
             key={project.id}
-            className="w-[44vw] min-w-[160px] max-w-[200px] sm:w-auto sm:min-w-[280px] sm:max-w-[310px] flex-shrink-0 snap-start"
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            className="w-full flex-shrink-0"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.05, duration: 0.5, ease: "easeOut" }}
           >
@@ -734,7 +663,7 @@ function ProjectCard({
             </Badge>
           </div>
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-linear-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
 
         {/* Conteúdo principal */}
@@ -746,7 +675,7 @@ function ProjectCard({
             {project.description}
           </p>
 
-          <div className="flex flex-wrap gap-1 sm:gap-1.5 mb-0 sm:mb-1">
+          <div className="hidden sm:flex flex-wrap gap-1 sm:gap-1.5 mb-0 sm:mb-1">
             {project.tags.slice(0, 2).map((tag: string) => (
               <span
                 key={tag}
@@ -767,14 +696,14 @@ function ProjectCard({
       {/* Footer */}
       <div className="p-2.5 sm:p-4 pt-0 flex flex-col gap-1.5 sm:gap-2">
         {project.isPrivate && (
-          <div className="text-[9px] sm:text-[10px] text-amber-500/80 bg-amber-500/10 border border-amber-500/20 rounded-md px-1.5 sm:px-2 py-1 flex items-center gap-1.5 font-medium">
+          <div className="hidden sm:flex text-[9px] sm:text-[10px] text-amber-500/80 bg-amber-500/10 border border-amber-500/20 rounded-md px-1.5 sm:px-2 py-1 items-center gap-1.5 font-medium">
             <span className="h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0 animate-pulse" />
             <span className="line-clamp-1">
               {language === "pt" ? "Código privado" : "Private code"}
             </span>
           </div>
         )}
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 w-full">
           <Button
             size="sm"
             onClick={onViewDetails}
@@ -787,7 +716,7 @@ function ProjectCard({
               size="sm"
               variant="outline"
               asChild
-              className="h-7 sm:h-8 w-7 sm:w-8 p-0 border-border hover:border-primary transition-colors flex items-center justify-center"
+              className="hidden sm:flex h-7 sm:h-8 w-7 sm:w-8 p-0 border-border hover:border-primary transition-colors items-center justify-center"
             >
               <a
                 href={project.github}
@@ -800,7 +729,7 @@ function ProjectCard({
             </Button>
           ) : (
             <div
-              className="h-7 sm:h-8 w-7 sm:w-8 rounded-md border border-border bg-muted/30 text-muted-foreground flex items-center justify-center cursor-help"
+              className="hidden sm:flex h-7 sm:h-8 w-7 sm:w-8 rounded-md border border-border bg-muted/30 text-muted-foreground items-center justify-center cursor-help"
               title={
                 language === "pt"
                   ? "Código privado por se tratar de um projeto interno."
