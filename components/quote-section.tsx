@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useLanguage } from "@/hooks/use-language"
 import { jarvisVariants } from "@/lib/animations"
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from "recharts"
 
 export function QuoteSection() {
   const { language, t } = useLanguage()
@@ -121,11 +122,11 @@ export function QuoteSection() {
   }
 
   const nextStep = () => {
-    if (step < 3) setStep(step + 1)
+    if (step < 3) setStep((prev) => prev + 1)
   }
 
   const prevStep = () => {
-    if (step > 1) setStep(step - 1)
+    if (step > 1) setStep((prev) => prev - 1)
   }
 
   const canProceed = () => {
@@ -372,12 +373,52 @@ export function QuoteSection() {
                             step={500}
                             className="mb-4"
                           />
-                          <div className="flex justify-between text-sm">
+                          <div className="flex justify-between text-sm mb-6">
                             <span className="text-muted-foreground">{language === "pt" ? "R$ 1.000" : "$ 1,000"}</span>
-                            <span className="font-semibold text-primary">
+                            <span className="font-semibold text-primary text-base">
                               {language === "pt" ? `R$ ${formData.budget[0].toLocaleString("pt-BR")}` : `$ ${formData.budget[0].toLocaleString("en-US")}`}
                             </span>
                             <span className="text-muted-foreground">{language === "pt" ? "R$ 50.000+" : "$ 50,000+"}</span>
+                          </div>
+
+                          {/* Recharts ROI & Hours Saved Interactive Visualization */}
+                          <div className="p-4 rounded-xl bg-black/40 border border-primary/30 backdrop-blur-sm space-y-3">
+                            <div className="flex items-center justify-between text-xs font-mono text-emerald-400">
+                              <span className="font-semibold">{"// SIMULADOR_ROI & IMPACTO"}</span>
+                              <span className="font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">
+                                {language === "pt"
+                                  ? `~${Math.round((formData.budget[0] / 5000) * 45)}h/mês economizadas`
+                                  : `~${Math.round((formData.budget[0] / 5000) * 45)}h/mo saved`}
+                              </span>
+                            </div>
+                            <div className="h-32 w-full pt-2">
+                              <ResponsiveContainer width="100%" height="100%">
+                                <BarChart
+                                  data={[
+                                    {
+                                      name: language === "pt" ? "Carga Manual" : "Manual Task",
+                                      horas: 160,
+                                    },
+                                    {
+                                      name: language === "pt" ? "Com Automação" : "Automated",
+                                      horas: Math.max(20, 160 - Math.round((formData.budget[0] / 5000) * 45)),
+                                    },
+                                  ]}
+                                  margin={{ top: 10, right: 15, left: -20, bottom: 0 }}
+                                >
+                                  <XAxis dataKey="name" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
+                                  <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
+                                  <Tooltip
+                                    contentStyle={{ backgroundColor: "#0f172a", borderColor: "#1e293b", color: "#f8fafc", borderRadius: "8px", fontSize: "12px" }}
+                                    formatter={(val) => [`${val} h/mês`, language === "pt" ? "Horas Gastas" : "Hours Spent"]}
+                                  />
+                                  <Bar dataKey="horas" radius={[6, 6, 0, 0]}>
+                                    <Cell fill="#334155" />
+                                    <Cell fill="#10b981" />
+                                  </Bar>
+                                </BarChart>
+                              </ResponsiveContainer>
+                            </div>
                           </div>
                         </div>
                       </div>

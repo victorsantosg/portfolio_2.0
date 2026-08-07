@@ -219,7 +219,7 @@ export function ProjectsSection() {
       title: t.projects.list.chatbot_ia.title,
       description: t.projects.list.chatbot_ia.description,
       category: "personal",
-      image: "https://www.codingal.com/resources/wp-content/uploads/2024/12/145.png",
+      image: "/chatbot_ia_cover.png",
       tags: ["Python", "Streamlit", "OpenAI API", "GPT-4o"],
       github: "https://github.com/victorsantosg/CHAT_BOT_COM_IA",
       demo: "https://github.com/victorsantosg/CHAT_BOT_COM_IA",

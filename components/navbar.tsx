@@ -16,7 +16,7 @@ export function Navbar() {
     { href: "#sobre", label: t.nav.about },
     { href: "#stack", label: t.nav.stack },
     { href: "#projetos", label: t.nav.projects },
-    { href: "#contato", label: t.nav.contact },
+    { href: "#orcamento", label: t.nav.contact },
   ]
 
   useEffect(() => {

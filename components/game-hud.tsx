@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useLanguage } from "@/hooks/use-language"
 import { Check, Star, Play, Award, Zap } from "lucide-react"
+import { toast } from "sonner"
 
 interface Stage {
   id: string
@@ -81,11 +82,24 @@ export function GameHUD() {
     if (element) {
       element.scrollIntoView({ behavior: "smooth" })
       
-      // Trigger game-like stage unlock notification
+      // Trigger game-like stage unlock notification via Sonner
       const stage = stages[index]
       const label = language === "pt" ? stage.labelPt : stage.labelEn
-      setNotification(`STAGE ${stage.num} UNLOCKED: ${label.split(" / ")[1]}`)
-      setTimeout(() => setNotification(null), 3000)
+      const stageName = label.split(" / ")[1]
+      
+      toast.success(
+        language === "pt" ? `Fase ${stage.num} Desbloqueada: ${stageName}` : `Stage ${stage.num} Unlocked: ${stageName}`,
+        {
+          description: language === "pt" ? "Conquista de exploração ativada no HUD J.A.R.V.I.S." : "Exploration achievement triggered on J.A.R.V.I.S. HUD",
+          icon: "⚡",
+          style: {
+            backgroundColor: "#090d16",
+            borderColor: "rgba(34, 197, 94, 0.4)",
+            color: "#f8fafc",
+            fontFamily: "monospace",
+          },
+        }
+      )
     }
   }
 
