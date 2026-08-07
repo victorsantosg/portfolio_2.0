@@ -100,7 +100,7 @@ export function QuoteSection() {
     try {
       await fetch("https://formspree.io/f/mzdlkzyl", {
         method: "POST",
-        headers: { 
+        headers: {
           "Content-Type": "application/json",
           "Accept": "application/json"
         },
@@ -219,9 +219,9 @@ export function QuoteSection() {
                 <div className="hidden lg:flex items-center justify-center p-6 border-y border-border/20 my-4 bg-secondary/10 rounded-xl relative overflow-hidden min-h-[140px] group/viz">
                   {/* Grid overlay futurista */}
                   <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-size-[16px_16px] pointer-events-none" />
-                  
+
                   {step === 1 && (
-                    <motion.div 
+                    <motion.div
                       key="step1-viz"
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -235,8 +235,8 @@ export function QuoteSection() {
                         <div className="font-mono text-[10px] text-primary font-bold tracking-wider">{"// INITIALIZING_MODULE: TYPE_SCAN"}</div>
                         <h4 className="font-semibold text-foreground text-sm">{language === 'pt' ? 'Categoria do Projeto' : 'Project Category'}</h4>
                         <p className="text-xs text-muted-foreground">
-                          {language === 'pt' 
-                            ? 'Defina a natureza do sistema para ajustarmos as tecnologias base.' 
+                          {language === 'pt'
+                            ? 'Defina a natureza do sistema para ajustarmos as tecnologias base.'
                             : 'Define the system nature to adjust baseline technologies.'}
                         </p>
                       </div>
@@ -244,7 +244,7 @@ export function QuoteSection() {
                   )}
 
                   {step === 2 && (
-                    <motion.div 
+                    <motion.div
                       key="step2-viz"
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -258,8 +258,8 @@ export function QuoteSection() {
                         <div className="font-mono text-[10px] text-primary font-bold tracking-wider">{"// CALIBRATING_MODULE: TIMELINE_ESTIMATE"}</div>
                         <h4 className="font-semibold text-foreground text-sm">{language === 'pt' ? 'Prazo de Desenvolvimento' : 'Development Timeframe'}</h4>
                         <p className="text-xs text-muted-foreground">
-                          {language === 'pt' 
-                            ? 'Estime o tempo de entrega para organizarmos o fluxo de sprints.' 
+                          {language === 'pt'
+                            ? 'Estime o tempo de entrega para organizarmos o fluxo de sprints.'
                             : 'Estimate delivery time to organize sprint flow.'}
                         </p>
                       </div>
@@ -267,7 +267,7 @@ export function QuoteSection() {
                   )}
 
                   {step === 3 && (
-                    <motion.div 
+                    <motion.div
                       key="step3-viz"
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -281,8 +281,8 @@ export function QuoteSection() {
                         <div className="font-mono text-[10px] text-primary font-bold tracking-wider">{"// SYNCHRONIZING_MODULE: ESTIMATED_BUDGET"}</div>
                         <h4 className="font-semibold text-foreground text-sm">{language === 'pt' ? 'Dados e Orçamento' : 'Budget & Contact'}</h4>
                         <p className="text-xs text-muted-foreground">
-                          {language === 'pt' 
-                            ? 'Informe sua estimativa e contato para criarmos uma proposta personalizada.' 
+                          {language === 'pt'
+                            ? 'Informe sua estimativa e contato para criarmos uma proposta personalizada.'
                             : 'Enter your estimate and contact details to generate a custom proposal.'}
                         </p>
                       </div>
@@ -522,12 +522,12 @@ export function QuoteSection() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-48 bg-card border-border/50">
                     <DropdownMenuItem asChild className="cursor-pointer">
-                      <a href="https://drive.google.com/file/d/1gdDbgXD7UKc8hjmY5wgNlEpxk7jhDPW1/view?usp=sharing" target="_blank" rel="noopener noreferrer">
+                      <a href="https://drive.google.com/file/d/1Cv596z56VEIEgutcjcX7SPFurH2w03-6/view?usp=sharing" target="_blank" rel="noopener noreferrer">
                         Português (PT-BR)
                       </a>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild className="cursor-pointer">
-                      <a href="https://drive.google.com/file/d/1Yu5czn-78k2OQ21_yywjbTX4b0QEAvZ_/view?usp=sharing" target="_blank" rel="noopener noreferrer">
+                      <a href="https://drive.google.com/file/d/1L9fgPyRqCy2OiDwD6Uru94ZHsEhxBN1r/view?usp=sharing" target="_blank" rel="noopener noreferrer">
                         English (EN-US)
                       </a>
                     </DropdownMenuItem>
