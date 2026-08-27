@@ -9,8 +9,8 @@ export function AboutSection() {
   const { t } = useLanguage()
 
   return (
-    <section id="sobre" className="relative py-20 md:py-28 overflow-hidden bg-background">
-      <div className="absolute inset-0 bg-linear-to-b from-background via-secondary/10 to-background" />
+    <section id="sobre" className="relative py-20 md:py-28 overflow-hidden bg-background/80 backdrop-blur-[1px]">
+      <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-secondary/10 to-background/40" />
 
       <div className="relative container mx-auto">
         <motion.div
