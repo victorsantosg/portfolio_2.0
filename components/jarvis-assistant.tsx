@@ -426,19 +426,22 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 40, scale: 0.95 }}
+            initial={{ opacity: 0, y: "100%", scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 30, scale: 0.95 }}
-            transition={{ duration: 0.35, ease: "easeOut" }}
-            className="fixed bottom-20 right-3 sm:right-6 z-[9995] w-[94vw] sm:w-[480px] max-h-[85vh] flex flex-col rounded-3xl bg-gray-950/95 border-2 border-amber-500/50 backdrop-blur-2xl shadow-[0_0_60px_rgba(245,158,11,0.25)] overflow-hidden"
+            exit={{ opacity: 0, y: "100%", scale: 0.98 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="fixed inset-x-0 bottom-0 sm:bottom-20 sm:right-6 sm:inset-x-auto z-[9995] w-full sm:w-[480px] h-[88dvh] sm:h-auto sm:max-h-[78vh] flex flex-col rounded-t-[28px] sm:rounded-3xl bg-gray-950/98 border-t-2 sm:border-2 border-amber-500/50 backdrop-blur-2xl shadow-[0_-10px_50px_rgba(0,0,0,0.8),0_0_60px_rgba(245,158,11,0.25)] overflow-hidden"
           >
+            {/* Mobile Drag/Pull Indicator Bar */}
+            <div className="w-10 h-1 rounded-full bg-white/20 mx-auto mt-2 -mb-1 sm:hidden shrink-0" />
+
             {/* HUD Scanline & Grid Effect */}
             <div 
               className="absolute inset-0 pointer-events-none opacity-10 bg-[radial-gradient(#f59e0b_1px,transparent_1px)] [background-size:16px_16px]" 
             />
 
             {/* Top Holographic Header Bar */}
-            <div className="relative z-10 p-3.5 sm:p-4 border-b border-amber-500/30 bg-gradient-to-r from-amber-500/20 via-orange-950/40 to-transparent flex items-center justify-between">
+            <div className="relative z-10 p-3 sm:p-4 border-b border-amber-500/30 bg-gradient-to-r from-amber-500/20 via-orange-950/40 to-transparent flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2.5 sm:gap-3">
                 {/* Mini Rotating Core */}
                 <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden border border-amber-400 bg-black shrink-0 shadow-[0_0_10px_#f59e0b]">
@@ -450,17 +453,17 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
                   />
                 </div>
                 <div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5 sm:gap-2">
                     <span className="text-xs sm:text-sm font-mono font-extrabold text-amber-400 tracking-wider">
                       J.A.R.V.I.S. AI
                     </span>
-                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold hidden xs:inline">
-                      LLAMA 3.3 70B
+                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">
+                      LLM DUAL-ENGINE
                     </span>
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
                   </div>
                   <div className="text-[9px] sm:text-[10px] font-mono text-muted-foreground">
-                    SANTOS PROTOCOL • GROQ ENGINE
+                    SANTOS PROTOCOL • MULTI-PROVIDER
                   </div>
                 </div>
               </div>
@@ -469,7 +472,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
               <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => setVoiceEnabled(!voiceEnabled)}
-                  className={`p-1.5 rounded-lg border text-xs transition-colors cursor-pointer ${
+                  className={`p-2 sm:p-1.5 rounded-xl border text-xs transition-colors cursor-pointer ${
                     voiceEnabled
                       ? "bg-amber-500/20 border-amber-400 text-amber-300"
                       : "border-white/10 text-muted-foreground hover:text-foreground"
@@ -481,7 +484,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
 
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-1.5 rounded-lg border border-white/10 text-muted-foreground hover:text-foreground hover:bg-white/10 transition-colors cursor-pointer"
+                  className="p-2 sm:p-1.5 rounded-xl border border-white/10 text-muted-foreground hover:text-foreground hover:bg-white/10 transition-colors cursor-pointer"
                   aria-label="Fechar Terminal J.A.R.V.I.S."
                 >
                   <X className="w-4 h-4" />
@@ -489,8 +492,8 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
               </div>
             </div>
 
-            {/* Terminal Body: Message Stream & Actions */}
-            <div className="relative z-10 p-3 sm:p-4 flex flex-col gap-3 overflow-y-auto max-h-[55vh] sm:max-h-[58vh]">
+            {/* Terminal Body: Message Stream & Actions (FLEX-1 FULL SCROLL) */}
+            <div className="relative z-10 p-3 sm:p-4 flex-1 overflow-y-auto flex flex-col gap-3 min-h-0">
               {/* If no chat history yet, show current Preset Dialogue Box */}
               {chatMessages.length === 0 ? (
                 <div className="p-3.5 sm:p-4 rounded-2xl bg-black/70 border border-amber-500/30 shadow-inner relative">
@@ -554,13 +557,13 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
               )}
 
               {/* Action Buttons (Guided Telemetry Menu) */}
-              <div className="space-y-1.5 pt-1">
+              <div className="space-y-1.5 pt-1 mt-auto">
                 <div className="text-[9px] sm:text-[10px] font-mono text-muted-foreground tracking-wider uppercase flex items-center gap-1.5">
                   <Zap className="w-3 h-3 text-amber-400" />
                   <span>Comandos Rápidos de Telemetria:</span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                <div className="grid grid-cols-2 sm:grid-cols-2 gap-1.5">
                   {dialogContent[currentState].actions.map((action) => (
                     <Button
                       key={action.label}
@@ -582,7 +585,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
             {/* Bottom Interactive AI Chat Input Box */}
             <form
               onSubmit={handleSendAiMessage}
-              className="relative z-10 p-2.5 sm:p-3 border-t border-amber-500/30 bg-black/90 flex items-center gap-2"
+              className="relative z-10 p-2.5 sm:p-3 pb-4 sm:pb-3 border-t border-amber-500/30 bg-black/95 flex items-center gap-2 shrink-0"
             >
               <div className="relative flex-1">
                 <input
@@ -592,7 +595,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
                   onChange={(e) => setInputQuery(e.target.value)}
                   placeholder="Pergunte qualquer coisa ao J.A.R.V.I.S...."
                   disabled={isAiLoading}
-                  className="w-full h-9 sm:h-10 pl-3 pr-8 rounded-xl bg-gray-900/90 border border-amber-500/40 text-xs font-mono text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 shadow-inner"
+                  className="w-full h-10 pl-3 pr-8 rounded-xl bg-gray-900/90 border border-amber-500/40 text-xs font-mono text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 shadow-inner"
                 />
                 <Sparkles className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-amber-400/60 pointer-events-none" />
               </div>
@@ -600,20 +603,17 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
               <Button
                 type="submit"
                 disabled={!inputQuery.trim() || isAiLoading}
-                className="h-9 sm:h-10 px-3 bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-black font-bold text-xs rounded-xl gap-1 shrink-0 cursor-pointer shadow-lg shadow-amber-500/20"
+                className="h-10 px-3.5 bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-black font-bold text-xs rounded-xl gap-1 shrink-0 cursor-pointer shadow-lg shadow-amber-500/20"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span className="hidden xs:inline">Enviar</span>
               </Button>
             </form>
 
-            {/* Bottom Status Bar */}
-            <div className="relative z-10 px-4 py-2 border-t border-amber-500/10 bg-black/60 flex items-center justify-between text-[9px] sm:text-[10px] font-mono text-muted-foreground">
-              <div className="flex items-center gap-1.5 text-amber-400">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
-                <span>SERVER: GROQ CLOUD • 100% OPERACIONAL</span>
-              </div>
-              <span className="hidden xs:inline">VICTOR SANTOS // DEV</span>
+            {/* Server Status Footer */}
+            <div className="relative z-10 px-3 py-1 bg-black text-[9px] font-mono text-muted-foreground/60 border-t border-white/5 flex items-center justify-between shrink-0">
+              <span>SERVER: GROQ + GEMINI DUAL ENGINE</span>
+              <span className="text-emerald-400">● ONLINE</span>
             </div>
           </motion.div>
         )}
