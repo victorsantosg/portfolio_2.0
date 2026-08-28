@@ -19,6 +19,9 @@ import {
   ShieldAlert,
   Radio,
   Zap,
+  Send,
+  Sparkles,
+  Bot,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
@@ -30,6 +33,12 @@ type JarvisState =
   | "architecture"
   | "telemetry"
   | "contact"
+  | "ai_chat"
+
+interface ChatMessage {
+  role: "user" | "assistant"
+  content: string
+}
 
 interface JarvisAssistantProps {
   isReady?: boolean
@@ -37,12 +46,18 @@ interface JarvisAssistantProps {
 
 export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [showStartupHolo, setShowStartupHolo] = useState(false)
   const [currentState, setCurrentState] = useState<JarvisState>("welcome")
   const [isTyping, setIsTyping] = useState(false)
   const [displayedText, setDisplayedText] = useState("")
   const [voiceEnabled, setVoiceEnabled] = useState(false)
+  
+  // Real Groq AI Chat States
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([])
+  const [inputQuery, setInputQuery] = useState("")
+  const [isAiLoading, setIsAiLoading] = useState(false)
+
   const messageEndRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   // Only open AFTER the initial intro and hero armor assembly effect have finished
   useEffect(() => {
@@ -50,12 +65,20 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
 
     // Wait 3.8s after loading screen finishes to allow full armor assembly animation
     const timerHolo = setTimeout(() => {
-      setShowStartupHolo(true)
       setIsOpen(true)
     }, 3800)
 
     return () => clearTimeout(timerHolo)
   }, [isReady])
+
+  // Focus input when opened
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => {
+        inputRef.current?.focus()
+      }, 300)
+    }
+  }, [isOpen])
 
   // Respostas programadas com a Persona Oficial do J.A.R.V.I.S.
   const dialogContent: Record<
@@ -63,9 +86,10 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
     { title: string; text: string; sectionId?: string; actions: { label: string; nextState?: JarvisState; href?: string; isExternal?: boolean; icon?: any }[] }
   > = {
     welcome: {
-      title: "PROTOCOLO DE INICIALIZAÇÃO // J.A.R.V.I.S.",
-      text: "Sistemas online. Bem-vindo ao servidor central de Victor Santos, Convidado. Eu sou o J.A.R.V.I.S. e gerencio os arquivos, códigos e implantações do Criador.\n\nOs bancos de dados de backend e interfaces de usuário estão operando com 100% de eficiência. Compilando as opções de telemetria disponíveis:\n\n• Histórico de Missões: Trajetória profissional e sistemas desenvolvidos.\n• Protótipos Ativos: Repositórios de código e aplicações em produção.\n• Arquitetura do Traje: A stack tecnológica e frameworks dominados.\n\nPor onde deseja começar a varredura, Senhor?",
+      title: "PROTOCOLO DE INICIALIZAÇÃO // J.A.R.V.I.S. (GROQ AI)",
+      text: "Sistemas neurais online com Llama-3.3-70B. Bem-vindo ao servidor central de Victor Santos. Eu sou o J.A.R.V.I.S. e gerencio os arquivos, códigos e implantações do Criador.\n\nVocê pode me fazer qualquer pergunta sobre as habilidades, projetos ou trajetória do Criador no campo de texto abaixo, ou selecionar uma rota rápida de telemetria:\n\n• Histórico de Missões: Trajetória profissional e sistemas desenvolvidos.\n• Protótipos Ativos: Repositórios de código e aplicações em produção.\n• Arquitetura do Traje: A stack tecnológica e frameworks dominados.",
       actions: [
+        { label: "🚀 Ir Direto para Projetos", href: "#projetos" },
         { label: "📜 Histórico de Missões", nextState: "missions" },
         { label: "🚀 Protótipos Ativos", nextState: "prototypes" },
         { label: "⚙️ Arquitetura do Traje", nextState: "architecture" },
@@ -127,6 +151,15 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
         { label: "🔄 Menu Principal", nextState: "welcome" },
       ],
     },
+    ai_chat: {
+      title: "RESPOSTA NEURAL // GROQ LLAMA 3.3 70B",
+      text: "",
+      actions: [
+        { label: "💬 Falar no WhatsApp", href: "https://wa.me/5585999556385", isExternal: true },
+        { label: "📂 Ver Projetos", href: "#projetos" },
+        { label: "🔄 Menu Principal", nextState: "welcome" },
+      ],
+    },
   }
 
   // Humanized J.A.R.V.I.S. Text-to-Speech Engine
@@ -135,7 +168,6 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
 
     window.speechSynthesis.cancel()
 
-    // 1. Convert text to natural spoken prose with phonetic replacement for Járvis
     const spokenText = rawText
       .replace(/J\.A\.R\.V\.I\.S\./gi, "Járvis")
       .replace(/J\.A\.R\.V\.I\.S/gi, "Járvis")
@@ -148,10 +180,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
       .replace(/\s+/g, " ")
       .trim()
 
-    // 2. Break down into complete sentences / clauses to respect commas and periods
     const sentences = spokenText.match(/[^.!?:]+[.!?:]?/g) || [spokenText]
-
-    // 3. Find the highest-quality Natural / Neural Brazilian Portuguese voice
     const voices = window.speechSynthesis.getVoices()
     const bestVoice =
       voices.find(
@@ -160,65 +189,58 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
           (v.name.includes("Natural") ||
             v.name.includes("Neural") ||
             v.name.includes("Google") ||
-            v.name.includes("Francisca") ||
-            v.name.includes("Antonio") ||
             v.name.includes("Luciana") ||
             v.name.includes("Felipe") ||
-            v.name.includes("Daniel"))
-      ) ||
-      voices.find((v) => v.lang === "pt-BR") ||
-      voices.find((v) => v.lang.startsWith("pt"))
+            v.name.includes("Daniel") ||
+            v.name.includes("Francisca"))
+      ) || voices.find((v) => v.lang.startsWith("pt"))
 
-    // 4. Queue each sentence with calm, dignified J.A.R.V.I.S. prosody
     sentences.forEach((sentence, index) => {
-      const cleanSentence = sentence.trim()
-      if (!cleanSentence) return
+      const trimmed = sentence.trim()
+      if (!trimmed) return
 
-      const utterance = new SpeechSynthesisUtterance(cleanSentence)
-      if (bestVoice) {
-        utterance.voice = bestVoice
+      const utterance = new SpeechSynthesisUtterance(trimmed)
+      if (bestVoice) utterance.voice = bestVoice
+      utterance.rate = 1.06
+      utterance.pitch = 0.95
+
+      if (index === sentences.length - 1) {
+        utterance.pitch = 0.92
       }
-      utterance.lang = "pt-BR"
-      utterance.rate = 0.94 // Calm, paced, humanized delivery
-      utterance.pitch = 0.92 // Slightly lower dignified tone
-      utterance.volume = 1.0
 
       window.speechSynthesis.speak(utterance)
     })
   }
 
-  // Pre-load voices on mount
-  useEffect(() => {
-    if (typeof window !== "undefined" && "speechSynthesis" in window) {
-      window.speechSynthesis.getVoices()
-      window.speechSynthesis.onvoiceschanged = () => {
-        window.speechSynthesis.getVoices()
-      }
-    }
-  }, [])
-
-  // Typewriter text animation effect & TTS trigger
-  useEffect(() => {
-    if (!isOpen) return
-
-    const fullText = dialogContent[currentState].text
-    setDisplayedText("")
+  // Typewriter effect generator
+  const triggerTypewriter = (fullText: string) => {
     setIsTyping(true)
+    setDisplayedText("")
+    let currentIndex = 0
 
-    let index = 0
     const interval = setInterval(() => {
-      index++
-      setDisplayedText(fullText.slice(0, index))
-      if (index >= fullText.length) {
-        clearInterval(interval)
+      if (currentIndex < fullText.length) {
+        setDisplayedText(fullText.slice(0, currentIndex + 1))
+        currentIndex++
+      } else {
         setIsTyping(false)
+        clearInterval(interval)
       }
     }, 12)
 
-    // Voice synthesis (TTS) if enabled
     if (voiceEnabled) {
       speakHumanizedJarvis(fullText)
     }
+
+    return interval
+  }
+
+  // Typewriter effect on preset state change (when not in ai_chat)
+  useEffect(() => {
+    if (!isOpen || currentState === "ai_chat") return
+
+    const fullText = dialogContent[currentState].text
+    const interval = triggerTypewriter(fullText)
 
     return () => {
       clearInterval(interval)
@@ -228,6 +250,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
     }
   }, [currentState, isOpen, voiceEnabled])
 
+  // Handle Preset Action Click
   const handleActionClick = (action: {
     label: string
     nextState?: JarvisState
@@ -242,13 +265,50 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
       if (action.isExternal) {
         window.open(action.href, "_blank", "noopener,noreferrer")
       } else {
-        // Fechar automaticamente a janela do J.A.R.V.I.S. para não cobrir o projeto/seção
         setIsOpen(false)
         const element = document.querySelector(action.href)
         if (element) {
           element.scrollIntoView({ behavior: "smooth" })
         }
       }
+    }
+  }
+
+  // Send Message to Groq Llama 3.3 70B AI Engine
+  const handleSendAiMessage = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
+    const query = inputQuery.trim()
+    if (!query || isAiLoading) return
+
+    setInputQuery("")
+    setIsAiLoading(true)
+    setCurrentState("ai_chat")
+
+    const newMessages: ChatMessage[] = [...chatMessages, { role: "user", content: query }]
+    setChatMessages(newMessages)
+
+    try {
+      const res = await fetch("/api/jarvis/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: newMessages }),
+      })
+
+      const data = await res.json()
+      const aiReply = data.reply || "Senhor, não foi possível obter retorno dos nós neurais da Groq."
+
+      setChatMessages([...newMessages, { role: "assistant", content: aiReply }])
+      triggerTypewriter(aiReply)
+    } catch (err: any) {
+      console.error(err)
+      const errorMsg = "Senhor, houve uma interrupção na conexão com a rede da Groq. Estou restabelecendo os nós neurais."
+      setChatMessages([...newMessages, { role: "assistant", content: errorMsg }])
+      triggerTypewriter(errorMsg)
+    } finally {
+      setIsAiLoading(false)
+      setTimeout(() => {
+        messageEndRef.current?.scrollIntoView({ behavior: "smooth" })
+      }, 100)
     }
   }
 
@@ -265,8 +325,8 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
             animate={{ opacity: 1, x: 0 }}
             className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/85 backdrop-blur-md border border-amber-500/30 text-amber-400 text-[11px] font-mono shadow-[0_0_12px_rgba(245,158,11,0.2)]"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-            <span>J.A.R.V.I.S.</span>
+            <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
+            <span>J.A.R.V.I.S. (GROQ AI)</span>
           </motion.div>
         )}
 
@@ -278,13 +338,8 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
           className="relative w-13 h-13 sm:w-14 sm:h-14 rounded-full flex items-center justify-center cursor-pointer group shadow-[0_0_20px_rgba(245,158,11,0.35)]"
           aria-label="Abrir Assistente J.A.R.V.I.S."
         >
-          {/* Subtle Outer Neon Ring */}
           <div className="absolute -inset-1 rounded-full border border-amber-500/30 border-dashed animate-spin [animation-duration:18s] pointer-events-none group-hover:border-amber-400/60 transition-colors" />
-
-          {/* Glowing Hologram Backdrop Core (Discreto) */}
           <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-amber-600/40 via-orange-500/40 to-amber-300/40 opacity-70 blur-[1px] group-hover:opacity-100 transition-opacity" />
-
-          {/* Animated Hologram Core of J.A.R.V.I.S. (WebP - Immune to iOS/Instagram Play Icon Overlays) */}
           <div className="relative w-[44px] h-[44px] sm:w-[48px] sm:h-[48px] rounded-full overflow-hidden border border-amber-400/80 bg-black flex items-center justify-center shadow-inner">
             <img
               src="/jarvis/jarvis3.webp"
@@ -292,8 +347,6 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
               className="w-full h-full object-cover mix-blend-screen scale-110 pointer-events-none select-none"
             />
           </div>
-
-          {/* Central Border Glow */}
           <div className="absolute inset-0 rounded-full border border-amber-400/40 pointer-events-none group-hover:border-amber-300 transition-colors" />
         </motion.button>
       </div>
@@ -308,7 +361,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.95 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
-            className="fixed bottom-24 right-4 sm:right-6 z-[9995] w-[92vw] sm:w-[460px] max-h-[82vh] flex flex-col rounded-3xl bg-gray-950/95 border-2 border-amber-500/50 backdrop-blur-2xl shadow-[0_0_60px_rgba(245,158,11,0.25)] overflow-hidden"
+            className="fixed bottom-20 right-3 sm:right-6 z-[9995] w-[94vw] sm:w-[480px] max-h-[85vh] flex flex-col rounded-3xl bg-gray-950/95 border-2 border-amber-500/50 backdrop-blur-2xl shadow-[0_0_60px_rgba(245,158,11,0.25)] overflow-hidden"
           >
             {/* HUD Scanline & Grid Effect */}
             <div 
@@ -316,10 +369,10 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
             />
 
             {/* Top Holographic Header Bar */}
-            <div className="relative z-10 p-4 border-b border-amber-500/30 bg-gradient-to-r from-amber-500/20 via-orange-950/40 to-transparent flex items-center justify-between">
-              <div className="flex items-center gap-3">
+            <div className="relative z-10 p-3.5 sm:p-4 border-b border-amber-500/30 bg-gradient-to-r from-amber-500/20 via-orange-950/40 to-transparent flex items-center justify-between">
+              <div className="flex items-center gap-2.5 sm:gap-3">
                 {/* Mini Rotating Core */}
-                <div className="relative w-9 h-9 rounded-full overflow-hidden border border-amber-400 bg-black shrink-0 shadow-[0_0_10px_#f59e0b]">
+                <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden border border-amber-400 bg-black shrink-0 shadow-[0_0_10px_#f59e0b]">
                   <Image
                     src="/jarvis/jarvis3.webp"
                     alt="J.A.R.V.I.S. Core"
@@ -329,13 +382,16 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono font-extrabold text-amber-400 tracking-wider">
-                      J.A.R.V.I.S. INTERFACE
+                    <span className="text-xs sm:text-sm font-mono font-extrabold text-amber-400 tracking-wider">
+                      J.A.R.V.I.S. AI
+                    </span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold hidden xs:inline">
+                      LLAMA 3.3 70B
                     </span>
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
                   </div>
-                  <div className="text-[10px] font-mono text-muted-foreground">
-                    SANTOS PROTOCOL • VER 2.0
+                  <div className="text-[9px] sm:text-[10px] font-mono text-muted-foreground">
+                    SANTOS PROTOCOL • GROQ ENGINE
                   </div>
                 </div>
               </div>
@@ -365,16 +421,23 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
             </div>
 
             {/* Terminal Body: Message Stream & Actions */}
-            <div className="relative z-10 p-5 flex flex-col gap-4 overflow-y-auto max-h-[60vh]">
+            <div className="relative z-10 p-3.5 sm:p-4 flex flex-col gap-3 overflow-y-auto max-h-[55vh] sm:max-h-[58vh]">
               {/* Dialogue Box */}
-              <div className="p-4 rounded-2xl bg-black/60 border border-amber-500/30 shadow-inner relative">
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-black/70 border border-amber-500/30 shadow-inner relative">
                 {/* State Title Tag */}
                 <div className="text-[10px] font-mono text-amber-400/90 font-bold mb-2 pb-1.5 border-b border-amber-500/20 flex items-center justify-between">
-                  <span>{dialogContent[currentState].title}</span>
-                  <Activity className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+                  <span className="truncate">{dialogContent[currentState].title}</span>
+                  {isAiLoading ? (
+                    <div className="flex items-center gap-1 text-amber-400 text-[9px] animate-pulse">
+                      <Bot className="w-3 h-3 animate-spin" />
+                      <span>PROCESSANDO GROQ...</span>
+                    </div>
+                  ) : (
+                    <Activity className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+                  )}
                 </div>
 
-                {/* Typewriter Text */}
+                {/* Typewriter Text / AI Response */}
                 <p className="text-xs sm:text-[13px] font-mono text-slate-200 leading-relaxed whitespace-pre-wrap">
                   {displayedText}
                   {isTyping && (
@@ -384,22 +447,23 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
               </div>
 
               {/* Action Buttons (Guided Telemetry Menu) */}
-              <div className="space-y-2 pt-1">
-                <div className="text-[10px] font-mono text-muted-foreground tracking-wider uppercase flex items-center gap-1.5">
+              <div className="space-y-1.5 pt-0.5">
+                <div className="text-[9px] sm:text-[10px] font-mono text-muted-foreground tracking-wider uppercase flex items-center gap-1.5">
                   <Zap className="w-3 h-3 text-amber-400" />
-                  <span>Comandos de Telemetria Disponíveis:</span>
+                  <span>Comandos Rápidos de Telemetria:</span>
                 </div>
 
-                <div className="flex flex-col gap-2">
-                  {dialogContent[currentState].actions.map((action, idx) => (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                  {dialogContent[currentState].actions.map((action) => (
                     <Button
                       key={action.label}
                       variant="outline"
+                      size="sm"
                       onClick={() => handleActionClick(action)}
-                      className="w-full justify-between h-auto py-2.5 px-4 bg-gray-900/80 hover:bg-amber-500/20 border-border/60 hover:border-amber-400/80 text-foreground hover:text-amber-300 text-xs font-mono transition-all rounded-xl shadow-sm text-left group/btn"
+                      className="justify-between h-auto py-1.5 px-2.5 bg-gray-900/80 hover:bg-amber-500/20 border-border/60 hover:border-amber-400/80 text-foreground hover:text-amber-300 text-[10px] sm:text-xs font-mono transition-all rounded-xl shadow-sm text-left group/btn"
                     >
-                      <span className="font-semibold">{action.label}</span>
-                      <ChevronRight className="w-4 h-4 text-amber-400 group-hover/btn:translate-x-1 transition-transform" />
+                      <span className="font-semibold truncate">{action.label}</span>
+                      <ChevronRight className="w-3.5 h-3.5 text-amber-400 group-hover/btn:translate-x-0.5 transition-transform shrink-0" />
                     </Button>
                   ))}
                 </div>
@@ -408,13 +472,41 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
               <div ref={messageEndRef} />
             </div>
 
-            {/* Bottom Status Bar */}
-            <div className="relative z-10 px-5 py-3 border-t border-amber-500/20 bg-black/40 flex items-center justify-between text-[10px] font-mono text-muted-foreground">
-              <div className="flex items-center gap-2 text-amber-400">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
-                <span>SERVER: ONLINE • 100% OPERATIONAL</span>
+            {/* Bottom Interactive AI Chat Input Box */}
+            <form
+              onSubmit={handleSendAiMessage}
+              className="relative z-10 p-2.5 sm:p-3 border-t border-amber-500/30 bg-black/90 flex items-center gap-2"
+            >
+              <div className="relative flex-1">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={inputQuery}
+                  onChange={(e) => setInputQuery(e.target.value)}
+                  placeholder="Pergunte qualquer coisa ao J.A.R.V.I.S...."
+                  disabled={isAiLoading}
+                  className="w-full h-9 sm:h-10 pl-3 pr-8 rounded-xl bg-gray-900/90 border border-amber-500/40 text-xs font-mono text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 shadow-inner"
+                />
+                <Sparkles className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-amber-400/60 pointer-events-none" />
               </div>
-              <span>VICTOR SANTOS // DEV</span>
+
+              <Button
+                type="submit"
+                disabled={!inputQuery.trim() || isAiLoading}
+                className="h-9 sm:h-10 px-3 bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-black font-bold text-xs rounded-xl gap-1 shrink-0 cursor-pointer shadow-lg shadow-amber-500/20"
+              >
+                <Send className="w-3.5 h-3.5" />
+                <span className="hidden xs:inline">Enviar</span>
+              </Button>
+            </form>
+
+            {/* Bottom Status Bar */}
+            <div className="relative z-10 px-4 py-2 border-t border-amber-500/10 bg-black/60 flex items-center justify-between text-[9px] sm:text-[10px] font-mono text-muted-foreground">
+              <div className="flex items-center gap-1.5 text-amber-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
+                <span>SERVER: GROQ CLOUD • 100% OPERACIONAL</span>
+              </div>
+              <span className="hidden xs:inline">VICTOR SANTOS // DEV</span>
             </div>
           </motion.div>
         )}
