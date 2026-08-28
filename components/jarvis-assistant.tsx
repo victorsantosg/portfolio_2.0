@@ -80,6 +80,13 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
     }
   }, [isOpen])
 
+  // Auto-scroll to bottom on message update or AI typing
+  useEffect(() => {
+    if (isOpen) {
+      messageEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    }
+  }, [chatMessages, displayedText, isAiLoading, isOpen])
+
   // Direct AI Query Handler
   const handleDirectAiQuery = async (queryText: string) => {
     if (!queryText.trim() || isAiLoading) return
@@ -479,33 +486,71 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
             </div>
 
             {/* Terminal Body: Message Stream & Actions */}
-            <div className="relative z-10 p-3.5 sm:p-4 flex flex-col gap-3 overflow-y-auto max-h-[55vh] sm:max-h-[58vh]">
-              {/* Dialogue Box */}
-              <div className="p-3.5 sm:p-4 rounded-2xl bg-black/70 border border-amber-500/30 shadow-inner relative">
-                {/* State Title Tag */}
-                <div className="text-[10px] font-mono text-amber-400/90 font-bold mb-2 pb-1.5 border-b border-amber-500/20 flex items-center justify-between">
-                  <span className="truncate">{dialogContent[currentState].title}</span>
-                  {isAiLoading ? (
-                    <div className="flex items-center gap-1 text-amber-400 text-[9px] animate-pulse">
-                      <Bot className="w-3 h-3 animate-spin" />
-                      <span>PROCESSANDO GROQ...</span>
-                    </div>
-                  ) : (
+            <div className="relative z-10 p-3 sm:p-4 flex flex-col gap-3 overflow-y-auto max-h-[55vh] sm:max-h-[58vh]">
+              {/* If no chat history yet, show current Preset Dialogue Box */}
+              {chatMessages.length === 0 ? (
+                <div className="p-3.5 sm:p-4 rounded-2xl bg-black/70 border border-amber-500/30 shadow-inner relative">
+                  {/* State Title Tag */}
+                  <div className="text-[10px] font-mono text-amber-400/90 font-bold mb-2 pb-1.5 border-b border-amber-500/20 flex items-center justify-between">
+                    <span className="truncate">{dialogContent[currentState].title}</span>
                     <Activity className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+                  </div>
+
+                  {/* Typewriter Text / Preset Response */}
+                  <p className="text-xs sm:text-[13px] font-mono text-slate-200 leading-relaxed whitespace-pre-wrap">
+                    {displayedText}
+                    {isTyping && (
+                      <span className="inline-block w-2 h-3.5 ml-1 bg-amber-400 animate-pulse align-middle" />
+                    )}
+                  </p>
+                </div>
+              ) : (
+                /* Interactive Conversational History Thread */
+                <div className="flex flex-col gap-3">
+                  {chatMessages.map((msg, idx) => (
+                    <div
+                      key={idx}
+                      className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                    >
+                      {msg.role === "user" ? (
+                        <div className="max-w-[88%] rounded-2xl rounded-tr-xs bg-gradient-to-r from-amber-600/30 via-orange-600/25 to-amber-500/30 border border-amber-500/50 p-2.5 sm:p-3 text-xs sm:text-sm font-mono text-amber-200 shadow-md">
+                          <div className="text-[9px] text-amber-400 font-bold mb-1 flex items-center gap-1 justify-end">
+                            <span>VOCÊ</span>
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                          </div>
+                          <p className="whitespace-pre-wrap leading-relaxed">{msg.content}</p>
+                        </div>
+                      ) : (
+                        <div className="max-w-[92%] rounded-2xl rounded-tl-xs bg-black/80 border border-amber-500/40 p-3 sm:p-3.5 text-xs sm:text-[13px] font-mono text-slate-200 shadow-inner">
+                          <div className="text-[9px] text-amber-400 font-bold mb-1.5 flex items-center gap-1.5 pb-1 border-b border-amber-500/20">
+                            <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
+                            <span>J.A.R.V.I.S. (IA CONVERSACIONAL)</span>
+                          </div>
+                          <p className="whitespace-pre-wrap leading-relaxed">
+                            {idx === chatMessages.length - 1 && isTyping ? displayedText : msg.content}
+                            {idx === chatMessages.length - 1 && isTyping && (
+                              <span className="inline-block w-1.5 h-3 ml-1 bg-amber-400 animate-pulse align-middle" />
+                            )}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+
+                  {/* AI Thinking Animation */}
+                  {isAiLoading && (
+                    <div className="flex justify-start">
+                      <div className="rounded-2xl rounded-tl-xs bg-black/75 border border-amber-500/40 p-2.5 sm:p-3 text-xs font-mono text-amber-300 flex items-center gap-2 shadow-inner animate-pulse">
+                        <Bot className="w-3.5 h-3.5 text-amber-400 animate-spin" />
+                        <span>J.A.R.V.I.S. processando nós neurais...</span>
+                      </div>
+                    </div>
                   )}
                 </div>
-
-                {/* Typewriter Text / AI Response */}
-                <p className="text-xs sm:text-[13px] font-mono text-slate-200 leading-relaxed whitespace-pre-wrap">
-                  {displayedText}
-                  {isTyping && (
-                    <span className="inline-block w-2 h-3.5 ml-1 bg-amber-400 animate-pulse align-middle" />
-                  )}
-                </p>
-              </div>
+              )}
 
               {/* Action Buttons (Guided Telemetry Menu) */}
-              <div className="space-y-1.5 pt-0.5">
+              <div className="space-y-1.5 pt-1">
                 <div className="text-[9px] sm:text-[10px] font-mono text-muted-foreground tracking-wider uppercase flex items-center gap-1.5">
                   <Zap className="w-3 h-3 text-amber-400" />
                   <span>Comandos Rápidos de Telemetria:</span>
