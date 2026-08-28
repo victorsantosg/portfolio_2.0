@@ -179,19 +179,49 @@ function InteractiveHeroAvatar({
 export function HeroSection() {
   const { t } = useLanguage()
 
-  // J.A.R.V.I.S. Assembly States - Default to assembled so content is immediately visible
-  const [assemblyState, setAssemblyState] = useState<"disassembled" | "assembling" | "assembled">("assembled")
+  // J.A.R.V.I.S. Iron Man Armor Assembly System
+  const [assemblyState, setAssemblyState] = useState<"disassembled" | "assembling" | "assembled">("disassembled")
 
   // Stats Counters
-  const [reposCount, setReposCount] = useState(60)
-  const [yearsCount, setYearsCount] = useState(2)
-  const [autoCount, setAutoCount] = useState(100)
+  const [reposCount, setReposCount] = useState(0)
+  const [yearsCount, setYearsCount] = useState(0)
+  const [autoCount, setAutoCount] = useState(0)
+
+  useEffect(() => {
+    // Trigger Iron Man armor assembly sequence on mount
+    setAssemblyState("assembling")
+
+    const duration = 1800
+    const steps = 30
+    const intervalTime = duration / steps
+    let currentStep = 0
+
+    const counterInterval = setInterval(() => {
+      currentStep++
+      const progress = currentStep / steps
+      setReposCount(Math.round(progress * 60))
+      setYearsCount(Math.round(progress * 2))
+      setAutoCount(Math.round(progress * 100))
+
+      if (currentStep >= steps) {
+        clearInterval(counterInterval)
+        setReposCount(60)
+        setYearsCount(2)
+        setAutoCount(100)
+        setAssemblyState("assembled")
+      }
+    }, intervalTime)
+
+    return () => {
+      clearInterval(counterInterval)
+    }
+  }, [])
 
   const getTransition = (delay: number) => {
     return {
       type: "spring" as const,
-      stiffness: 85,
-      damping: 15,
+      stiffness: 75,
+      damping: 14,
       delay,
     }
   }
@@ -257,41 +287,48 @@ export function HeroSection() {
 
             {/* Status Badge */}
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={assemblyState === "disassembled" ? { scale: 0, opacity: 0 } : { scale: 1, opacity: 1 }}
+              transition={getTransition(0.3)}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/5 mb-8 text-sm font-medium text-primary shadow-sm hover:border-[#ee7112] hover:bg-[#ee7112]/10 transition-colors"
             >
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
               <span>{t.hero.available}</span>
             </motion.div>
 
-            {/* Flying Titles with Kinetic Letter Zoom on Hover */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-balance">
-              <div className="flex flex-wrap justify-center lg:justify-start">
-                <KineticLetters text={title1} />
-              </div>
-              <div className="flex flex-wrap justify-center lg:justify-start mt-1">
-                <KineticLetters text={title2} isGradient />
-              </div>
-            </h1>
+            {/* Flying Titles with Armor Assembly Physics */}
+            <motion.div
+              initial={{ x: -280, opacity: 0, rotate: -8 }}
+              animate={assemblyState === "disassembled" ? { x: -280, opacity: 0 } : { x: 0, opacity: 1, rotate: 0 }}
+              transition={getTransition(0.5)}
+              className="mb-6"
+            >
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-balance">
+                <div className="flex flex-wrap justify-center lg:justify-start">
+                  <KineticLetters text={title1} />
+                </div>
+                <div className="flex flex-wrap justify-center lg:justify-start mt-1">
+                  <KineticLetters text={title2} isGradient />
+                </div>
+              </h1>
+            </motion.div>
 
             {/* Subtitle */}
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              initial={{ opacity: 0, y: 80 }}
+              animate={assemblyState === "disassembled" ? { opacity: 0, y: 80 } : { opacity: 1, y: 0 }}
+              transition={getTransition(0.7)}
               className="text-lg md:text-xl text-muted-foreground max-w-2xl lg:max-w-none lg:text-left mb-10 text-pretty"
             >
               {t.hero.subtitle}
             </motion.p>
 
-            {/* CTA Buttons with Quantum Warp Transition */}
+            {/* CTA Buttons with Armor Assembly Flight */}
             <div className="flex flex-row items-center justify-center lg:justify-start gap-2.5 sm:gap-3 w-full flex-wrap">
               <motion.div
-                initial={{ x: -20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
+                initial={{ x: -200, opacity: 0 }}
+                animate={assemblyState === "disassembled" ? { x: -200, opacity: 0 } : { x: 0, opacity: 1 }}
+                transition={getTransition(0.9)}
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -306,9 +343,9 @@ export function HeroSection() {
               </motion.div>
 
               <motion.div
-                initial={{ x: 20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.35 }}
+                initial={{ x: 200, opacity: 0 }}
+                animate={assemblyState === "disassembled" ? { x: 200, opacity: 0 } : { x: 0, opacity: 1 }}
+                transition={getTransition(1.0)}
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -326,9 +363,9 @@ export function HeroSection() {
 
             {/* Stats Bar */}
             <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
+              initial={{ y: 120, opacity: 0 }}
+              animate={assemblyState === "disassembled" ? { y: 120, opacity: 0 } : { y: 0, opacity: 1 }}
+              transition={getTransition(1.2)}
               className="mt-10 sm:mt-16 flex items-center justify-center lg:justify-start w-full"
             >
               <div className="inline-flex items-center gap-0 glass rounded-2xl border border-border/40 overflow-hidden divide-x divide-border/40 w-full max-w-sm sm:max-w-none sm:w-auto hover:border-[#ee7112]/40 transition-colors shadow-lg">
