@@ -242,6 +242,8 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
       if (action.isExternal) {
         window.open(action.href, "_blank", "noopener,noreferrer")
       } else {
+        // Fechar automaticamente a janela do J.A.R.V.I.S. para não cobrir o projeto/seção
+        setIsOpen(false)
         const element = document.querySelector(action.href)
         if (element) {
           element.scrollIntoView({ behavior: "smooth" })
@@ -255,46 +257,35 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
       {/* ========================================================= */}
       {/* FLOATING ORANGE HOLOGRAPHIC SPHERE WIDGET (BOTTOM-RIGHT) */}
       {/* ========================================================= */}
-      <div className="fixed bottom-6 right-6 z-[9990] flex items-center gap-3">
-        {/* Helper Pulse Tag */}
+      <div className="fixed bottom-5 right-5 z-[9990] flex items-center gap-2.5">
+        {/* Helper Pulse Tag - Discreto e apenas Desktop */}
         {!isOpen && (
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: 15 }}
             animate={{ opacity: 1, x: 0 }}
-            className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/80 backdrop-blur-md border border-amber-500/40 text-amber-400 text-xs font-mono shadow-[0_0_20px_rgba(245,158,11,0.25)]"
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/85 backdrop-blur-md border border-amber-500/30 text-amber-400 text-[11px] font-mono shadow-[0_0_12px_rgba(245,158,11,0.2)]"
           >
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-            <span>J.A.R.V.I.S. ONLINE</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+            <span>J.A.R.V.I.S.</span>
           </motion.div>
         )}
 
-        {/* Holographic Glowing Sphere Trigger Button */}
+        {/* Holographic Glowing Sphere Trigger Button - Discreto & Elegante */}
         <motion.button
           onClick={() => setIsOpen(!isOpen)}
-          whileHover={{ scale: 1.08 }}
-          whileTap={{ scale: 0.92 }}
-          className="relative w-16 h-16 sm:w-18 sm:h-18 rounded-full flex items-center justify-center cursor-pointer group shadow-[0_0_35px_rgba(245,158,11,0.4)]"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="relative w-13 h-13 sm:w-14 sm:h-14 rounded-full flex items-center justify-center cursor-pointer group shadow-[0_0_20px_rgba(245,158,11,0.35)]"
           aria-label="Abrir Assistente J.A.R.V.I.S."
         >
-          {/* Startup Shockwave Wave */}
-          {showStartupHolo && (
-            <motion.div
-              initial={{ scale: 1, opacity: 0.9 }}
-              animate={{ scale: [1, 3, 5], opacity: [0.9, 0.4, 0] }}
-              transition={{ duration: 1.1, repeat: Infinity, ease: "easeOut" }}
-              className="absolute inset-0 rounded-full border-2 border-amber-400 pointer-events-none"
-            />
-          )}
+          {/* Subtle Outer Neon Ring */}
+          <div className="absolute -inset-1 rounded-full border border-amber-500/30 border-dashed animate-spin [animation-duration:18s] pointer-events-none group-hover:border-amber-400/60 transition-colors" />
 
-          {/* Rotating Audio Visualizer Rings */}
-          <div className="absolute -inset-2 rounded-full border border-amber-500/40 border-dashed animate-spin [animation-duration:12s] pointer-events-none" />
-          <div className="absolute -inset-3.5 rounded-full border border-amber-400/20 border-dotted animate-spin [animation-duration:20s] [animation-direction:reverse] pointer-events-none" />
-
-          {/* Glowing Hologram Backdrop Core */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-amber-600 via-orange-500 to-amber-300 opacity-80 blur-[2px] group-hover:opacity-100 transition-opacity" />
+          {/* Glowing Hologram Backdrop Core (Discreto) */}
+          <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-amber-600/40 via-orange-500/40 to-amber-300/40 opacity-70 blur-[1px] group-hover:opacity-100 transition-opacity" />
 
           {/* Animated Hologram Core of J.A.R.V.I.S. (WebP - Immune to iOS/Instagram Play Icon Overlays) */}
-          <div className="relative w-[54px] h-[54px] sm:w-[60px] sm:h-[60px] rounded-full overflow-hidden border-2 border-amber-300 bg-black flex items-center justify-center shadow-inner">
+          <div className="relative w-[44px] h-[44px] sm:w-[48px] sm:h-[48px] rounded-full overflow-hidden border border-amber-400/80 bg-black flex items-center justify-center shadow-inner">
             <img
               src="/jarvis/jarvis3.webp"
               alt="J.A.R.V.I.S. Arc Reactor Core"
@@ -302,8 +293,8 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
             />
           </div>
 
-          {/* Central Hologram Core Indicator */}
-          <div className="absolute inset-0 rounded-full border-2 border-amber-400/60 pointer-events-none group-hover:border-amber-300 transition-colors" />
+          {/* Central Border Glow */}
+          <div className="absolute inset-0 rounded-full border border-amber-400/40 pointer-events-none group-hover:border-amber-300 transition-colors" />
         </motion.button>
       </div>
 
