@@ -36,7 +36,7 @@ export default function Home() {
         <Navbar />
         <GameHUD />
         <JarvisAssistant isReady={!isLoading} />
-        <HeroSection />
+        <HeroSection isLoaded={!isLoading} />
         <AboutSection />
         <TechStackSection />
         <MakerLabSection />

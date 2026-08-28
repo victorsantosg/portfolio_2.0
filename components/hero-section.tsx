@@ -176,7 +176,11 @@ function InteractiveHeroAvatar({
   )
 }
 
-export function HeroSection() {
+interface HeroSectionProps {
+  isLoaded?: boolean
+}
+
+export function HeroSection({ isLoaded = true }: HeroSectionProps) {
   const { t } = useLanguage()
 
   // J.A.R.V.I.S. Iron Man Armor Assembly System
@@ -188,34 +192,40 @@ export function HeroSection() {
   const [autoCount, setAutoCount] = useState(0)
 
   useEffect(() => {
-    // Trigger Iron Man armor assembly sequence on mount
-    setAssemblyState("assembling")
+    if (!isLoaded) return
 
-    const duration = 1800
-    const steps = 30
-    const intervalTime = duration / steps
-    let currentStep = 0
+    // Small delay (150ms) after loading screen ends to let the user see the pieces fly in!
+    const timerStart = setTimeout(() => {
+      setAssemblyState("assembling")
 
-    const counterInterval = setInterval(() => {
-      currentStep++
-      const progress = currentStep / steps
-      setReposCount(Math.round(progress * 60))
-      setYearsCount(Math.round(progress * 2))
-      setAutoCount(Math.round(progress * 100))
+      const duration = 1800
+      const steps = 30
+      const intervalTime = duration / steps
+      let currentStep = 0
 
-      if (currentStep >= steps) {
+      const counterInterval = setInterval(() => {
+        currentStep++
+        const progress = currentStep / steps
+        setReposCount(Math.round(progress * 60))
+        setYearsCount(Math.round(progress * 2))
+        setAutoCount(Math.round(progress * 100))
+
+        if (currentStep >= steps) {
+          clearInterval(counterInterval)
+          setReposCount(60)
+          setYearsCount(2)
+          setAutoCount(100)
+          setAssemblyState("assembled")
+        }
+      }, intervalTime)
+
+      return () => {
         clearInterval(counterInterval)
-        setReposCount(60)
-        setYearsCount(2)
-        setAutoCount(100)
-        setAssemblyState("assembled")
       }
-    }, intervalTime)
+    }, 150)
 
-    return () => {
-      clearInterval(counterInterval)
-    }
-  }, [])
+    return () => clearTimeout(timerStart)
+  }, [isLoaded])
 
   const getTransition = (delay: number) => {
     return {
@@ -224,6 +234,24 @@ export function HeroSection() {
       damping: 14,
       delay,
     }
+  }
+
+  const getAssemblyVariants = (index: number, type: "left" | "right" | "top" | "bottom" | "scale") => {
+    if (assemblyState === "disassembled") {
+      switch (type) {
+        case "left":
+          return { x: -500, y: 120, rotate: -25, opacity: 0, scale: 0.3 }
+        case "right":
+          return { x: 500, y: -120, rotate: 25, opacity: 0, scale: 0.3 }
+        case "top":
+          return { y: -400, rotate: 15, opacity: 0, scale: 0.3 }
+        case "bottom":
+          return { y: 400, rotate: -15, opacity: 0, scale: 0.3 }
+        case "scale":
+          return { scale: 0.1, rotate: -180, opacity: 0 }
+      }
+    }
+    return { x: 0, y: 0, rotate: 0, opacity: 1, scale: 1 }
   }
 
   const [warpTarget, setWarpTarget] = useState<string | null>(null)
@@ -289,35 +317,51 @@ export function HeroSection() {
             <motion.div
               initial={{ scale: 0, opacity: 0 }}
               animate={assemblyState === "disassembled" ? { scale: 0, opacity: 0 } : { scale: 1, opacity: 1 }}
-              transition={getTransition(0.3)}
+              transition={getTransition(0.2)}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/5 mb-8 text-sm font-medium text-primary shadow-sm hover:border-[#ee7112] hover:bg-[#ee7112]/10 transition-colors"
             >
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
               <span>{t.hero.available}</span>
             </motion.div>
 
-            {/* Flying Titles with Armor Assembly Physics */}
-            <motion.div
-              initial={{ x: -280, opacity: 0, rotate: -8 }}
-              animate={assemblyState === "disassembled" ? { x: -280, opacity: 0 } : { x: 0, opacity: 1, rotate: 0 }}
-              transition={getTransition(0.5)}
-              className="mb-6"
-            >
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-balance">
-                <div className="flex flex-wrap justify-center lg:justify-start">
-                  <KineticLetters text={title1} />
-                </div>
-                <div className="flex flex-wrap justify-center lg:justify-start mt-1">
-                  <KineticLetters text={title2} isGradient />
-                </div>
-              </h1>
-            </motion.div>
+            {/* Flying Titles with Per-Word Armor Assembly Physics & Kinetic Zoom on Hover */}
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-balance">
+              <div className="flex flex-wrap justify-center lg:justify-start gap-x-3 gap-y-1">
+                {title1.split(" ").map((word, i) => (
+                  <motion.span
+                    key={i}
+                    initial={{ opacity: 0 }}
+                    animate={getAssemblyVariants(i, i % 2 === 0 ? "left" : "right")}
+                    transition={getTransition(0.3 + i * 0.12)}
+                    className="inline-block relative text-foreground"
+                  >
+                    <KineticLetters text={word} />
+                    {assemblyState === "assembling" && (
+                      <span className="absolute left-0 right-0 bottom-0 h-[2px] bg-[#ee7112] shadow-[0_0_8px_#ee7112] animate-pulse" />
+                    )}
+                  </motion.span>
+                ))}
+              </div>
+              <div className="flex flex-wrap justify-center lg:justify-start gap-x-3 gap-y-1 mt-1">
+                {title2.split(" ").map((word, i) => (
+                  <motion.span
+                    key={i}
+                    initial={{ opacity: 0 }}
+                    animate={getAssemblyVariants(i, i === 1 ? "scale" : i === 0 ? "left" : "right")}
+                    transition={getTransition(0.65 + i * 0.15)}
+                    className="inline-block text-gradient animate-gradient bg-[length:200%_200%]"
+                  >
+                    <KineticLetters text={word} isGradient />
+                  </motion.span>
+                ))}
+              </div>
+            </h1>
 
             {/* Subtitle */}
             <motion.p
               initial={{ opacity: 0, y: 80 }}
               animate={assemblyState === "disassembled" ? { opacity: 0, y: 80 } : { opacity: 1, y: 0 }}
-              transition={getTransition(0.7)}
+              transition={getTransition(0.85)}
               className="text-lg md:text-xl text-muted-foreground max-w-2xl lg:max-w-none lg:text-left mb-10 text-pretty"
             >
               {t.hero.subtitle}
