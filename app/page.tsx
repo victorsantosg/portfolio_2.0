@@ -35,7 +35,7 @@ export default function Home() {
         <ScrollAssemblyCanvas />
         <Navbar />
         <GameHUD />
-        <JarvisAssistant />
+        <JarvisAssistant isReady={!isLoading} />
         <HeroSection />
         <AboutSection />
         <TechStackSection />

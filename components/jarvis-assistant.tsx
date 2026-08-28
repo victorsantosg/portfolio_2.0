@@ -31,24 +31,31 @@ type JarvisState =
   | "telemetry"
   | "contact"
 
-export function JarvisAssistant() {
+interface JarvisAssistantProps {
+  isReady?: boolean
+}
+
+export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [showStartupHolo, setShowStartupHolo] = useState(true)
+  const [showStartupHolo, setShowStartupHolo] = useState(false)
   const [currentState, setCurrentState] = useState<JarvisState>("welcome")
   const [isTyping, setIsTyping] = useState(false)
   const [displayedText, setDisplayedText] = useState("")
   const [voiceEnabled, setVoiceEnabled] = useState(false)
   const messageEndRef = useRef<HTMLDivElement>(null)
 
-  // Auto-open on initial page reveal with cinematic hologram startup effect
+  // Only open AFTER the initial intro and hero armor assembly effect have finished
   useEffect(() => {
+    if (!isReady) return
+
+    // Wait 3.8s after loading screen finishes to allow full armor assembly animation
     const timerHolo = setTimeout(() => {
-      setShowStartupHolo(false)
+      setShowStartupHolo(true)
       setIsOpen(true)
-    }, 1100)
+    }, 3800)
 
     return () => clearTimeout(timerHolo)
-  }, [])
+  }, [isReady])
 
   // Respostas programadas com a Persona Oficial do J.A.R.V.I.S.
   const dialogContent: Record<
