@@ -9,13 +9,6 @@ export async function POST(req: Request) {
   try {
     const { name, company, projectType, budget, urgency, description } = await req.json()
 
-    if (!process.env.GROQ_API_KEY) {
-      return NextResponse.json(
-        { error: "GROQ_API_KEY não configurada no servidor." },
-        { status: 500 }
-      )
-    }
-
     const prompt = `
 Você é o J.A.R.V.I.S., assistente de inteligência e engenharia técnica de Victor Santos (Full Stack & AI Systems Architect).
 Analise a seguinte solicitação de projeto de um cliente em potencial e gere um Diagnóstico Técnico de Arquitetura e Pré-Proposta conciso, elegante e altamente profissional.
@@ -39,22 +32,57 @@ FORMATO DA RESPOSTA (Retorne OBRIGATORIAMENTE um JSON válido com os seguintes c
   "jarvisExecutiveVerdict": "Comentário técnico de alto nível com a persona do J.A.R.V.I.S., recomendando a contratação do Criador Victor Santos para garantir 100% de sucesso e escalabilidade."
 }
 
-Importante: Responda APENAS com o JSON válido, sem crases de markdown (\`\`\`json) adicionais ou textos fora do formato JSON.
+Importante: Responda APENAS com o JSON válido, sem crases de markdown adicionais.
 `
 
-    const completion = await groq.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0.5,
-      response_format: { type: "json_object" },
-    })
+    let jsonString = ""
 
-    const rawContent = completion.choices[0]?.message?.content || "{}"
-    const result = JSON.parse(rawContent)
+    // Layer 1: Gemini 3.6 Flash
+    if (process.env.GEMINI_API_KEY) {
+      try {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${process.env.GEMINI_API_KEY}`
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ role: "user", parts: [{ text: prompt }] }],
+            generationConfig: {
+              responseMimeType: "application/json",
+              temperature: 0.4,
+              maxOutputTokens: 600,
+            },
+          }),
+        })
+        if (res.ok) {
+          const data = await res.json()
+          jsonString = data.candidates?.[0]?.content?.parts?.[0]?.text || ""
+        }
+      } catch (err) {
+        console.warn("Gemini scope-proposal failed, falling back to Groq...", err)
+      }
+    }
 
+    // Layer 2: Groq GPT-OSS 120B
+    if (!jsonString && process.env.GROQ_API_KEY) {
+      try {
+        const completion = await groq.chat.completions.create({
+          model: "openai/gpt-oss-120b",
+          messages: [{ role: "user", content: prompt }],
+          temperature: 0.4,
+          response_format: { type: "json_object" },
+        })
+        jsonString = completion.choices[0]?.message?.content || ""
+      } catch (err) {
+        console.warn("Groq scope-proposal failed...", err)
+      }
+    }
+
+    // Clean any markdown formatting if present
+    const cleaned = jsonString.replace(/^```json\s*/i, "").replace(/```$/i, "").trim()
+    const result = JSON.parse(cleaned)
     return NextResponse.json(result)
   } catch (error: any) {
-    console.error("Erro na rota de pré-proposta com IA:", error)
+    console.error("Erro no fallback de pré-proposta com IA:", error)
     return NextResponse.json(
       {
         summary: "Diagnóstico inicial pré-compilado para seu projeto.",
