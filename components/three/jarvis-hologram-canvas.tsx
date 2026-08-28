@@ -20,6 +20,10 @@ export function JarvisHologramCanvas({ isSpinComplete, isActivating }: JarvisHol
     const width = container.clientWidth || window.innerWidth
     const height = container.clientHeight || window.innerHeight
 
+    // 1. SCENE & CAMERA
+    const scene = new THREE.Scene()
+    scene.fog = new THREE.FogExp2(0x030303, 0.02)
+
     const isMobile = width < 768 || width < height
     const camZ = isMobile ? 24 : 16
 
