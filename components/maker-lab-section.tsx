@@ -110,9 +110,9 @@ export function MakerLabSection() {
         </div>
 
         {/* Main Content Showcase */}
-        <div className="grid lg:grid-cols-12 gap-8 items-start">
+        <div className="grid lg:grid-cols-12 gap-8 items-start w-full max-w-full">
           {/* Left Column: Interactive 3D Sandbox OR Real Production Showcase */}
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-7 w-full max-w-full overflow-hidden">
             <AnimatePresence mode="wait">
               {activeTab === "3d_demo" ? (
                 <motion.div
@@ -121,6 +121,7 @@ export function MakerLabSection() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -15 }}
                   transition={{ duration: 0.3 }}
+                  className="w-full max-w-full overflow-hidden"
                 >
                   <SandboxViewer />
                 </motion.div>
