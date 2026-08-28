@@ -140,7 +140,7 @@ export function TourHudControls() {
     }
 
     if (activeVoice) utterance.voice = activeVoice
-    utterance.rate = 1.02
+    utterance.rate = 1.30
     utterance.pitch = 0.96
 
     // Wait until the speech finishes completely before advancing to the next step
@@ -148,7 +148,7 @@ export function TourHudControls() {
       if (!isPaused) {
         timerRef.current = setTimeout(() => {
           handleNext()
-        }, 1800)
+        }, 1500)
       }
     }
 
@@ -156,14 +156,14 @@ export function TourHudControls() {
       if (!isPaused) {
         timerRef.current = setTimeout(() => {
           handleNext()
-        }, 3000)
+        }, 2500)
       }
     }
 
     if (voiceEnabled) {
       window.speechSynthesis.speak(utterance)
     } else {
-      const readingDuration = Math.max(7000, text.length * 65)
+      const readingDuration = Math.max(5000, text.length * 50)
       timerRef.current = setTimeout(() => {
         handleNext()
       }, readingDuration)
@@ -199,7 +199,7 @@ export function TourHudControls() {
       } else {
         clearInterval(typeInterval)
       }
-    }, 16)
+    }, 11)
 
     if (timerRef.current) clearTimeout(timerRef.current)
     if (!isPaused) {

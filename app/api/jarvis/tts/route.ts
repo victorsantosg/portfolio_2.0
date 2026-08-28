@@ -41,7 +41,7 @@ export async function POST(req: Request) {
 
     const { audioStream } = await tts.toStream(cleanText, {
       pitch: "-4Hz",
-      rate: "+2%",
+      rate: "+30%",
       volume: "+0%",
     })
 

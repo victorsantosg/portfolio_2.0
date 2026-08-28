@@ -246,7 +246,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
       "Sistemas calibrados, Senhor. Eu sou o Járvis, e este é o meu canal de sintetização de voz."
     )
     utterance.voice = voice
-    utterance.rate = 1.02
+    utterance.rate = 1.30
     utterance.pitch = 0.96
     window.speechSynthesis.speak(utterance)
     setSelectedVoiceURI(voice.voiceURI)
@@ -315,7 +315,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
 
       const utterance = new SpeechSynthesisUtterance(trimmed)
       if (activeVoice) utterance.voice = activeVoice
-      utterance.rate = 1.02
+      utterance.rate = 1.30
       utterance.pitch = 0.96
 
       if (index === sentences.length - 1) {
