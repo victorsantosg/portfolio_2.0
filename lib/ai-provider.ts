@@ -41,7 +41,7 @@ async function callGemini(model: string, messages: Message[], systemPrompt: stri
       contents: contents.length > 0 ? contents : [{ role: "user", parts: [{ text: "Olá J.A.R.V.I.S." }] }],
       generationConfig: {
         temperature: 0.6,
-        maxOutputTokens: 450,
+        maxOutputTokens: 1200,
       },
     }),
   })
@@ -73,7 +73,7 @@ async function callGroq(model: string, messages: Message[], systemPrompt: string
       })),
     ],
     temperature: 0.6,
-    max_tokens: 450,
+    max_tokens: 1200,
   })
 
   const reply = completion.choices[0]?.message?.content

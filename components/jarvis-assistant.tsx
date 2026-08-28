@@ -268,27 +268,31 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
     })
   }
 
+  const typewriterRef = useRef<NodeJS.Timeout | null>(null)
+
   // Typewriter effect generator
   const triggerTypewriter = (fullText: string) => {
+    if (typewriterRef.current) clearInterval(typewriterRef.current)
     setIsTyping(true)
     setDisplayedText("")
     let currentIndex = 0
 
-    const interval = setInterval(() => {
+    typewriterRef.current = setInterval(() => {
       if (currentIndex < fullText.length) {
         setDisplayedText(fullText.slice(0, currentIndex + 1))
         currentIndex++
       } else {
         setIsTyping(false)
-        clearInterval(interval)
+        setDisplayedText(fullText)
+        if (typewriterRef.current) clearInterval(typewriterRef.current)
       }
-    }, 12)
+    }, 10)
 
     if (voiceEnabled) {
       speakHumanizedJarvis(fullText)
     }
 
-    return interval
+    return typewriterRef.current
   }
 
   // Typewriter effect on preset state change (when not in ai_chat)
@@ -296,10 +300,10 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
     if (!isOpen || currentState === "ai_chat") return
 
     const fullText = dialogContent[currentState].text
-    const interval = triggerTypewriter(fullText)
+    triggerTypewriter(fullText)
 
     return () => {
-      clearInterval(interval)
+      if (typewriterRef.current) clearInterval(typewriterRef.current)
       if (typeof window !== "undefined" && "speechSynthesis" in window) {
         window.speechSynthesis.cancel()
       }
