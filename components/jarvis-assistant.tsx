@@ -141,8 +141,8 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
     { title: string; text: string; sectionId?: string; actions: { label: string; nextState?: JarvisState; href?: string; isExternal?: boolean; isTour?: boolean; icon?: any }[] }
   > = {
     welcome: {
-      title: "PROTOCOLO DE INICIALIZAÇÃO // J.A.R.V.I.S. (GROQ AI)",
-      text: "Sistemas neurais online com Llama-3.3-70B e Gemini Failover. Bem-vindo ao servidor central de Victor Santos. Eu sou o J.A.R.V.I.S. e gerencio os arquivos, códigos e implantações do Criador.\n\nVocê pode me fazer qualquer pergunta sobre as habilidades, projetos ou trajetória do Criador no campo de texto abaixo, ou selecionar uma rota rápida de telemetria:\n\n• Histórico de Missões: Trajetória profissional e sistemas desenvolvidos.\n• Protótipos Ativos: Repositórios de código e aplicações em produção.\n• Arquitetura do Traje: A stack tecnológica e frameworks dominados.",
+      title: "PROTOCOLO DE INICIALIZAÇÃO // J.A.R.V.I.S.",
+      text: "Sistemas neurais online. Bem-vindo ao servidor central de Victor Santos. Eu sou o J.A.R.V.I.S. e gerencio os arquivos, códigos e implantações do Criador.\n\nVocê pode me fazer qualquer pergunta sobre as habilidades, projetos ou trajetória do Criador no campo de texto abaixo, ou selecionar uma rota rápida de telemetria:\n\n• Histórico de Missões: Trajetória profissional e sistemas desenvolvidos.\n• Protótipos Ativos: Repositórios de código e aplicações em produção.\n• Arquitetura do Traje: A stack tecnológica e frameworks dominados.",
       actions: [
         { label: "🎙️ Iniciar Tour Narrado (Piloto Auto)", isTour: true },
         { label: "🚀 Ir Direto para Projetos", href: "#projetos" },
@@ -208,7 +208,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
       ],
     },
     ai_chat: {
-      title: "RESPOSTA NEURAL // GROQ LLAMA 3.3 70B",
+      title: "RESPOSTA NEURAL // J.A.R.V.I.S.",
       text: "",
       actions: [
         { label: "💬 Falar no WhatsApp", href: "https://wa.me/5585999556385", isExternal: true },
@@ -364,13 +364,13 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
       })
 
       const data = await res.json()
-      const aiReply = data.reply || "Senhor, não foi possível obter retorno dos nós neurais da Groq."
+      const aiReply = data.reply || "Senhor, não foi possível obter retorno dos nós neurais."
 
       setChatMessages([...newMessages, { role: "assistant", content: aiReply }])
       triggerTypewriter(aiReply)
     } catch (err: any) {
       console.error(err)
-      const errorMsg = "Senhor, houve uma interrupção na conexão com a rede da Groq. Estou restabelecendo os nós neurais."
+      const errorMsg = "Senhor, houve uma oscilação na conexão. Estou restabelecendo os nós neurais."
       setChatMessages([...newMessages, { role: "assistant", content: errorMsg }])
       triggerTypewriter(errorMsg)
     } finally {
@@ -395,7 +395,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
             className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/85 backdrop-blur-md border border-amber-500/30 text-amber-400 text-[11px] font-mono shadow-[0_0_12px_rgba(245,158,11,0.2)]"
           >
             <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
-            <span>J.A.R.V.I.S. (GROQ AI)</span>
+            <span>J.A.R.V.I.S.</span>
           </motion.div>
         )}
 
@@ -455,15 +455,15 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
                 <div>
                   <div className="flex items-center gap-1.5 sm:gap-2">
                     <span className="text-xs sm:text-sm font-mono font-extrabold text-amber-400 tracking-wider">
-                      J.A.R.V.I.S. AI
+                      J.A.R.V.I.S.
                     </span>
                     <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">
-                      LLM DUAL-ENGINE
+                      ASSISTENTE IA
                     </span>
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
                   </div>
                   <div className="text-[9px] sm:text-[10px] font-mono text-muted-foreground">
-                    SANTOS PROTOCOL • MULTI-PROVIDER
+                    SANTOS PROTOCOL • SISTEMA AUTÔNOMO
                   </div>
                 </div>
               </div>
@@ -531,7 +531,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
                         <div className="max-w-[92%] rounded-2xl rounded-tl-xs bg-black/80 border border-amber-500/40 p-3 sm:p-3.5 text-xs sm:text-[13px] font-mono text-slate-200 shadow-inner">
                           <div className="text-[9px] text-amber-400 font-bold mb-1.5 flex items-center gap-1.5 pb-1 border-b border-amber-500/20">
                             <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
-                            <span>J.A.R.V.I.S. (IA CONVERSACIONAL)</span>
+                            <span>J.A.R.V.I.S.</span>
                           </div>
                           <p className="whitespace-pre-wrap leading-relaxed">
                             {idx === chatMessages.length - 1 && isTyping ? displayedText : msg.content}
@@ -549,7 +549,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
                     <div className="flex justify-start">
                       <div className="rounded-2xl rounded-tl-xs bg-black/75 border border-amber-500/40 p-2.5 sm:p-3 text-xs font-mono text-amber-300 flex items-center gap-2 shadow-inner animate-pulse">
                         <Bot className="w-3.5 h-3.5 text-amber-400 animate-spin" />
-                        <span>J.A.R.V.I.S. processando nós neurais...</span>
+                        <span>J.A.R.V.I.S. processando resposta...</span>
                       </div>
                     </div>
                   )}
@@ -612,7 +612,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
 
             {/* Server Status Footer */}
             <div className="relative z-10 px-3 py-1 bg-black text-[9px] font-mono text-muted-foreground/60 border-t border-white/5 flex items-center justify-between shrink-0">
-              <span>SERVER: GROQ + GEMINI DUAL ENGINE</span>
+              <span>SISTEMA CENTRAL • 100% OPERACIONAL</span>
               <span className="text-emerald-400">● ONLINE</span>
             </div>
           </motion.div>

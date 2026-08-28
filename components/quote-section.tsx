@@ -545,7 +545,7 @@ ${
                           <span>
                             {isGeneratingAiProposal
                               ? "J.A.R.V.I.S. PROCESSANDO ARQUITETURA..."
-                              : "✨ Gerar Diagnóstico Técnico com IA (Groq/Gemini)"}
+                              : "✨ Gerar Diagnóstico Técnico com IA"}
                           </span>
                         </Button>
                       </div>
