@@ -38,10 +38,20 @@ export function TourHudControls() {
     return () => window.removeEventListener("start-jarvis-tour", handleStartTour)
   }, [])
 
-  // Speak narration and trigger next step on completion
-  const speakText = (text: string) => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return
-    window.speechSynthesis.cancel()
+  const tourAudioRef = useRef<HTMLAudioElement | null>(null)
+
+  // Speak narration and trigger next step on completion (Edge Neural TTS + Fallback)
+  const speakText = async (text: string) => {
+    if (typeof window === "undefined") return
+
+    // Stop existing audio
+    if (tourAudioRef.current) {
+      tourAudioRef.current.pause()
+      tourAudioRef.current.currentTime = 0
+    }
+    if ("speechSynthesis" in window) {
+      window.speechSynthesis.cancel()
+    }
 
     const spokenText = text
       .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
@@ -59,6 +69,54 @@ export function TourHudControls() {
       .replace(/\s+/g, " ")
       .replace(/\s+([.,!?])/g, "$1")
       .trim()
+
+    if (voiceEnabled) {
+      try {
+        // 1. Primary: Microsoft Edge Neural TTS
+        const res = await fetch("/api/jarvis/tts", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: spokenText }),
+        })
+
+        if (res.ok) {
+          const blob = await res.blob()
+          const audioUrl = URL.createObjectURL(blob)
+          const audio = new Audio(audioUrl)
+          tourAudioRef.current = audio
+
+          audio.onended = () => {
+            if (!isPaused) {
+              timerRef.current = setTimeout(() => {
+                handleNext()
+              }, 1800)
+            }
+          }
+
+          audio.onerror = () => {
+            if (!isPaused) {
+              timerRef.current = setTimeout(() => {
+                handleNext()
+              }, 3000)
+            }
+          }
+
+          await audio.play()
+          return
+        }
+      } catch (err) {
+        console.warn("Edge TTS failed for tour, using browser speech fallback...", err)
+      }
+    }
+
+    // 2. Fallback: Browser Native Speech Synthesis
+    if (!("speechSynthesis" in window)) {
+      const readingDuration = Math.max(7000, text.length * 65)
+      timerRef.current = setTimeout(() => {
+        handleNext()
+      }, readingDuration)
+      return
+    }
 
     const utterance = new SpeechSynthesisUtterance(spokenText)
     const voices = window.speechSynthesis.getVoices()
@@ -105,7 +163,6 @@ export function TourHudControls() {
     if (voiceEnabled) {
       window.speechSynthesis.speak(utterance)
     } else {
-      // Fallback timer if voice is muted
       const readingDuration = Math.max(7000, text.length * 65)
       timerRef.current = setTimeout(() => {
         handleNext()

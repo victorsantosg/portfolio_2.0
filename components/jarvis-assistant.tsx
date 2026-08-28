@@ -170,14 +170,44 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
     localStorage.setItem("jarvis_selected_voice", voice.voiceURI)
   }
 
-  // Humanized Speech Synthesis with Audio Pacing
-  const speakHumanizedJarvis = (text: string) => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return
-    window.speechSynthesis.cancel()
+  // Humanized J.A.R.V.I.S. Neural Audio Player (Edge TTS + SpeechSynthesis Fallback)
+  const speakHumanizedJarvis = async (text: string) => {
+    if (!voiceEnabled || typeof window === "undefined") return
 
     const spokenText = cleanSpeechText(text)
     if (!spokenText) return
 
+    // Stop any existing audio
+    if (audioRef.current) {
+      audioRef.current.pause()
+      audioRef.current.currentTime = 0
+    }
+    if ("speechSynthesis" in window) {
+      window.speechSynthesis.cancel()
+    }
+
+    try {
+      // 1. Primary: Microsoft Edge Neural TTS Audio Stream (/api/jarvis/tts)
+      const res = await fetch("/api/jarvis/tts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: spokenText }),
+      })
+
+      if (res.ok) {
+        const blob = await res.blob()
+        const audioUrl = URL.createObjectURL(blob)
+        const audio = new Audio(audioUrl)
+        audioRef.current = audio
+        await audio.play()
+        return
+      }
+    } catch (err) {
+      console.warn("Edge Neural TTS failed, using browser speech fallback...", err)
+    }
+
+    // 2. Fallback: Browser Native Speech Synthesis
+    if (!("speechSynthesis" in window)) return
     const sentences = spokenText.match(/[^.!?]+[.!?]?/g) || [spokenText]
     const voices = availableVoices.length > 0 ? availableVoices : window.speechSynthesis.getVoices()
     
