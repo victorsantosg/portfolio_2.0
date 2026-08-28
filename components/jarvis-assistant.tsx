@@ -49,7 +49,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
   const [currentState, setCurrentState] = useState<JarvisState>("welcome")
   const [isTyping, setIsTyping] = useState(false)
   const [displayedText, setDisplayedText] = useState("")
-  const [voiceEnabled, setVoiceEnabled] = useState(false)
+  const [voiceEnabled, setVoiceEnabled] = useState(true)
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([])
   const [selectedVoiceURI, setSelectedVoiceURI] = useState<string>("")
   const [showVoiceSettings, setShowVoiceSettings] = useState(false)
@@ -61,10 +61,18 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
 
   const messageEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
 
-  // Load available speech synthesis voices
+  // Load saved voice preference and available voices
   useEffect(() => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return
+    if (typeof window === "undefined") return
+
+    const savedVoiceState = localStorage.getItem("jarvis_voice_enabled")
+    if (savedVoiceState !== null) {
+      setVoiceEnabled(savedVoiceState === "true")
+    }
+
+    if (!("speechSynthesis" in window)) return
 
     const loadVoices = () => {
       const voices = window.speechSynthesis.getVoices()
@@ -94,6 +102,24 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
     loadVoices()
     window.speechSynthesis.onvoiceschanged = loadVoices
   }, [])
+
+  // Toggle voice and save preference
+  const toggleVoice = () => {
+    const nextState = !voiceEnabled
+    setVoiceEnabled(nextState)
+    if (typeof window !== "undefined") {
+      localStorage.setItem("jarvis_voice_enabled", String(nextState))
+      if (!nextState) {
+        if (audioRef.current) {
+          audioRef.current.pause()
+          audioRef.current.currentTime = 0
+        }
+        if ("speechSynthesis" in window) {
+          window.speechSynthesis.cancel()
+        }
+      }
+    }
+  }
 
   // Only open AFTER the initial intro and hero armor assembly effect have finished
   useEffect(() => {
@@ -264,11 +290,13 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
 
       setChatMessages([...newMessages, { role: "assistant", content: aiReply }])
       triggerTypewriter(aiReply)
+      speakHumanizedJarvis(aiReply)
     } catch (err: any) {
       console.error(err)
       const errorMsg = "Senhor, houve uma oscilação na rede neural. Estou recalibrando os servidores."
       setChatMessages([...newMessages, { role: "assistant", content: errorMsg }])
       triggerTypewriter(errorMsg)
+      speakHumanizedJarvis(errorMsg)
     } finally {
       setIsAiLoading(false)
       setTimeout(() => {
@@ -298,65 +326,61 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
   > = {
     welcome: {
       title: "PROTOCOLO DE INICIALIZAÇÃO // J.A.R.V.I.S.",
-      text: "Sistemas neurais online. Bem-vindo ao servidor central de Victor Santos. Eu sou o J.A.R.V.I.S. e gerencio os arquivos, códigos e implantações do Criador.\n\nVocê pode me fazer qualquer pergunta sobre as habilidades, projetos ou trajetória do Criador no campo de texto abaixo, ou selecionar uma rota rápida de telemetria:\n\n• Histórico de Missões: Trajetória profissional e sistemas desenvolvidos.\n• Protótipos Ativos: Repositórios de código e aplicações em produção.\n• Arquitetura do Traje: A stack tecnológica e frameworks dominados.",
+      text: "Sistemas neurais online. Bem-vindo ao servidor central de Victor Santos. Eu sou o J.A.R.V.I.S. e gerencio os arquivos, códigos e implantações do Criador. Você pode explorar os módulos abaixo ou conversar diretamente comigo digitando sua mensagem no terminal.",
       actions: [
-        { label: "🎙️ Iniciar Tour Narrado (Piloto Auto)", isTour: true },
-        { label: "🚀 Ir Direto para Projetos", href: "#projetos" },
-        { label: "📜 Histórico de Missões", nextState: "missions" },
-        { label: "🚀 Protótipos Ativos", nextState: "prototypes" },
-        { label: "⚙️ Arquitetura do Traje", nextState: "architecture" },
-        { label: "📊 Telemetria de Eficiência", nextState: "telemetry" },
-        { label: "💬 Falar com o Criador", nextState: "contact" },
+        { label: "🚀 Iniciar Tour Guiado", isTour: true },
+        { label: "🎯 Missões & Carreira", nextState: "missions" },
+        { label: "📦 Projetos & Protótipos", nextState: "prototypes" },
+        { label: "⚡ Arquitetura & Stack", nextState: "architecture" },
+        { label: "📡 Telemetria & Contato", nextState: "contact" },
       ],
     },
     missions: {
-      title: "REGISTROS DE MISSÕES // HISTÓRICO PROFISSIONAL",
-      text: "Acessando logs confidenciais de carreira do Criador:\n\n1. Cometa Supermercados (Missão Crítica):\nO Criador desenvolveu do zero o Sistema de Inventário Corporativo integrado ao ERP (RPINFO), confrontando estoque físico com sistêmico e eliminando distorções de perdas.\n\n2. Formação Acadêmica de Engenharia:\n• Graduação em Análise e Desenvolvimento de Sistemas — UNIFOR\n• Pós-Graduação em Desenvolvimento Web Full Stack — Faculdade INFNET\n\nTodos os registros estão autenticados e disponíveis para inspeção, Senhor.",
-      sectionId: "#sobre",
+      title: "HISTÓRICO DE MISSÕES // TRAJETÓRIA",
+      text: "O Criador atua na vanguarda do desenvolvimento Full Stack e Engenharia de Software, combinando TypeScript, React, Next.js, Node.js, PHP moderno e Integrações de Inteligência Artificial para construir sistemas robustos e de alto tráfego.",
+      sectionId: "sobre",
       actions: [
-        { label: "🚀 Ver Protótipos Ativos", nextState: "prototypes" },
-        { label: "⚙️ Ver Stack Tecnológica", nextState: "architecture" },
-        { label: "📋 Baixar Registros (Currículo)", href: "#orcamento" },
+        { label: "📜 Ir para Sobre", href: "#sobre" },
+        { label: "📦 Ver Projetos", nextState: "prototypes" },
         { label: "🔄 Menu Principal", nextState: "welcome" },
       ],
     },
     prototypes: {
-      title: "PROTÓTIPOS ATIVOS // SISTEMAS EM PRODUÇÃO",
-      text: "Transmissão de telemetria dos protótipos de software desenvolvidos pelo Criador:\n\n• ERP Corporativo & Inventário: Painel analítico de missão crítica com Fastify, Prisma e Next.js.\n• Robôs de Automação ETL Python: Scripts inteligentes para extração e processamento massivo de dados com 0% de falha operacional.\n• Chatbot com IA & Visão Computacional: Assistentes inteligentes integrados a APIs de LLM e automação de fluxos desktop.\n\nDirecionando os sensores para a galeria de projetos...",
-      sectionId: "#projetos",
+      title: "PROTÓTIPOS E IMPLANTAÇÕES // PROJETOS",
+      text: "Acessando banco de dados de projetos: Destacam-se plataformas SaaS completas, dashboards de telemetria com Three.js em 3D, automações de logística reversa e integrações com modelos de linguagem avançados.",
+      sectionId: "projetos",
       actions: [
-        { label: "📂 Abrir Galeria de Projetos", href: "#projetos" },
-        { label: "⚙️ Inspecionar Arquitetura", nextState: "architecture" },
-        { label: "💬 Contatar o Criador (WhatsApp)", href: "https://wa.me/5585999556385", isExternal: true },
+        { label: "📂 Explorar Projetos no Site", href: "#projetos" },
+        { label: "⚡ Ver Arquitetura Técnica", nextState: "architecture" },
         { label: "🔄 Menu Principal", nextState: "welcome" },
       ],
     },
     architecture: {
-      title: "ARQUITETURA DO TRAJE // TECH STACK",
-      text: "Diagnóstico da armadura tecnológica do Criador:\n\n• Frontend Core: Next.js 16, React 19, TypeScript, Tailwind CSS v4, Three.js.\n• Backend & APIs: Node.js, Fastify, Prisma ORM, Python 3.12, RESTful APIs.\n• Banco de Dados: PostgreSQL, Supabase, Firebase, SQL otimizado.\n• Infraestrutura & Deploy: Docker, Coolify, Docker Compose, AWS Cloud.\n• Manufatura & IA 3D: Meshy AI Engine, Geração 3D e Fatiamento 3MF.\n\nTodos os subsistemas reportam estabilidade máxima de 60 FPS.",
-      sectionId: "#stack",
+      title: "MATRIZ DE COMPETÊNCIAS // STACK",
+      text: "Arquitetura otimizada para escala: Frontend com Next.js 16, React 19, Tailwind CSS e Framer Motion. Backend resiliente com APIs REST, WebSocket, integrações com bancos de dados relacionais e agentes autônomos de IA.",
+      sectionId: "skills",
       actions: [
-        { label: "🔬 Inspecionar 3D Maker Lab", href: "#maker-lab" },
-        { label: "📊 Ver Métricas de Eficiência", nextState: "telemetry" },
-        { label: "📜 Histórico de Missões", nextState: "missions" },
+        { label: "🛠️ Ver Habilidades Técnicas", href: "#skills" },
+        { label: "📊 Telemetria ao Vivo", nextState: "telemetry" },
         { label: "🔄 Menu Principal", nextState: "welcome" },
       ],
     },
     telemetry: {
-      title: "TELEMETRIA DE EFICIÊNCIA // MÉTRICAS REAIS",
-      text: "Compilação de métricas de desempenho registradas:\n\n• Repositórios Ativos: Mais de 60 projetos de código estruturados no GitHub.\n• Experiência Full Stack: 2+ anos construindo aplicações escaláveis.\n• Automação de Processos: 100% de precisão nos fluxos corporativos automatizados.\n• Manifold Check 3D: 100% Watertight (Modelos estanques prontos para manufatura).\n\nA eficiência das operações do Criador excede os padrões industriais convencionais, Senhor.",
+      title: "TELEMETRIA DE SISTEMA // DIAGNÓSTICO",
+      text: "Todos os subsistemas operando em capacidade máxima. Latência média de 32ms, infraestrutura 100% serverless na nuvem e integridade neural validada com múltiplos nós de contingência.",
+      sectionId: "skills",
       actions: [
-        { label: "💬 Solicitar Orçamento / Proposta", href: "#orcamento" },
-        { label: "💼 Conectar no LinkedIn", href: "https://www.linkedin.com/in/victor-santos-0a86021b7/", isExternal: true },
-        { label: "🐙 Ver GitHub do Criador", href: "https://github.com/victorsantosg", isExternal: true },
+        { label: "📡 Ver Telemetria", href: "#skills" },
+        { label: "💼 Falar com o Criador", nextState: "contact" },
         { label: "🔄 Menu Principal", nextState: "welcome" },
       ],
     },
     contact: {
-      title: "PROTOCOLO DE COMUNICAÇÃO // CONTATO DIRETO",
-      text: "Estabelecendo canal prioritário com Victor Santos:\n\nOs links de comunicação direta estão ativos e criptografados para sua conveniência, Senhor. Como deseja prosseguir?",
+      title: "CANAL DE TRANSMISSÃO // CONTATO",
+      text: "Canais diretos de comunicação com o Senhor Victor Santos: Disponível via WhatsApp corporativo, LinkedIn e e-mail. Pronto para discutir novos projetos e parcerias estratégicas.",
+      sectionId: "contato",
       actions: [
-        { label: "💬 Falar no WhatsApp Oficial", href: "https://wa.me/5585999556385", isExternal: true },
+        { label: "💬 Iniciar Conversa no WhatsApp", href: "https://wa.me/5585999556385", isExternal: true },
         { label: "💼 Mensagem via LinkedIn", href: "https://www.linkedin.com/in/victor-santos-0a86021b7/", isExternal: true },
         { label: "✉️ Enviar E-mail Direto", href: "mailto:victoorsaantos16@gmail.com", isExternal: true },
         { label: "📋 Abrir Formulário de Orçamento", href: "#orcamento" },
@@ -394,10 +418,6 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
       }
     }, 10)
 
-    if (voiceEnabled) {
-      speakHumanizedJarvis(fullText)
-    }
-
     return typewriterRef.current
   }
 
@@ -407,9 +427,13 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
 
     const fullText = dialogContent[currentState].text
     triggerTypewriter(fullText)
+    speakHumanizedJarvis(fullText)
 
     return () => {
       if (typewriterRef.current) clearInterval(typewriterRef.current)
+      if (audioRef.current) {
+        audioRef.current.pause()
+      }
       if (typeof window !== "undefined" && "speechSynthesis" in window) {
         window.speechSynthesis.cancel()
       }
@@ -449,7 +473,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
     }
   }
 
-  // Send Message to Groq Llama 3.3 70B AI Engine
+  // Send Message to AI Engine
   const handleSendAiMessage = async (e?: React.FormEvent) => {
     if (e) e.preventDefault()
     const query = inputQuery.trim()
@@ -474,11 +498,13 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
 
       setChatMessages([...newMessages, { role: "assistant", content: aiReply }])
       triggerTypewriter(aiReply)
+      speakHumanizedJarvis(aiReply)
     } catch (err: any) {
       console.error(err)
       const errorMsg = "Senhor, houve uma oscilação na conexão. Estou restabelecendo os nós neurais."
       setChatMessages([...newMessages, { role: "assistant", content: errorMsg }])
       triggerTypewriter(errorMsg)
+      speakHumanizedJarvis(errorMsg)
     } finally {
       setIsAiLoading(false)
       setTimeout(() => {
