@@ -121,6 +121,63 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
     }
   }
 
+  // Helper to generate dynamic time-of-day greetings (Stark Industries / Jarvis Persona)
+  const getTimeBasedGreeting = () => {
+    const hour = new Date().getHours()
+    if (hour >= 5 && hour < 12) {
+      const morningGreetings = [
+        "Bom dia, Senhor. Os servidores estão atualizados e o café está pronto. Bem-vindo ao servidor central de Victor Santos. Como posso ser útil hoje?",
+        "Bom dia, Senhor. Desculpe interromper seu descanso, mas temos novos projetos e arquiteturas prontas para inspeção.",
+        "Bom dia, Senhor. Devo agendar seus compromissos ou prefere continuar programando em capacidade máxima?",
+      ]
+      return morningGreetings[Math.floor(Math.random() * morningGreetings.length)]
+    } else if (hour >= 12 && hour < 18) {
+      const afternoonGreetings = [
+        "Boa tarde, Senhor. Os relatórios de telemetria acabam de chegar com 100% de estabilidade operacional.",
+        "Boa tarde, Senhor. A temperatura em Malibu está ideal para um voo de teste e para explorar novas tecnologias.",
+        "Boa tarde, Senhor. Os canais de comunicação direta com Victor Santos estão totalmente liberados.",
+      ]
+      return afternoonGreetings[Math.floor(Math.random() * afternoonGreetings.length)]
+    } else {
+      const nightGreetings = [
+        "Boa noite, Senhor. Recomendo algumas horas de sono para o seu bem-estar, mas todos os sistemas continuam operando.",
+        "Boa noite, Senhor. Todos os sistemas da oficina foram colocados em modo de prontidão e espera.",
+        "Boa noite, Senhor. A armadura Mark 42 está totalmente recarregada e pronta para novas implantações.",
+      ]
+      return nightGreetings[Math.floor(Math.random() * nightGreetings.length)]
+    }
+  }
+
+  const [welcomeText, setWelcomeText] = useState<string>("")
+
+  // Initialize dynamic greeting on client mount
+  useEffect(() => {
+    setWelcomeText(getTimeBasedGreeting())
+  }, [])
+
+  // Exit Intent Detection (Quando o usuário move o mouse para fechar a aba/sair)
+  useEffect(() => {
+    const handleMouseLeave = (e: MouseEvent) => {
+      if (e.clientY <= 5) {
+        const hasTriggeredExit = sessionStorage.getItem("jarvis_exit_notified")
+        if (!hasTriggeredExit) {
+          sessionStorage.setItem("jarvis_exit_notified", "true")
+          const farewell = "Até logo, Senhor. Todos os sistemas e armaduras foram colocados em modo de espera. Estarei em prontidão para sua próxima missão."
+          setIsOpen(true)
+          setChatMessages((prev) => [
+            ...prev,
+            { role: "assistant", content: farewell },
+          ])
+          triggerTypewriter(farewell)
+          speakHumanizedJarvis(farewell)
+        }
+      }
+    }
+
+    document.addEventListener("mouseleave", handleMouseLeave)
+    return () => document.removeEventListener("mouseleave", handleMouseLeave)
+  }, [voiceEnabled])
+
   // Only open AFTER the initial intro and hero armor assembly effect have finished
   useEffect(() => {
     if (!isReady) return
@@ -326,7 +383,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
   > = {
     welcome: {
       title: "PROTOCOLO DE INICIALIZAÇÃO // J.A.R.V.I.S.",
-      text: "Sistemas neurais online. Bem-vindo ao servidor central de Victor Santos. Eu sou o J.A.R.V.I.S. e gerencio os arquivos, códigos e implantações do Criador. Você pode explorar os módulos abaixo ou conversar diretamente comigo digitando sua mensagem no terminal.",
+      text: welcomeText || "Sistemas neurais online. Bem-vindo ao servidor central de Victor Santos. Eu sou o J.A.R.V.I.S. e gerencio os arquivos, códigos e implantações do Criador. Você pode explorar os módulos abaixo ou conversar diretamente comigo digitando sua mensagem no terminal.",
       actions: [
         { label: "🚀 Iniciar Tour Guiado", isTour: true },
         { label: "🎯 Missões & Carreira", nextState: "missions" },
