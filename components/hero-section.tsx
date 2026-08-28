@@ -368,21 +368,22 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
             </motion.p>
 
             {/* CTA Buttons with Armor Assembly Flight */}
-            <div className="flex flex-row items-center justify-center lg:justify-start gap-2.5 sm:gap-3 w-full flex-wrap">
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-2.5 sm:gap-3 w-full sm:w-auto">
               <motion.div
                 initial={{ x: -200, opacity: 0 }}
                 animate={assemblyState === "disassembled" ? { x: -200, opacity: 0 } : { x: 0, opacity: 1 }}
                 transition={getTransition(0.9)}
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                className="w-full sm:w-auto flex justify-center"
               >
                 <Button
                   size="lg"
                   onClick={(e) => handleWarpToSection("#orcamento", e)}
-                  className="relative overflow-hidden bg-primary text-primary-foreground font-semibold px-4 py-3.5 text-xs sm:px-6 sm:py-6 sm:text-base glow-border animate-pulse-glow hover:bg-[#ee7112] hover:shadow-[0_0_30px_rgba(238,113,18,0.8)] cursor-pointer transition-all duration-300"
+                  className="w-full sm:w-auto min-w-[220px] sm:min-w-0 h-11 sm:h-12 relative overflow-hidden bg-primary text-primary-foreground font-semibold px-5 sm:px-6 text-xs sm:text-sm glow-border animate-pulse-glow hover:bg-[#ee7112] hover:shadow-[0_0_30px_rgba(238,113,18,0.8)] cursor-pointer transition-all duration-300 rounded-xl flex items-center justify-center gap-2"
                 >
-                  {t.hero.ctaPrimary}
-                  <ArrowRight className="ml-1.5 h-3.5 w-3.5 sm:ml-2 sm:h-5 sm:w-5" />
+                  <span>{t.hero.ctaPrimary}</span>
+                  <ArrowRight className="h-4 w-4" />
                 </Button>
               </motion.div>
 
@@ -390,8 +391,9 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
                 initial={{ y: 200, opacity: 0 }}
                 animate={assemblyState === "disassembled" ? { y: 200, opacity: 0 } : { y: 0, opacity: 1 }}
                 transition={getTransition(0.95)}
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                className="w-full sm:w-auto flex justify-center"
               >
                 <Button
                   size="lg"
@@ -400,9 +402,9 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
                       window.dispatchEvent(new CustomEvent("start-jarvis-tour"))
                     }
                   }}
-                  className="relative overflow-hidden bg-black/80 border-2 border-amber-500/60 text-amber-300 hover:text-black hover:bg-amber-400 font-semibold px-4 py-3.5 text-xs sm:px-6 sm:py-6 sm:text-base font-mono shadow-[0_0_25px_rgba(245,158,11,0.3)] hover:shadow-[0_0_35px_rgba(245,158,11,0.7)] cursor-pointer transition-all duration-300 gap-1.5"
+                  className="w-full sm:w-auto min-w-[220px] sm:min-w-0 h-11 sm:h-12 relative overflow-hidden bg-black/85 border border-amber-500/50 text-amber-300 hover:text-black hover:bg-amber-400 font-semibold px-5 sm:px-6 text-xs sm:text-sm font-mono shadow-[0_0_20px_rgba(245,158,11,0.25)] hover:shadow-[0_0_30px_rgba(245,158,11,0.6)] cursor-pointer transition-all duration-300 rounded-xl flex items-center justify-center gap-2"
                 >
-                  <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
                   <span>🎙️ Tour com J.A.R.V.I.S.</span>
                 </Button>
               </motion.div>
@@ -411,17 +413,18 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
                 initial={{ x: 200, opacity: 0 }}
                 animate={assemblyState === "disassembled" ? { x: 200, opacity: 0 } : { x: 0, opacity: 1 }}
                 transition={getTransition(1.0)}
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                className="w-full sm:w-auto flex justify-center"
               >
                 <Button
                   size="lg"
                   variant="outline"
                   onClick={(e) => handleWarpToSection("#projetos", e)}
-                  className="relative overflow-hidden border-border bg-transparent hover:bg-secondary font-semibold px-4 py-3.5 text-xs sm:px-6 sm:py-6 sm:text-base hover:border-[#ee7112] hover:text-amber-300 hover:shadow-[0_0_20px_rgba(238,113,18,0.4)] cursor-pointer transition-all duration-300"
+                  className="w-full sm:w-auto min-w-[220px] sm:min-w-0 h-11 sm:h-12 relative overflow-hidden border-border bg-black/40 hover:bg-secondary font-semibold px-5 sm:px-6 text-xs sm:text-sm hover:border-[#ee7112] hover:text-amber-300 hover:shadow-[0_0_20px_rgba(238,113,18,0.4)] cursor-pointer transition-all duration-300 rounded-xl flex items-center justify-center gap-2"
                 >
-                  {t.hero.ctaSecondary}
-                  <ExternalLink className="ml-1.5 h-3.5 w-3.5 sm:ml-2 sm:h-5 sm:w-5" />
+                  <span>{t.hero.ctaSecondary}</span>
+                  <ExternalLink className="h-4 w-4" />
                 </Button>
               </motion.div>
             </div>
