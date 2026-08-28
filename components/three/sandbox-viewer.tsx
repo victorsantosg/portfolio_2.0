@@ -562,30 +562,36 @@ export function SandboxViewer({ className = "" }: SandboxViewerProps) {
   useEffect(() => {
     if (!sceneElementsRef.current) return
     const { camera, controls } = sceneElementsRef.current
+    const isMob = typeof window !== "undefined" ? window.innerWidth < 640 : false
 
     switch (cameraPreset) {
       case "geral":
-        camera.position.set(0, 32, 48)
-        controls.target.set(0, 2, -2)
+        if (isMob) {
+          camera.position.set(0, 48, 64)
+          controls.target.set(0, 3, -4)
+        } else {
+          camera.position.set(0, 32, 48)
+          controls.target.set(0, 2, -2)
+        }
         break
       case "secos":
-        camera.position.set(-8, 16, 22)
+        camera.position.set(isMob ? -6 : -8, isMob ? 22 : 16, isMob ? 28 : 22)
         controls.target.set(-2.5, 3, -6)
         break
       case "frios":
-        camera.position.set(16, 18, 22)
+        camera.position.set(isMob ? 14 : 16, isMob ? 24 : 18, isMob ? 28 : 22)
         controls.target.set(11.5, 3, -5)
         break
       case "antecamara":
-        camera.position.set(11.5, 8, 24)
+        camera.position.set(11.5, isMob ? 12 : 8, isMob ? 28 : 24)
         controls.target.set(11.5, 2.5, 11)
         break
       case "docas":
-        camera.position.set(0, 10, 34)
+        camera.position.set(0, isMob ? 14 : 10, isMob ? 42 : 34)
         controls.target.set(0, 2, 18)
         break
       case "2d":
-        camera.position.set(0, 62, -3.99)
+        camera.position.set(0, isMob ? 80 : 62, -3.99)
         controls.target.set(0, 0, -4)
         break
     }
