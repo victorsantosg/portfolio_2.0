@@ -82,29 +82,29 @@ export function MakerLabSection() {
           </p>
 
           {/* Switcher Tabs: 3D Interativo vs Aplicação Real em Produção */}
-          <div className="flex items-center gap-2 p-1.5 bg-gray-950/80 border border-amber-500/30 rounded-2xl mt-8 shadow-xl">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1.5 sm:gap-2 p-1.5 bg-gray-950/80 border border-amber-500/30 rounded-2xl mt-6 sm:mt-8 shadow-xl w-full sm:w-auto">
             <button
               onClick={() => setActiveTab("3d_demo")}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-mono font-bold transition-all cursor-pointer ${
+              className={`flex items-center justify-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-mono font-bold transition-all cursor-pointer text-center ${
                 activeTab === "3d_demo"
                   ? "bg-amber-500 text-black shadow-lg shadow-amber-500/20"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Cpu className="w-4 h-4" />
-              <span>🎮 Visualizador 3D Interativo (Demonstrativo)</span>
+              <Cpu className="w-4 h-4 shrink-0" />
+              <span>🎮 Visualizador 3D Interativo</span>
             </button>
 
             <button
               onClick={() => setActiveTab("real_app")}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-mono font-bold transition-all cursor-pointer ${
+              className={`flex items-center justify-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-mono font-bold transition-all cursor-pointer text-center ${
                 activeTab === "real_app"
                   ? "bg-amber-500 text-black shadow-lg shadow-amber-500/20"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <ImageIcon className="w-4 h-4" />
-              <span>📸 Aplicação Real em Produção (WMS Cometa)</span>
+              <ImageIcon className="w-4 h-4 shrink-0" />
+              <span>📸 Aplicação Real em Produção (WMS)</span>
             </button>
           </div>
         </div>

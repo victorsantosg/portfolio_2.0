@@ -81,9 +81,26 @@ function InteractiveHeroAvatar({
     setIsHovered(false)
   }
 
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!avatarRef.current || e.touches.length === 0) return
+    const touch = e.touches[0]
+    const rect = avatarRef.current.getBoundingClientRect()
+    const x = (touch.clientX - rect.left) / rect.width - 0.5
+    const y = (touch.clientY - rect.top) / rect.height - 0.5
+    mouseX.set(x)
+    mouseY.set(y)
+    setIsHovered(true)
+  }
+
+  const handleTouchEnd = () => {
+    mouseX.set(0)
+    mouseY.set(0)
+    setIsHovered(false)
+  }
+
   const sizeClasses = isDesktop
     ? "w-64 h-64 xl:w-84 xl:h-84"
-    : "w-36 h-36 sm:w-40 sm:h-40"
+    : "w-36 h-36 sm:w-44 sm:h-44"
 
   return (
     <div style={{ perspective: 1000 }} className="relative select-none">
@@ -92,6 +109,9 @@ function InteractiveHeroAvatar({
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={handleMouseLeave}
+        onTouchMove={handleTouchMove}
+        onTouchStart={() => setIsHovered(true)}
+        onTouchEnd={handleTouchEnd}
         initial={{ scale: 0.1, rotate: -180, opacity: 0 }}
         animate={
           assemblyState === "disassembled"
@@ -267,7 +287,7 @@ export function HeroSection() {
             </motion.p>
 
             {/* CTA Buttons with Quantum Warp Transition */}
-            <div className="flex flex-row items-center justify-center lg:justify-start gap-3 w-full">
+            <div className="flex flex-row items-center justify-center lg:justify-start gap-2.5 sm:gap-3 w-full flex-wrap">
               <motion.div
                 initial={{ x: -20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
@@ -278,10 +298,10 @@ export function HeroSection() {
                 <Button
                   size="lg"
                   onClick={(e) => handleWarpToSection("#orcamento", e)}
-                  className="relative overflow-hidden bg-primary text-primary-foreground font-semibold px-5 py-4 text-sm sm:px-8 sm:py-6 sm:text-lg glow-border animate-pulse-glow hover:bg-[#ee7112] hover:shadow-[0_0_30px_rgba(238,113,18,0.8)] cursor-pointer transition-all duration-300"
+                  className="relative overflow-hidden bg-primary text-primary-foreground font-semibold px-4 py-3.5 text-xs sm:px-8 sm:py-6 sm:text-lg glow-border animate-pulse-glow hover:bg-[#ee7112] hover:shadow-[0_0_30px_rgba(238,113,18,0.8)] cursor-pointer transition-all duration-300"
                 >
                   {t.hero.ctaPrimary}
-                  <ArrowRight className="ml-1.5 h-4 w-4 sm:ml-2 sm:h-5 sm:w-5" />
+                  <ArrowRight className="ml-1.5 h-3.5 w-3.5 sm:ml-2 sm:h-5 sm:w-5" />
                 </Button>
               </motion.div>
 
@@ -296,10 +316,10 @@ export function HeroSection() {
                   size="lg"
                   variant="outline"
                   onClick={(e) => handleWarpToSection("#projetos", e)}
-                  className="relative overflow-hidden border-border bg-transparent hover:bg-secondary font-semibold px-5 py-4 text-sm sm:px-8 sm:py-6 sm:text-lg hover:border-[#ee7112] hover:text-amber-300 hover:shadow-[0_0_20px_rgba(238,113,18,0.4)] cursor-pointer transition-all duration-300"
+                  className="relative overflow-hidden border-border bg-transparent hover:bg-secondary font-semibold px-4 py-3.5 text-xs sm:px-8 sm:py-6 sm:text-lg hover:border-[#ee7112] hover:text-amber-300 hover:shadow-[0_0_20px_rgba(238,113,18,0.4)] cursor-pointer transition-all duration-300"
                 >
                   {t.hero.ctaSecondary}
-                  <ExternalLink className="ml-1.5 h-4 w-4 sm:ml-2 sm:h-5 sm:w-5" />
+                  <ExternalLink className="ml-1.5 h-3.5 w-3.5 sm:ml-2 sm:h-5 sm:w-5" />
                 </Button>
               </motion.div>
             </div>
@@ -309,9 +329,9 @@ export function HeroSection() {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="mt-16 flex items-center justify-center lg:justify-start w-full"
+              className="mt-10 sm:mt-16 flex items-center justify-center lg:justify-start w-full"
             >
-              <div className="inline-flex items-center gap-0 glass rounded-2xl border border-border/40 overflow-hidden divide-x divide-border/40 w-full max-w-xs sm:max-w-none sm:w-auto hover:border-[#ee7112]/40 transition-colors shadow-lg">
+              <div className="inline-flex items-center gap-0 glass rounded-2xl border border-border/40 overflow-hidden divide-x divide-border/40 w-full max-w-sm sm:max-w-none sm:w-auto hover:border-[#ee7112]/40 transition-colors shadow-lg">
                 {[
                   { value: `${reposCount}+`, label: t.hero.stats.repos },
                   { value: `${yearsCount}+`, label: t.hero.stats.exp },
@@ -319,12 +339,12 @@ export function HeroSection() {
                 ].map((stat, i) => (
                   <div
                     key={stat.label}
-                    className="text-center px-3 py-3 sm:px-8 sm:py-5 flex-1 group/stat hover:bg-white/5 transition-colors cursor-default"
+                    className="text-center px-2.5 py-2.5 sm:px-8 sm:py-5 flex-1 group/stat hover:bg-white/5 transition-colors cursor-default"
                   >
-                    <div className="text-xl sm:text-3xl md:text-4xl font-bold text-gradient group-hover/stat:scale-110 transition-transform duration-200">
+                    <div className="text-lg sm:text-3xl md:text-4xl font-bold text-gradient group-hover/stat:scale-110 transition-transform duration-200">
                       {stat.value}
                     </div>
-                    <div className="text-[10px] sm:text-sm text-muted-foreground mt-0.5 leading-tight">{stat.label}</div>
+                    <div className="text-[9px] sm:text-sm text-muted-foreground mt-0.5 leading-tight">{stat.label}</div>
                   </div>
                 ))}
               </div>
