@@ -202,11 +202,16 @@ export function TourHudControls() {
     }, 16)
 
     if (timerRef.current) clearTimeout(timerRef.current)
-    speakText(narrationText)
+    if (!isPaused) {
+      speakText(narrationText)
+    }
 
     return () => {
       clearInterval(typeInterval)
       if (timerRef.current) clearTimeout(timerRef.current)
+      if (tourAudioRef.current) {
+        tourAudioRef.current.pause()
+      }
       if (typeof window !== "undefined" && "speechSynthesis" in window) {
         window.speechSynthesis.cancel()
       }
@@ -214,6 +219,13 @@ export function TourHudControls() {
   }, [isActive, currentStepIndex, isPaused, voiceEnabled])
 
   const handleNext = () => {
+    if (tourAudioRef.current) {
+      tourAudioRef.current.pause()
+      tourAudioRef.current.currentTime = 0
+    }
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel()
+    }
     if (currentStepIndex < TOUR_STEPS.length - 1) {
       setCurrentStepIndex((prev) => prev + 1)
     } else {
@@ -223,7 +235,13 @@ export function TourHudControls() {
 
   const handleClose = () => {
     setIsActive(false)
+    setIsPaused(false)
     if (timerRef.current) clearTimeout(timerRef.current)
+    if (tourAudioRef.current) {
+      tourAudioRef.current.pause()
+      tourAudioRef.current.currentTime = 0
+      tourAudioRef.current = null
+    }
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.cancel()
     }
@@ -232,9 +250,15 @@ export function TourHudControls() {
   const togglePause = () => {
     if (isPaused) {
       setIsPaused(false)
+      if (tourAudioRef.current && tourAudioRef.current.paused) {
+        tourAudioRef.current.play().catch(() => {})
+      }
     } else {
       setIsPaused(true)
       if (timerRef.current) clearTimeout(timerRef.current)
+      if (tourAudioRef.current) {
+        tourAudioRef.current.pause()
+      }
       if (typeof window !== "undefined" && "speechSynthesis" in window) {
         window.speechSynthesis.cancel()
       }
