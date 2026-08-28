@@ -44,29 +44,44 @@ export function TourHudControls() {
     window.speechSynthesis.cancel()
 
     const spokenText = text
-      .replace(/J\.A\.R\.V\.I\.S\./gi, "Járvis")
-      .replace(/•\s*/g, ", ")
-      .replace(/\n+/g, " ")
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+      .replace(/https?:\/\/[^\s)]+/g, "")
+      .replace(/([a-zA-Z0-9._%+-]+)@([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g, "$1 arroba $2")
+      .replace(/[*_~`#>\\]/g, "")
+      .replace(/[•▪▸►■✦✧★\-\–\—]/g, " ")
       .replace(/\/\//g, " - ")
+      .replace(/\+55\s*(\d{2})\s*(\d{4,5})-?(\d{4})/g, "DDD $1, $2 $3")
+      .replace(/J\.A\.R\.V\.I\.S\./gi, "Járvis")
+      .replace(/\bJARVIS\b/gi, "Járvis")
+      .replace(/\bJarvis\b/g, "Járvis")
+      .replace(/[:;]+/g, ",")
+      .replace(/\n+/g, ", ")
+      .replace(/\s+/g, " ")
+      .replace(/\s+([.,!?])/g, "$1")
       .trim()
 
     const utterance = new SpeechSynthesisUtterance(spokenText)
     const voices = window.speechSynthesis.getVoices()
-    const bestVoice =
-      voices.find(
-        (v) =>
-          (v.lang === "pt-BR" || v.lang.startsWith("pt")) &&
-          (v.name.includes("Natural") ||
-            v.name.includes("Neural") ||
-            v.name.includes("Google") ||
-            v.name.includes("Antonio") ||
-            v.name.includes("Luciana") ||
-            v.name.includes("Felipe") ||
-            v.name.includes("Daniel") ||
-            v.name.includes("Francisca"))
-      ) || voices.find((v) => v.lang.startsWith("pt"))
+    const savedVoiceURI = typeof window !== "undefined" ? localStorage.getItem("jarvis_selected_voice") : null
+    let activeVoice = savedVoiceURI ? voices.find((v) => v.voiceURI === savedVoiceURI) : null
 
-    if (bestVoice) utterance.voice = bestVoice
+    if (!activeVoice) {
+      activeVoice =
+        voices.find(
+          (v) =>
+            (v.lang === "pt-BR" || v.lang.startsWith("pt")) &&
+            (v.name.includes("Natural") ||
+              v.name.includes("Neural") ||
+              v.name.includes("Google") ||
+              v.name.includes("Antonio") ||
+              v.name.includes("Luciana") ||
+              v.name.includes("Felipe") ||
+              v.name.includes("Daniel") ||
+              v.name.includes("Francisca"))
+        ) || voices.find((v) => v.lang.startsWith("pt"))
+    }
+
+    if (activeVoice) utterance.voice = activeVoice
     utterance.rate = 1.02
     utterance.pitch = 0.96
 

@@ -50,6 +50,9 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
   const [isTyping, setIsTyping] = useState(false)
   const [displayedText, setDisplayedText] = useState("")
   const [voiceEnabled, setVoiceEnabled] = useState(false)
+  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([])
+  const [selectedVoiceURI, setSelectedVoiceURI] = useState<string>("")
+  const [showVoiceSettings, setShowVoiceSettings] = useState(false)
   
   // Real Groq AI Chat States
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([])
@@ -58,6 +61,39 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
 
   const messageEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  // Load available speech synthesis voices
+  useEffect(() => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return
+
+    const loadVoices = () => {
+      const voices = window.speechSynthesis.getVoices()
+      if (voices.length > 0) {
+        setAvailableVoices(voices)
+        const saved = localStorage.getItem("jarvis_selected_voice")
+        if (saved && voices.some((v) => v.voiceURI === saved)) {
+          setSelectedVoiceURI(saved)
+        } else {
+          const defaultPt = voices.find(
+            (v) =>
+              (v.lang === "pt-BR" || v.lang.startsWith("pt")) &&
+              (v.name.includes("Natural") ||
+                v.name.includes("Neural") ||
+                v.name.includes("Google") ||
+                v.name.includes("Antonio") ||
+                v.name.includes("Luciana") ||
+                v.name.includes("Francisca"))
+          ) || voices.find((v) => v.lang.startsWith("pt"))
+          if (defaultPt) {
+            setSelectedVoiceURI(defaultPt.voiceURI)
+          }
+        }
+      }
+    }
+
+    loadVoices()
+    window.speechSynthesis.onvoiceschanged = loadVoices
+  }, [])
 
   // Only open AFTER the initial intro and hero armor assembly effect have finished
   useEffect(() => {
@@ -86,6 +122,96 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
       messageEndRef.current?.scrollIntoView({ behavior: "smooth" })
     }
   }, [chatMessages, displayedText, isAiLoading, isOpen])
+
+  /**
+   * Helper to clean markdown, urls, symbols, bullets, asterisks and format natural human speech
+   */
+  const cleanSpeechText = (rawText: string): string => {
+    if (!rawText) return ""
+    return rawText
+      // Replace markdown links [label](url) with just label
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+      // Remove raw URLs
+      .replace(/https?:\/\/[^\s)]+/g, "")
+      // Convert emails to human spoken format
+      .replace(/([a-zA-Z0-9._%+-]+)@([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g, "$1 arroba $2")
+      // Remove markdown bold, italic, strikethrough, backticks, hashes, quotes
+      .replace(/[*_~`#>\\]/g, "")
+      // Remove bullets, square icons and arrows
+      .replace(/[•▪▸►■✦✧★\-\–\—]/g, " ")
+      .replace(/\/\//g, " - ")
+      // Pronounce Brazilian phone numbers naturally (ex: DDD 85, 99955 6385)
+      .replace(/\+55\s*(\d{2})\s*(\d{4,5})-?(\d{4})/g, "DDD $1, $2 $3")
+      // Pronounce Jarvis cleanly
+      .replace(/J\.A\.R\.V\.I\.S\./gi, "Járvis")
+      .replace(/\bJARVIS\b/gi, "Járvis")
+      .replace(/\bJarvis\b/g, "Járvis")
+      // Replace double colons or semicolons with comma for natural speech pause
+      .replace(/[:;]+/g, ",")
+      .replace(/\n\n+/g, ". ")
+      .replace(/\n+/g, ", ")
+      .replace(/\s+/g, " ")
+      .replace(/\s+([.,!?])/g, "$1")
+      .trim()
+  }
+
+  // Voice Preview Test
+  const handleTestVoice = (voice: SpeechSynthesisVoice) => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return
+    window.speechSynthesis.cancel()
+    const utterance = new SpeechSynthesisUtterance(
+      "Sistemas calibrados, Senhor. Eu sou o Járvis, e este é o meu canal de sintetização de voz."
+    )
+    utterance.voice = voice
+    utterance.rate = 1.02
+    utterance.pitch = 0.96
+    window.speechSynthesis.speak(utterance)
+    setSelectedVoiceURI(voice.voiceURI)
+    localStorage.setItem("jarvis_selected_voice", voice.voiceURI)
+  }
+
+  // Humanized Speech Synthesis with Audio Pacing
+  const speakHumanizedJarvis = (text: string) => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return
+    window.speechSynthesis.cancel()
+
+    const spokenText = cleanSpeechText(text)
+    if (!spokenText) return
+
+    const sentences = spokenText.match(/[^.!?]+[.!?]?/g) || [spokenText]
+    const voices = availableVoices.length > 0 ? availableVoices : window.speechSynthesis.getVoices()
+    
+    let activeVoice = voices.find((v) => v.voiceURI === selectedVoiceURI)
+    if (!activeVoice) {
+      activeVoice =
+        voices.find(
+          (v) =>
+            (v.lang === "pt-BR" || v.lang.startsWith("pt")) &&
+            (v.name.includes("Natural") ||
+              v.name.includes("Neural") ||
+              v.name.includes("Google") ||
+              v.name.includes("Antonio") ||
+              v.name.includes("Luciana") ||
+              v.name.includes("Francisca"))
+        ) || voices.find((v) => v.lang.startsWith("pt"))
+    }
+
+    sentences.forEach((sentence, index) => {
+      const trimmed = sentence.trim()
+      if (!trimmed) return
+
+      const utterance = new SpeechSynthesisUtterance(trimmed)
+      if (activeVoice) utterance.voice = activeVoice
+      utterance.rate = 1.02
+      utterance.pitch = 0.96
+
+      if (index === sentences.length - 1) {
+        utterance.pitch = 0.93
+      }
+
+      window.speechSynthesis.speak(utterance)
+    })
+  }
 
   // Direct AI Query Handler
   const handleDirectAiQuery = async (queryText: string) => {
@@ -216,56 +342,6 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
         { label: "🔄 Menu Principal", nextState: "welcome" },
       ],
     },
-  }
-
-  // Humanized J.A.R.V.I.S. Text-to-Speech Engine
-  const speakHumanizedJarvis = (rawText: string) => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return
-
-    window.speechSynthesis.cancel()
-
-    const spokenText = rawText
-      .replace(/J\.A\.R\.V\.I\.S\./gi, "Járvis")
-      .replace(/J\.A\.R\.V\.I\.S/gi, "Járvis")
-      .replace(/\bJARVIS\b/gi, "Járvis")
-      .replace(/\bJarvis\b/g, "Járvis")
-      .replace(/•\s*/g, ", ")
-      .replace(/\n\n+/g, ". ")
-      .replace(/\n+/g, ", ")
-      .replace(/\/\//g, " - ")
-      .replace(/\s+/g, " ")
-      .trim()
-
-    const sentences = spokenText.match(/[^.!?:]+[.!?:]?/g) || [spokenText]
-    const voices = window.speechSynthesis.getVoices()
-    const bestVoice =
-      voices.find(
-        (v) =>
-          (v.lang === "pt-BR" || v.lang.startsWith("pt")) &&
-          (v.name.includes("Natural") ||
-            v.name.includes("Neural") ||
-            v.name.includes("Google") ||
-            v.name.includes("Luciana") ||
-            v.name.includes("Felipe") ||
-            v.name.includes("Daniel") ||
-            v.name.includes("Francisca"))
-      ) || voices.find((v) => v.lang.startsWith("pt"))
-
-    sentences.forEach((sentence, index) => {
-      const trimmed = sentence.trim()
-      if (!trimmed) return
-
-      const utterance = new SpeechSynthesisUtterance(trimmed)
-      if (bestVoice) utterance.voice = bestVoice
-      utterance.rate = 1.06
-      utterance.pitch = 0.95
-
-      if (index === sentences.length - 1) {
-        utterance.pitch = 0.92
-      }
-
-      window.speechSynthesis.speak(utterance)
-    })
   }
 
   const typewriterRef = useRef<NodeJS.Timeout | null>(null)
@@ -468,14 +544,26 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
                 </div>
               </div>
 
-              {/* Header Actions (Mute & Close) */}
+              {/* Header Actions (Voice Settings, Mute & Close) */}
               <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => setShowVoiceSettings(!showVoiceSettings)}
+                  className={`p-2 sm:p-1.5 rounded-xl border text-xs transition-colors cursor-pointer ${
+                    showVoiceSettings
+                      ? "bg-amber-500/20 border-amber-400 text-amber-300 shadow-[0_0_10px_rgba(245,158,11,0.3)]"
+                      : "border-white/10 text-muted-foreground hover:text-foreground hover:bg-white/10"
+                  }`}
+                  title="Configurar e testar vozes neurais"
+                >
+                  <Cpu className="w-4 h-4" />
+                </button>
+
                 <button
                   onClick={() => setVoiceEnabled(!voiceEnabled)}
                   className={`p-2 sm:p-1.5 rounded-xl border text-xs transition-colors cursor-pointer ${
                     voiceEnabled
                       ? "bg-amber-500/20 border-amber-400 text-amber-300"
-                      : "border-white/10 text-muted-foreground hover:text-foreground"
+                      : "border-white/10 text-muted-foreground hover:text-foreground hover:bg-white/10"
                   }`}
                   title={voiceEnabled ? "Voz ativada" : "Ativar voz sintetizada"}
                 >
@@ -491,6 +579,63 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
                 </button>
               </div>
             </div>
+
+            {/* Voice Calibration Drawer */}
+            <AnimatePresence>
+              {showVoiceSettings && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="relative z-20 p-3 sm:p-4 bg-gray-900/95 border-b border-amber-500/40 text-xs font-mono space-y-2.5 overflow-hidden shrink-0 shadow-lg"
+                >
+                  <div className="flex items-center justify-between pb-1 border-b border-white/10 text-amber-400 font-bold text-[11px]">
+                    <div className="flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                      <span>CANAL DE VOZ // ESCOLHA & TESTE</span>
+                    </div>
+                    <button
+                      onClick={() => setShowVoiceSettings(false)}
+                      className="text-muted-foreground hover:text-white text-xs cursor-pointer"
+                    >
+                      ✕ Fechar
+                    </button>
+                  </div>
+
+                  <p className="text-[10px] text-muted-foreground">
+                    Selecione a voz neural de sua preferência e clique em <b>Ouvir</b> para calibrar o áudio:
+                  </p>
+
+                  <div className="max-h-40 overflow-y-auto space-y-1.5 pr-1">
+                    {availableVoices
+                      .filter((v) => v.lang.startsWith("pt") || v.lang.startsWith("en"))
+                      .map((voice) => (
+                        <div
+                          key={voice.voiceURI}
+                          className={`p-2 rounded-xl border flex items-center justify-between gap-2 transition-all ${
+                            selectedVoiceURI === voice.voiceURI
+                              ? "bg-amber-500/20 border-amber-400 text-amber-300 shadow-[0_0_12px_rgba(245,158,11,0.2)]"
+                              : "bg-black/50 border-white/10 text-slate-300 hover:border-amber-500/40"
+                          }`}
+                        >
+                          <div className="truncate flex-1">
+                            <div className="font-bold truncate text-[11px]">{voice.name}</div>
+                            <div className="text-[9px] text-muted-foreground">{voice.lang}</div>
+                          </div>
+                          <Button
+                            type="button"
+                            size="sm"
+                            onClick={() => handleTestVoice(voice)}
+                            className="h-7 px-2.5 bg-amber-500 hover:bg-amber-400 text-black text-[10px] font-bold rounded-lg flex items-center gap-1 cursor-pointer transition-colors shadow-sm shrink-0"
+                          >
+                            <span>▶️ Ouvir</span>
+                          </Button>
+                        </div>
+                      ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Terminal Body: Message Stream & Actions (FLEX-1 FULL SCROLL) */}
             <div className="relative z-10 p-3 sm:p-4 flex-1 overflow-y-auto flex flex-col gap-3 min-h-0">
