@@ -379,10 +379,31 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
                 <Button
                   size="lg"
                   onClick={(e) => handleWarpToSection("#orcamento", e)}
-                  className="relative overflow-hidden bg-primary text-primary-foreground font-semibold px-4 py-3.5 text-xs sm:px-8 sm:py-6 sm:text-lg glow-border animate-pulse-glow hover:bg-[#ee7112] hover:shadow-[0_0_30px_rgba(238,113,18,0.8)] cursor-pointer transition-all duration-300"
+                  className="relative overflow-hidden bg-primary text-primary-foreground font-semibold px-4 py-3.5 text-xs sm:px-6 sm:py-6 sm:text-base glow-border animate-pulse-glow hover:bg-[#ee7112] hover:shadow-[0_0_30px_rgba(238,113,18,0.8)] cursor-pointer transition-all duration-300"
                 >
                   {t.hero.ctaPrimary}
                   <ArrowRight className="ml-1.5 h-3.5 w-3.5 sm:ml-2 sm:h-5 sm:w-5" />
+                </Button>
+              </motion.div>
+
+              <motion.div
+                initial={{ y: 200, opacity: 0 }}
+                animate={assemblyState === "disassembled" ? { y: 200, opacity: 0 } : { y: 0, opacity: 1 }}
+                transition={getTransition(0.95)}
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Button
+                  size="lg"
+                  onClick={() => {
+                    if (typeof window !== "undefined") {
+                      window.dispatchEvent(new CustomEvent("start-jarvis-tour"))
+                    }
+                  }}
+                  className="relative overflow-hidden bg-black/80 border-2 border-amber-500/60 text-amber-300 hover:text-black hover:bg-amber-400 font-semibold px-4 py-3.5 text-xs sm:px-6 sm:py-6 sm:text-base font-mono shadow-[0_0_25px_rgba(245,158,11,0.3)] hover:shadow-[0_0_35px_rgba(245,158,11,0.7)] cursor-pointer transition-all duration-300 gap-1.5"
+                >
+                  <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+                  <span>🎙️ Tour com J.A.R.V.I.S.</span>
                 </Button>
               </motion.div>
 
@@ -397,7 +418,7 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
                   size="lg"
                   variant="outline"
                   onClick={(e) => handleWarpToSection("#projetos", e)}
-                  className="relative overflow-hidden border-border bg-transparent hover:bg-secondary font-semibold px-4 py-3.5 text-xs sm:px-8 sm:py-6 sm:text-lg hover:border-[#ee7112] hover:text-amber-300 hover:shadow-[0_0_20px_rgba(238,113,18,0.4)] cursor-pointer transition-all duration-300"
+                  className="relative overflow-hidden border-border bg-transparent hover:bg-secondary font-semibold px-4 py-3.5 text-xs sm:px-6 sm:py-6 sm:text-base hover:border-[#ee7112] hover:text-amber-300 hover:shadow-[0_0_20px_rgba(238,113,18,0.4)] cursor-pointer transition-all duration-300"
                 >
                   {t.hero.ctaSecondary}
                   <ExternalLink className="ml-1.5 h-3.5 w-3.5 sm:ml-2 sm:h-5 sm:w-5" />

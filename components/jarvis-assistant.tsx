@@ -80,15 +80,64 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
     }
   }, [isOpen])
 
+  // Direct AI Query Handler
+  const handleDirectAiQuery = async (queryText: string) => {
+    if (!queryText.trim() || isAiLoading) return
+    setIsAiLoading(true)
+    setCurrentState("ai_chat")
+
+    const newMessages: ChatMessage[] = [...chatMessages, { role: "user", content: queryText }]
+    setChatMessages(newMessages)
+
+    try {
+      const res = await fetch("/api/jarvis/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: newMessages }),
+      })
+
+      const data = await res.json()
+      const aiReply = data.reply || "Senhor, não foi possível obter retorno dos nós neurais."
+
+      setChatMessages([...newMessages, { role: "assistant", content: aiReply }])
+      triggerTypewriter(aiReply)
+    } catch (err: any) {
+      console.error(err)
+      const errorMsg = "Senhor, houve uma oscilação na rede neural. Estou recalibrando os servidores."
+      setChatMessages([...newMessages, { role: "assistant", content: errorMsg }])
+      triggerTypewriter(errorMsg)
+    } finally {
+      setIsAiLoading(false)
+      setTimeout(() => {
+        messageEndRef.current?.scrollIntoView({ behavior: "smooth" })
+      }, 100)
+    }
+  }
+
+  // Listen to External Trigger Queries (e.g. from 3D Diagnostics)
+  useEffect(() => {
+    const handleAskQuery = (e: any) => {
+      const query = e.detail?.query
+      if (query) {
+        setIsOpen(true)
+        handleDirectAiQuery(query)
+      }
+    }
+
+    window.addEventListener("jarvis-ask-query", handleAskQuery)
+    return () => window.removeEventListener("jarvis-ask-query", handleAskQuery)
+  }, [chatMessages, isAiLoading])
+
   // Respostas programadas com a Persona Oficial do J.A.R.V.I.S.
   const dialogContent: Record<
     JarvisState,
-    { title: string; text: string; sectionId?: string; actions: { label: string; nextState?: JarvisState; href?: string; isExternal?: boolean; icon?: any }[] }
+    { title: string; text: string; sectionId?: string; actions: { label: string; nextState?: JarvisState; href?: string; isExternal?: boolean; isTour?: boolean; icon?: any }[] }
   > = {
     welcome: {
       title: "PROTOCOLO DE INICIALIZAÇÃO // J.A.R.V.I.S. (GROQ AI)",
-      text: "Sistemas neurais online com Llama-3.3-70B. Bem-vindo ao servidor central de Victor Santos. Eu sou o J.A.R.V.I.S. e gerencio os arquivos, códigos e implantações do Criador.\n\nVocê pode me fazer qualquer pergunta sobre as habilidades, projetos ou trajetória do Criador no campo de texto abaixo, ou selecionar uma rota rápida de telemetria:\n\n• Histórico de Missões: Trajetória profissional e sistemas desenvolvidos.\n• Protótipos Ativos: Repositórios de código e aplicações em produção.\n• Arquitetura do Traje: A stack tecnológica e frameworks dominados.",
+      text: "Sistemas neurais online com Llama-3.3-70B e Gemini Failover. Bem-vindo ao servidor central de Victor Santos. Eu sou o J.A.R.V.I.S. e gerencio os arquivos, códigos e implantações do Criador.\n\nVocê pode me fazer qualquer pergunta sobre as habilidades, projetos ou trajetória do Criador no campo de texto abaixo, ou selecionar uma rota rápida de telemetria:\n\n• Histórico de Missões: Trajetória profissional e sistemas desenvolvidos.\n• Protótipos Ativos: Repositórios de código e aplicações em produção.\n• Arquitetura do Traje: A stack tecnológica e frameworks dominados.",
       actions: [
+        { label: "🎙️ Iniciar Tour Narrado (Piloto Auto)", isTour: true },
         { label: "🚀 Ir Direto para Projetos", href: "#projetos" },
         { label: "📜 Histórico de Missões", nextState: "missions" },
         { label: "🚀 Protótipos Ativos", nextState: "prototypes" },
@@ -256,7 +305,16 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
     nextState?: JarvisState
     href?: string
     isExternal?: boolean
+    isTour?: boolean
   }) => {
+    if (action.isTour) {
+      setIsOpen(false)
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("start-jarvis-tour"))
+      }
+      return
+    }
+
     if (action.nextState) {
       setCurrentState(action.nextState)
     }

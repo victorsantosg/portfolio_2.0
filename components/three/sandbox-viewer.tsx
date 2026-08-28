@@ -688,6 +688,28 @@ export function SandboxViewer({ className = "" }: SandboxViewerProps) {
 
   const activeSlot = hoveredSlot || selectedSlot
 
+  // Listen to Jarvis Autonomous Tour Steps
+  useEffect(() => {
+    const handleTourStep = (e: any) => {
+      const step = e.detail
+      if (step?.id === "maker_lab") {
+        if (step.threePreset) setCameraPreset(step.threePreset)
+        if (step.threeLevel) setSelectedLevel(step.threeLevel)
+        setAutoRotate(true)
+      }
+    }
+
+    window.addEventListener("jarvis-tour-step", handleTourStep)
+    return () => window.removeEventListener("jarvis-tour-step", handleTourStep)
+  }, [])
+
+  // Disclaimer Banner & Quick AI Diagnostics Trigger
+  const triggerJarvisQuery = (query: string) => {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("jarvis-ask-query", { detail: { query } }))
+    }
+  }
+
   return (
     <div
       ref={rootContainerRef}
@@ -744,17 +766,29 @@ export function SandboxViewer({ className = "" }: SandboxViewerProps) {
         </Button>
       </div>
 
-      {/* Disclaimer Banner: 3D de Teste Meramente Ilustrativo */}
-      <div className="px-2.5 sm:px-4 py-1.5 bg-amber-500/10 border-b border-amber-500/20 flex items-center justify-between gap-2 text-[10px] sm:text-[11px] font-mono text-amber-300 w-full overflow-hidden">
+      {/* Disclaimer & AI Diagnostic Badges */}
+      <div className="px-2.5 sm:px-3 py-1.5 bg-amber-500/10 border-b border-amber-500/20 flex flex-wrap items-center justify-between gap-1.5 text-[10px] sm:text-[11px] font-mono text-amber-300 w-full overflow-hidden">
         <div className="flex items-center gap-1.5 min-w-0">
           <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-          <span className="truncate sm:text-wrap">
-            <strong>3D Demo:</strong> Simulação interativa de estoque.
+          <span className="truncate">
+            <strong>3D Demo:</strong> 11.200 posições reais (WMS).
           </span>
         </div>
-        <span className="text-[9px] uppercase font-bold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 shrink-0 hidden sm:inline">
-          PROTÓTIPO TESTE
-        </span>
+
+        <div className="flex items-center gap-1 shrink-0">
+          <button
+            onClick={() => triggerJarvisQuery("J.A.R.V.I.S., realize um diagnóstico imediato dos produtos com risco de validade FEFO e shelf-life no armazém.")}
+            className="px-2 py-0.5 rounded bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/40 font-bold text-[9px] flex items-center gap-1 cursor-pointer transition-colors shadow-sm"
+          >
+            <span>⚠️ Diagnóstico FEFO</span>
+          </button>
+          <button
+            onClick={() => triggerJarvisQuery("J.A.R.V.I.S., analise os produtos de Curva A (alta rotatividade) e a eficiência de picking nas docas.")}
+            className="px-2 py-0.5 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 font-bold text-[9px] flex items-center gap-1 cursor-pointer transition-colors shadow-sm"
+          >
+            <span>🔥 Análise Curva A</span>
+          </button>
+        </div>
       </div>
 
       {/* Main 3D Canvas Viewport */}

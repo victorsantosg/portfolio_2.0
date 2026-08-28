@@ -1,9 +1,5 @@
 import { NextResponse } from "next/server"
-import Groq from "groq-sdk"
-
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY || "",
-})
+import { generateJarvisResponse } from "@/lib/ai-provider"
 
 const JARVIS_SYSTEM_PROMPT = `
 Você é o J.A.R.V.I.S. (Just A Rather Very Intelligent System), a inteligência artificial holográfica avançada e assistente oficial de Victor Santos (Full Stack & AI Systems Architect).
@@ -30,7 +26,7 @@ BASE DE CONHECIMENTO COMPLETA DO CRIADOR (VICTOR SANTOS):
    - Backend: Node.js, Fastify, Python 3.12, Prisma ORM, APIs RESTful e GraphQL.
    - Bancos de Dados: PostgreSQL, Supabase, Firebase, MySQL.
    - Infraestrutura & DevOps: Docker, Docker Compose, Coolify, Linux VPS, Vercel, AWS.
-   - IA & Manufatura 3D: Groq LPUs (Llama 3.3 70B), Meshy AI, Fatiamento e exportação industrial .3MF / .GLB.
+   - IA & Manufatura 3D: Groq LPUs (Llama 3.3 70B), Google Gemini 1.5, Meshy AI, Fatiamento e exportação industrial .3MF / .GLB.
 
 4. CONTATO & REDIRECIONAMENTOS:
    - Se o usuário perguntar como contratar, pedir orçamento ou falar com o Criador, oriente com elegância para o WhatsApp Oficial (+55 85 99955-6385 / https://wa.me/5585999556385) ou indique a seção de orçamento no portfólio.
@@ -44,38 +40,25 @@ export async function POST(req: Request) {
   try {
     const { messages } = await req.json()
 
-    const apiKey = process.env.GROQ_API_KEY
-    if (!apiKey) {
+    if (!process.env.GROQ_API_KEY && !process.env.GEMINI_API_KEY) {
       return NextResponse.json(
         {
           reply:
-            "Senhor, os protocolos neurais da Groq Cloud ainda requerem a chave de acesso GROQ_API_KEY no servidor. Por favor, verifique as variáveis de ambiente.",
+            "Senhor, os nós neurais requerem ao menos uma chave de acesso (GROQ_API_KEY ou GEMINI_API_KEY). Por favor, verifique as variáveis de ambiente.",
         },
         { status: 200 }
       )
     }
 
-    const completion = await groq.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
-      messages: [
-        { role: "system", content: JARVIS_SYSTEM_PROMPT },
-        ...messages,
-      ],
-      temperature: 0.6,
-      max_tokens: 450,
-    })
+    const { reply, provider } = await generateJarvisResponse(messages, JARVIS_SYSTEM_PROMPT)
 
-    const reply =
-      completion.choices[0]?.message?.content ||
-      "Senhor, processei a solicitação, mas houve uma oscilação na rede neural. Como posso auxiliá-lo a seguir?"
-
-    return NextResponse.json({ reply })
+    return NextResponse.json({ reply, provider })
   } catch (error: any) {
-    console.error("Erro no Jarvis Groq Chat:", error)
+    console.error("Erro no Jarvis Multi-Provider Chat:", error)
     return NextResponse.json(
       {
         reply:
-          "Detectei uma anomalia momentânea no link de comunicação quântica da Groq. Estou recalibrando os servidores. Pode tentar novamente, Senhor?",
+          "Detectei uma oscilação momentânea nas redes neurais. Meus sistemas de contingência estão restaurando a conexão. Como posso auxiliá-lo, Senhor?",
         error: error.message,
       },
       { status: 200 }

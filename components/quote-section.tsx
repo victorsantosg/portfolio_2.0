@@ -46,6 +46,65 @@ export function QuoteSection() {
   })
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [aiProposal, setAiProposal] = useState<{
+    summary?: string
+    recommendedStack?: string[]
+    architectureHighlights?: string[]
+    estimatedTimeline?: string
+    complexityLevel?: string
+    keyDeliverables?: string[]
+    jarvisExecutiveVerdict?: string
+  } | null>(null)
+  const [isGeneratingAiProposal, setIsGeneratingAiProposal] = useState(false)
+
+  const handleGenerateAiProposal = async () => {
+    setIsGeneratingAiProposal(true)
+    try {
+      const res = await fetch("/api/jarvis/scope-proposal", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          projectType: formData.projectType,
+          budget: `R$ ${formData.budget[0].toLocaleString("pt-BR")}`,
+          urgency: formData.timeline,
+          description: formData.description,
+        }),
+      })
+
+      const data = await res.json()
+      setAiProposal(data)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setIsGeneratingAiProposal(false)
+    }
+  }
+
+  const handleSendToWhatsApp = () => {
+    const text = `*SOLICITAÇÃO DE PROPOSTA TÉCNICA // J.A.R.V.I.S.*
+-----------------------------------
+*Cliente:* ${formData.name || "Interessado"}
+*Email:* ${formData.email || "Não informado"}
+*Tipo de Projeto:* ${formData.projectType || "Geral"}
+*Orçamento Estimado:* R$ ${formData.budget[0].toLocaleString("pt-BR")}
+*Prazo/Urgência:* ${formData.timeline || "Normal"}
+
+*Descrição:* ${formData.description || "N/A"}
+
+${
+  aiProposal
+    ? `*DIAGNÓSTICO J.A.R.V.I.S. (IA):*
+• *Stack Recomendada:* ${aiProposal.recommendedStack?.join(", ")}
+• *Prazo Estimado:* ${aiProposal.estimatedTimeline}
+• *Complexidade:* ${aiProposal.complexityLevel}
+• *Veredito:* ${aiProposal.jarvisExecutiveVerdict}`
+    : ""
+}`
+
+    const encoded = encodeURIComponent(text)
+    window.open(`https://wa.me/5585999556385?text=${encoded}`, "_blank")
+  }
 
   const projectTypes = [
     { id: "web", label: language === "pt" ? "Web App" : "Web App", icon: Globe },
@@ -465,7 +524,7 @@ export function QuoteSection() {
                         <Textarea
                           id="description"
                           placeholder={t.quote.descPlaceholder}
-                          rows={5}
+                          rows={4}
                           value={formData.description}
                           onChange={(e) =>
                             setFormData({ ...formData, description: e.target.value })
@@ -473,6 +532,82 @@ export function QuoteSection() {
                           className="bg-secondary border-border resize-none"
                         />
                       </div>
+
+                      {/* AI Architecture Diagnosis Trigger */}
+                      <div className="pt-1">
+                        <Button
+                          type="button"
+                          onClick={handleGenerateAiProposal}
+                          disabled={isGeneratingAiProposal || !formData.description.trim()}
+                          className="w-full bg-gradient-to-r from-amber-600/30 via-orange-600/30 to-amber-500/30 hover:from-amber-600/50 hover:to-orange-500/50 border border-amber-500/50 text-amber-300 font-mono text-xs py-2.5 rounded-xl flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(245,158,11,0.2)] transition-all cursor-pointer"
+                        >
+                          <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+                          <span>
+                            {isGeneratingAiProposal
+                              ? "J.A.R.V.I.S. PROCESSANDO ARQUITETURA..."
+                              : "✨ Gerar Diagnóstico Técnico com IA (Groq/Gemini)"}
+                          </span>
+                        </Button>
+                      </div>
+
+                      {/* AI Architecture Proposal Result Card */}
+                      {aiProposal && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 15 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="p-4 rounded-2xl bg-black/80 border-2 border-amber-500/60 shadow-[0_0_30px_rgba(245,158,11,0.25)] font-mono space-y-3 relative overflow-hidden"
+                        >
+                          <div className="flex items-center justify-between pb-2 border-b border-amber-500/30 text-xs">
+                            <div className="flex items-center gap-2 text-amber-400 font-bold">
+                              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                              <span>DIAGNÓSTICO TÉCNICO // J.A.R.V.I.S.</span>
+                            </div>
+                            <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold text-[10px] border border-amber-500/40">
+                              {aiProposal.complexityLevel}
+                            </span>
+                          </div>
+
+                          <p className="text-xs text-slate-200 leading-relaxed">
+                            {aiProposal.summary}
+                          </p>
+
+                          {/* Tech Stack Badges */}
+                          {aiProposal.recommendedStack && (
+                            <div>
+                              <div className="text-[10px] text-muted-foreground uppercase mb-1">
+                                Stack Recomendada:
+                              </div>
+                              <div className="flex flex-wrap gap-1">
+                                {aiProposal.recommendedStack.map((tech) => (
+                                  <span
+                                    key={tech}
+                                    className="px-2 py-0.5 rounded-lg bg-gray-900 border border-amber-500/30 text-amber-300 text-[10px]"
+                                  >
+                                    {tech}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Timeline & Verdict */}
+                          <div className="grid grid-cols-2 gap-2 pt-1 border-t border-amber-500/20 text-[11px]">
+                            <div>
+                              <span className="text-muted-foreground">Prazo Estimado: </span>
+                              <span className="text-amber-400 font-bold">{aiProposal.estimatedTimeline}</span>
+                            </div>
+                          </div>
+
+                          {/* 1-Click WhatsApp Export */}
+                          <Button
+                            type="button"
+                            onClick={handleSendToWhatsApp}
+                            className="w-full h-10 bg-emerald-600 hover:bg-emerald-500 text-white font-bold font-mono text-xs rounded-xl gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer transition-all"
+                          >
+                            <span>📱 Enviar Pré-Proposta para WhatsApp do Victor</span>
+                          </Button>
+                        </motion.div>
+                      )}
                     </motion.div>
                   )}
 
