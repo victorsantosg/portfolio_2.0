@@ -63,7 +63,7 @@ export function TechStackSection() {
       techs: [
         { name: "Python (Pandas & NumPy)", level: 95 },
         { name: "PyAutoGUI & Selenium (RPA)", level: 95 },
-        { name: "Gemini API & OpenAI SDK", level: 88 },
+        { name: "OpenAI & LLM APIs / AI Agents", level: 90 },
         { name: "ETL & Advanced Scripting", level: 90 },
       ],
     },

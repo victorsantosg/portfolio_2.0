@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion"
 import {
   ExternalLink,
   Github,
@@ -445,10 +445,11 @@ export function ProjectsSection() {
       </div>
 
       <Dialog open={!!selectedProject} onOpenChange={(open) => !open && setSelectedProjectId(null)}>
-        <DialogContent className="max-w-3xl bg-card border border-border p-0 overflow-hidden">
-          <div className="flex items-center justify-between border-b border-border px-6 py-4 bg-secondary/30">
-            <DialogTitle className="text-xl font-bold flex items-center gap-3">
-              {selectedProject?.title}
+        <DialogContent className="max-w-3xl bg-[#0c0a08]/95 backdrop-blur-2xl border border-[#ee7112]/50 p-0 overflow-hidden shadow-[0_25px_70px_rgba(238,113,18,0.25)] rounded-2xl">
+          <div className="flex items-center justify-between border-b border-[#ee7112]/20 px-6 py-4 bg-gradient-to-r from-[#18120c] via-[#0f0c08] to-[#18120c]">
+            <DialogTitle className="text-xl font-bold flex items-center gap-3 text-foreground">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#ee7112] animate-pulse" />
+              <span>{selectedProject?.title}</span>
             </DialogTitle>
           </div>
 
@@ -625,122 +626,205 @@ function ProjectCard({
   onImageClick: (imageUrl: string) => void
 }) {
   const { language, t } = useLanguage()
-  return (
-    <motion.div
-      whileHover={{ y: -8, scale: 1.02 }}
-      transition={{ duration: 0.2 }}
-      className="group h-full rounded-2xl bg-card border border-border/50 overflow-hidden hover:border-primary/50 hover:shadow-[0_15px_30px_rgba(99,102,241,0.15)] dark:hover:shadow-[0_15px_30px_rgba(99,102,241,0.08)] transition-all duration-300 flex flex-col justify-between"
-    >
-      <div>
-        <div
-          className={`relative aspect-video overflow-hidden cursor-pointer group/img ${!project.image ? "bg-secondary" : "bg-card"}`}
-          onClick={onViewDetails}
-        >
-          {project.image ? (
-            <Image
-              src={project.image}
-              alt={project.title}
-              fill
-              className="object-cover group-hover:scale-110 transition-transform duration-500"
-            />
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center text-muted-foreground group-hover:text-primary transition-colors">
-              <Layers className="h-12 w-12" />
-            </div>
-          )}
+  const cardRef = useRef<HTMLDivElement>(null)
+  const [isClicking, setIsClicking] = useState(false)
 
-          <div className="absolute top-2 left-2 sm:top-3 sm:left-3">
-            <Badge
-              className={`text-[9px] sm:text-xs font-semibold ${
-                project.category === "corporate"
-                  ? "bg-blue-500/20 text-blue-400"
-                  : "bg-purple-500/20 text-purple-400"
-              }`}
+  // 3D Motion Values with Amplified Physics for intense Card Tilt
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+
+  const springConfig = { damping: 14, stiffness: 300 }
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [22, -22]), springConfig)
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-25, 25]), springConfig)
+  const glareX = useTransform(mouseX, [-0.5, 0.5], ["0%", "100%"])
+  const glareY = useTransform(mouseY, [-0.5, 0.5], ["0%", "100%"])
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return
+    const rect = cardRef.current.getBoundingClientRect()
+    const x = (e.clientX - rect.left) / rect.width - 0.5
+    const y = (e.clientY - rect.top) / rect.height - 0.5
+    mouseX.set(x)
+    mouseY.set(y)
+  }
+
+  const handleMouseLeave = () => {
+    mouseX.set(0)
+    mouseY.set(0)
+  }
+
+  const handleClick = (e: React.MouseEvent) => {
+    setIsClicking(true)
+    setTimeout(() => setIsClicking(false), 400)
+    onViewDetails()
+  }
+
+  return (
+    <div style={{ perspective: 900 }} className="h-full py-2">
+      <motion.div
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        onClick={handleClick}
+        style={{
+          rotateX,
+          rotateY,
+          transformStyle: "preserve-3d",
+        }}
+        whileHover={{
+          y: -16,
+          scale: 1.06,
+          transition: { duration: 0.25, ease: "easeOut" },
+        }}
+        whileTap={{
+          scale: 0.94,
+          rotateX: 8,
+          transition: { duration: 0.1 },
+        }}
+        className="group h-full rounded-2xl bg-gradient-to-b from-[#181410] via-[#0e0c0a] to-[#070605] border border-border/50 overflow-hidden hover:border-[#ee7112] hover:shadow-[0_30px_70px_rgba(238,113,18,0.45),0_0_35px_rgba(238,113,18,0.3)] transition-all duration-300 flex flex-col justify-between relative cursor-pointer select-none"
+      >
+        {/* Intense Holographic Specular Glare in #ee7112 / Gold */}
+        <motion.div
+          className="absolute inset-0 z-30 pointer-events-none opacity-0 group-hover:opacity-80 mix-blend-screen transition-opacity duration-300"
+          style={{
+            background: `radial-gradient(circle 320px at ${glareX} ${glareY}, rgba(238, 113, 18, 0.6) 0%, rgba(251, 191, 36, 0.25) 35%, transparent 75%)`,
+          }}
+        />
+
+        {/* 3D Holographic Vertical Scan Beam on Hover */}
+        <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-40 h-24 bg-gradient-to-b from-[#ee7112]/40 via-amber-400/20 to-transparent blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-30" />
+
+        {/* 3D Holographic Corner Accent Brackets */}
+        <div className="absolute top-2.5 right-2.5 w-4 h-4 border-t-2 border-r-2 border-[#ee7112]/40 group-hover:border-[#ee7112] group-hover:shadow-[0_0_10px_#ee7112] transition-all duration-300 z-30 pointer-events-none rounded-tr" />
+        <div className="absolute bottom-2.5 left-2.5 w-4 h-4 border-b-2 border-l-2 border-[#ee7112]/40 group-hover:border-[#ee7112] group-hover:shadow-[0_0_10px_#ee7112] transition-all duration-300 z-30 pointer-events-none rounded-bl" />
+
+        {/* 3D Click Shockwave Pulse */}
+        {isClicking && (
+          <motion.div
+            initial={{ scale: 0.3, opacity: 1 }}
+            animate={{ scale: 2.4, opacity: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="absolute inset-0 z-40 bg-gradient-to-r from-[#ee7112]/40 via-amber-400/30 to-transparent pointer-events-none rounded-2xl"
+          />
+        )}
+
+        {/* 3D Layer 1: Image & Floating Badge (Z: 55px) */}
+        <div style={{ transform: "translateZ(55px)", transformStyle: "preserve-3d" }}>
+          <div className="relative aspect-video overflow-hidden bg-card rounded-t-xl">
+            {project.image ? (
+              <Image
+                src={project.image}
+                alt={project.title}
+                fill
+                className="object-cover group-hover:scale-115 group-hover:brightness-110 transition-all duration-500"
+              />
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center text-muted-foreground group-hover:text-primary transition-colors">
+                <Layers className="h-12 w-12" />
+              </div>
+            )}
+
+            {/* Floating Category Hologram Badge (Z: 85px) */}
+            <div
+              className="absolute top-2.5 left-2.5 sm:top-3.5 sm:left-3.5 z-10"
+              style={{ transform: "translateZ(85px)" }}
             >
-              {project.category === "corporate"
-                ? (language === "pt" ? "Corporativo" : "Corporate")
-                : (language === "pt" ? "Pessoal" : "Personal")}
-            </Badge>
+              <Badge
+                className={`text-[9px] sm:text-xs font-semibold backdrop-blur-md shadow-xl transition-all duration-300 group-hover:scale-110 group-hover:shadow-[0_0_18px_rgba(238,113,18,0.6)] ${
+                  project.category === "corporate"
+                    ? "bg-[#ee7112]/30 text-[#ffedd5] border-[#ee7112]/60"
+                    : "bg-emerald-500/30 text-emerald-200 border-emerald-400/60 shadow-[0_0_18px_rgba(16,185,129,0.5)]"
+                }`}
+              >
+                {project.category === "corporate"
+                  ? (language === "pt" ? "🏢 Corporativo" : "🏢 Corporate")
+                  : (language === "pt" ? "⚡ Automação / App" : "⚡ Automation / App")}
+              </Badge>
+            </div>
+
+            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent opacity-40 group-hover:opacity-90 transition-opacity duration-300" />
           </div>
 
-          <div className="absolute inset-0 bg-linear-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          {/* 3D Layer 2: Main Text Content (Z: 65px) */}
+          <div style={{ transform: "translateZ(65px)" }} className="p-2.5 sm:p-4">
+            <h3 className="font-bold text-[11px] sm:text-base leading-snug mb-1 sm:mb-1.5 text-foreground group-hover:text-[#ee7112] transition-colors line-clamp-2 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+              {project.title}
+            </h3>
+            <p className="hidden sm:block text-xs text-muted-foreground mb-3 line-clamp-2 leading-relaxed">
+              {project.description}
+            </p>
+
+            <div className="hidden sm:flex flex-wrap gap-1 sm:gap-1.5 mb-0 sm:mb-1">
+              {project.tags.slice(0, 2).map((tag: string) => (
+                <span
+                  key={tag}
+                  className="text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-md bg-secondary/90 text-muted-foreground group-hover:text-amber-200 border border-border/40 group-hover:border-[#ee7112]/50 transition-colors shadow-sm"
+                >
+                  {tag}
+                </span>
+              ))}
+              {project.tags.length > 2 && (
+                <span className="text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-md bg-secondary/60 text-muted-foreground">
+                  +{project.tags.length - 2}
+                </span>
+              )}
+            </div>
+          </div>
         </div>
 
-        {/* Conteúdo principal */}
-        <div className="p-2.5 sm:p-4">
-          <h3 className="font-bold text-[11px] sm:text-base leading-snug mb-1 sm:mb-1.5 group-hover:text-primary transition-colors line-clamp-2">
-            {project.title}
-          </h3>
-          <p className="hidden sm:block text-xs text-muted-foreground mb-3 line-clamp-2 leading-relaxed">
-            {project.description}
-          </p>
-
-          <div className="hidden sm:flex flex-wrap gap-1 sm:gap-1.5 mb-0 sm:mb-1">
-            {project.tags.slice(0, 2).map((tag: string) => (
-              <span
-                key={tag}
-                className="text-[9px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded-md bg-secondary text-muted-foreground border border-border/20"
+        {/* 3D Layer 3: Footer & CTA Buttons (Z: 75px) */}
+        <div
+          style={{ transform: "translateZ(75px)", transformStyle: "preserve-3d" }}
+          className="p-2.5 sm:p-4 pt-0 flex flex-col gap-1.5 sm:gap-2"
+        >
+          {project.isPrivate && (
+            <div className="hidden sm:flex text-[9px] sm:text-[10px] text-amber-400 bg-amber-500/10 border border-amber-500/25 rounded-md px-1.5 sm:px-2 py-1 items-center gap-1.5 font-medium">
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-400 shrink-0 animate-ping" />
+              <span className="line-clamp-1">
+                {language === "pt" ? "Código corporativo seguro" : "Secure corporate code"}
+              </span>
+            </div>
+          )}
+          <div className="flex items-center gap-1.5 sm:gap-2 w-full">
+            <Button
+              size="sm"
+              className="flex-1 text-[10px] sm:text-xs py-0.5 h-7 sm:h-8 bg-[#ee7112]/20 text-[#ee7112] hover:bg-[#ee7112] hover:text-white border border-[#ee7112]/40 transition-all duration-300 font-semibold shadow-[0_0_15px_rgba(238,113,18,0.15)] group-hover:shadow-[0_0_20px_rgba(238,113,18,0.4)]"
+            >
+              {t.projects.btnDetails}
+            </Button>
+            {!project.isPrivate ? (
+              <Button
+                size="sm"
+                variant="outline"
+                asChild
+                className="hidden sm:flex h-7 sm:h-8 w-7 sm:w-8 p-0 border-border hover:border-[#ee7112] hover:text-[#ee7112] transition-colors items-center justify-center"
+                onClick={(e) => e.stopPropagation()}
               >
-                {tag}
-              </span>
-            ))}
-            {project.tags.length > 2 && (
-              <span className="text-[9px] sm:text-[10px] px-1 sm:px-1.5 py-0.5 rounded-md bg-secondary text-muted-foreground">
-                +{project.tags.length - 2}
-              </span>
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Ver código no GitHub"
+                >
+                  <Github className="h-3.5 w-3.5" />
+                </a>
+              </Button>
+            ) : (
+              <div
+                className="hidden sm:flex h-7 sm:h-8 w-7 sm:w-8 rounded-md border border-border bg-muted/30 text-muted-foreground items-center justify-center cursor-help"
+                title={
+                  language === "pt"
+                    ? "Código privado por se tratar de um projeto interno."
+                    : "Private code due to being an internal project."
+                }
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Github className="h-3.5 w-3.5 opacity-40" />
+              </div>
             )}
           </div>
         </div>
-      </div>
-
-      {/* Footer */}
-      <div className="p-2.5 sm:p-4 pt-0 flex flex-col gap-1.5 sm:gap-2">
-        {project.isPrivate && (
-          <div className="hidden sm:flex text-[9px] sm:text-[10px] text-amber-500/80 bg-amber-500/10 border border-amber-500/20 rounded-md px-1.5 sm:px-2 py-1 items-center gap-1.5 font-medium">
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0 animate-pulse" />
-            <span className="line-clamp-1">
-              {language === "pt" ? "Código privado" : "Private code"}
-            </span>
-          </div>
-        )}
-        <div className="flex items-center gap-1.5 sm:gap-2 w-full">
-          <Button
-            size="sm"
-            onClick={onViewDetails}
-            className="flex-1 text-[10px] sm:text-xs py-0.5 h-7 sm:h-8 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-semibold"
-          >
-            {t.projects.btnDetails}
-          </Button>
-          {!project.isPrivate ? (
-            <Button
-              size="sm"
-              variant="outline"
-              asChild
-              className="hidden sm:flex h-7 sm:h-8 w-7 sm:w-8 p-0 border-border hover:border-primary transition-colors items-center justify-center"
-            >
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Ver código no GitHub"
-              >
-                <Github className="h-3.5 w-3.5" />
-              </a>
-            </Button>
-          ) : (
-            <div
-              className="hidden sm:flex h-7 sm:h-8 w-7 sm:w-8 rounded-md border border-border bg-muted/30 text-muted-foreground items-center justify-center cursor-help"
-              title={
-                language === "pt"
-                  ? "Código privado por se tratar de um projeto interno."
-                  : "Private code due to being an internal project."
-              }
-            >
-              <Github className="h-3.5 w-3.5 opacity-40" />
-            </div>
-          )}
-        </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   )
 }

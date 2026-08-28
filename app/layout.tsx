@@ -34,8 +34,8 @@ export const metadata: Metadata = {
     images: ['/chatbot_ia_cover.png'],
   },
   icons: {
-    icon: '/logovs.svg',
-    apple: '/logovs.svg',
+    icon: '/logovs-orange.svg',
+    apple: '/logovs-orange.svg',
   },
 }
 

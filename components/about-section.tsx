@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { GraduationCap, Code, Award } from "lucide-react"
 import { useLanguage } from "@/hooks/use-language"
 import { jarvisVariants } from "@/lib/animations"
+import { IdPassCard } from "@/components/three/id-pass-card"
 
 export function AboutSection() {
   const { t } = useLanguage()
@@ -37,32 +38,17 @@ export function AboutSection() {
         </motion.div>
 
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          {/* Coluna da Esquerda: Contato e Formação */}
+          {/* Coluna da Esquerda: Cartão de Acesso 3D e Competências */}
           <motion.div
             variants={jarvisVariants}
             custom={{ direction: "left", delay: 0.2 }}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="lg:col-span-4 space-y-5 order-2 lg:order-1"
+            className="lg:col-span-4 space-y-5 order-2 lg:order-1 flex flex-col items-center lg:items-start"
           >
-            {/* Card de Formação Acadêmica */}
-            <div className="glass rounded-2xl border border-border/50 p-5 sm:p-6">
-              <h4 className="font-semibold text-foreground mb-4 flex items-center gap-2">
-                <GraduationCap className="h-5 w-5 text-primary shrink-0" />
-                Formação Acadêmica
-              </h4>
-              <ul className="space-y-4 text-sm">
-                <li className="relative pl-4 before:absolute before:left-0 before:top-2 before:w-1.5 before:h-1.5 before:rounded-full before:bg-primary/60">
-                  <p className="font-medium text-foreground leading-snug">Graduação em Análise e Desenvolvimento de Sistemas</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">UNIFOR (Universidade de Fortaleza)</p>
-                </li>
-                <li className="relative pl-4 before:absolute before:left-0 before:top-2 before:w-1.5 before:h-1.5 before:rounded-full before:bg-primary/60">
-                  <p className="font-medium text-foreground leading-snug">Pós-Graduação em Dev Web Full Stack</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">Faculdade INFNET (Concluído)</p>
-                </li>
-              </ul>
-            </div>
+            {/* Cartão de Acesso ID / Security Pass 3D */}
+            <IdPassCard />
 
             {/* Cursos / Certificações (Movido para a coluna da esquerda) */}
             <div className="space-y-4 pt-4 lg:pt-8">

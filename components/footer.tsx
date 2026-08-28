@@ -28,9 +28,9 @@ export function Footer() {
           >
             <div className="flex items-center justify-center md:justify-start">
               <img 
-                src="/logovs.png" 
-                alt="Logo VS" 
-                className="h-16 w-auto object-contain hover:scale-105 transition-transform duration-300"
+                src="/logovs-orange.svg" 
+                alt="Logo VS Victor Santos" 
+                className="h-16 w-auto object-contain hover:scale-105 transition-transform duration-300 filter drop-shadow-[0_0_15px_rgba(238,113,18,0.7)]"
               />
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto md:mx-0">

@@ -14,36 +14,36 @@ import { Footer } from "@/components/footer"
 import { LoadingScreen } from "@/components/loading-screen"
 import { GameHUD } from "@/components/game-hud"
 import { ScrollAssemblyCanvas } from "@/components/three/scroll-assembly-canvas"
+import { JarvisAssistant } from "@/components/jarvis-assistant"
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 2800)
-    return () => clearTimeout(timer)
-  }, [])
-
   return (
     <LanguageProvider>
-      <AnimatePresence mode="wait">
-        {isLoading && <LoadingScreen key="loader" />}
+      <AnimatePresence>
+        {isLoading && (
+          <LoadingScreen
+            key="loader"
+            onComplete={() => setIsLoading(false)}
+          />
+        )}
       </AnimatePresence>
-      {!isLoading && (
-        <main className="relative min-h-screen">
-          <ScrollAssemblyCanvas />
-          <Navbar />
-          <GameHUD />
-          <HeroSection />
-          <AboutSection />
-          <TechStackSection />
-          <MakerLabSection />
-          <ProjectsSection />
-          <QuoteSection />
-          <Footer />
-        </main>
-      )}
+
+      {/* Main page is pre-mounted in the background so 3D shaders and DOM are fully warm */}
+      <main className="relative min-h-screen">
+        <ScrollAssemblyCanvas />
+        <Navbar />
+        <GameHUD />
+        <JarvisAssistant />
+        <HeroSection />
+        <AboutSection />
+        <TechStackSection />
+        <MakerLabSection />
+        <ProjectsSection />
+        <QuoteSection />
+        <Footer />
+      </main>
     </LanguageProvider>
   )
 }

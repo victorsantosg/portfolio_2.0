@@ -31,18 +31,18 @@ export function ScrollAssemblyCanvas() {
     container.appendChild(renderer.domElement)
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0x0a1525, 2.5)
+    const ambientLight = new THREE.AmbientLight(0x180d02, 2.5)
     scene.add(ambientLight)
 
-    const greenLight = new THREE.DirectionalLight(0x22c55e, 2.8)
-    greenLight.position.set(5, 6, 4)
-    scene.add(greenLight)
+    const orangeLight = new THREE.DirectionalLight(0xf59e0b, 3.2)
+    orangeLight.position.set(5, 6, 4)
+    scene.add(orangeLight)
 
-    const cyanLight = new THREE.DirectionalLight(0x06b6d4, 2.4)
-    cyanLight.position.set(-5, -4, -2)
-    scene.add(cyanLight)
+    const amberLight = new THREE.DirectionalLight(0xff7b00, 2.6)
+    amberLight.position.set(-5, -4, -2)
+    scene.add(amberLight)
 
-    const coreLight = new THREE.PointLight(0x22c55e, 4, 8)
+    const coreLight = new THREE.PointLight(0xf59e0b, 4.5, 8)
     scene.add(coreLight)
 
     // Master Assembly Group
@@ -64,29 +64,29 @@ export function ScrollAssemblyCanvas() {
     })
 
     const pcbMat = new THREE.MeshStandardMaterial({
-      color: 0x022c22, // Dark emerald PCB
+      color: 0x180d02, // Dark carbon / amber PCB
       metalness: 0.6,
       roughness: 0.4,
     })
 
     const cyanEmissiveMat = new THREE.MeshStandardMaterial({
-      color: 0x06b6d4,
-      emissive: 0x06b6d4,
+      color: 0xfbbf24, // Gold Amber Emissive
+      emissive: 0xfbbf24,
       emissiveIntensity: 0.9,
       roughness: 0.2,
     })
 
     const greenEmissiveMat = new THREE.MeshStandardMaterial({
-      color: 0x22c55e,
-      emissive: 0x22c55e,
-      emissiveIntensity: 1.1,
+      color: 0xf59e0b, // J.A.R.V.I.S. Stark Orange Emissive
+      emissive: 0xf59e0b,
+      emissiveIntensity: 1.2,
       roughness: 0.1,
     })
 
     const wireframeMat = new THREE.LineBasicMaterial({
-      color: 0x22c55e,
+      color: 0xf59e0b,
       transparent: true,
-      opacity: 0.25,
+      opacity: 0.35,
     })
 
     // ==========================================
