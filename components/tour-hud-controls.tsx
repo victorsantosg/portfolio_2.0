@@ -38,9 +38,9 @@ export function TourHudControls() {
     return () => window.removeEventListener("start-jarvis-tour", handleStartTour)
   }, [])
 
-  // Speak narration
+  // Speak narration and trigger next step on completion
   const speakText = (text: string) => {
-    if (!voiceEnabled || typeof window === "undefined" || !("speechSynthesis" in window)) return
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return
     window.speechSynthesis.cancel()
 
     const spokenText = text
@@ -59,6 +59,7 @@ export function TourHudControls() {
           (v.name.includes("Natural") ||
             v.name.includes("Neural") ||
             v.name.includes("Google") ||
+            v.name.includes("Antonio") ||
             v.name.includes("Luciana") ||
             v.name.includes("Felipe") ||
             v.name.includes("Daniel") ||
@@ -66,9 +67,35 @@ export function TourHudControls() {
       ) || voices.find((v) => v.lang.startsWith("pt"))
 
     if (bestVoice) utterance.voice = bestVoice
-    utterance.rate = 1.05
-    utterance.pitch = 0.95
-    window.speechSynthesis.speak(utterance)
+    utterance.rate = 1.02
+    utterance.pitch = 0.96
+
+    // Wait until the speech finishes completely before advancing to the next step
+    utterance.onend = () => {
+      if (!isPaused) {
+        timerRef.current = setTimeout(() => {
+          handleNext()
+        }, 1800)
+      }
+    }
+
+    utterance.onerror = () => {
+      if (!isPaused) {
+        timerRef.current = setTimeout(() => {
+          handleNext()
+        }, 3000)
+      }
+    }
+
+    if (voiceEnabled) {
+      window.speechSynthesis.speak(utterance)
+    } else {
+      // Fallback timer if voice is muted
+      const readingDuration = Math.max(7000, text.length * 65)
+      timerRef.current = setTimeout(() => {
+        handleNext()
+      }, readingDuration)
+    }
   }
 
   // Typewriter effect for active step
@@ -100,18 +127,10 @@ export function TourHudControls() {
       } else {
         clearInterval(typeInterval)
       }
-    }, 14)
+    }, 16)
 
-    speakText(narrationText)
-
-    // Step Duration Timer
     if (timerRef.current) clearTimeout(timerRef.current)
-
-    if (!isPaused) {
-      timerRef.current = setTimeout(() => {
-        handleNext()
-      }, currentStep.duration)
-    }
+    speakText(narrationText)
 
     return () => {
       clearInterval(typeInterval)
