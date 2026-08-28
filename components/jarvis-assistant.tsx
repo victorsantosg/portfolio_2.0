@@ -293,15 +293,12 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
           {/* Glowing Hologram Backdrop Core */}
           <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-amber-600 via-orange-500 to-amber-300 opacity-80 blur-[2px] group-hover:opacity-100 transition-opacity" />
 
-          {/* Video or Image Hologram of J.A.R.V.I.S. */}
+          {/* Animated Hologram Core of J.A.R.V.I.S. (WebP - Immune to iOS/Instagram Play Icon Overlays) */}
           <div className="relative w-[54px] h-[54px] sm:w-[60px] sm:h-[60px] rounded-full overflow-hidden border-2 border-amber-300 bg-black flex items-center justify-center shadow-inner">
-            <video
-              src="/jarvis/Glowing_orange_AI_hologram_rotating_202608280839.mp4"
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-full object-cover mix-blend-screen scale-110"
+            <img
+              src="/jarvis/jarvis3.webp"
+              alt="J.A.R.V.I.S. Arc Reactor Core"
+              className="w-full h-full object-cover mix-blend-screen scale-110 pointer-events-none select-none"
             />
           </div>
 
