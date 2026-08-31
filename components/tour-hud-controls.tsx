@@ -72,7 +72,7 @@ export function TourHudControls() {
 
     if (voiceEnabled) {
       try {
-        // 1. Primary: Microsoft Edge Neural TTS
+        // 1. Exclusively: Microsoft Edge Neural TTS (/api/jarvis/tts)
         const res = await fetch("/api/jarvis/tts", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -89,7 +89,7 @@ export function TourHudControls() {
             if (!isPaused) {
               timerRef.current = setTimeout(() => {
                 handleNext()
-              }, 1800)
+              }, 1200)
             }
           }
 
@@ -97,7 +97,7 @@ export function TourHudControls() {
             if (!isPaused) {
               timerRef.current = setTimeout(() => {
                 handleNext()
-              }, 3000)
+              }, 2500)
             }
           }
 
@@ -105,69 +105,15 @@ export function TourHudControls() {
           return
         }
       } catch (err) {
-        console.warn("Edge TTS failed for tour, using browser speech fallback...", err)
+        console.warn("Edge TTS failed for tour:", err)
       }
     }
 
-    // 2. Fallback: Browser Native Speech Synthesis
-    if (!("speechSynthesis" in window)) {
-      const readingDuration = Math.max(7000, text.length * 65)
-      timerRef.current = setTimeout(() => {
-        handleNext()
-      }, readingDuration)
-      return
-    }
-
-    const utterance = new SpeechSynthesisUtterance(spokenText)
-    const voices = window.speechSynthesis.getVoices()
-    const savedVoiceURI = typeof window !== "undefined" ? localStorage.getItem("jarvis_selected_voice") : null
-    let activeVoice = savedVoiceURI ? voices.find((v) => v.voiceURI === savedVoiceURI) : null
-
-    if (!activeVoice) {
-      activeVoice =
-        voices.find(
-          (v) =>
-            (v.lang === "pt-BR" || v.lang.startsWith("pt")) &&
-            (v.name.includes("Natural") ||
-              v.name.includes("Neural") ||
-              v.name.includes("Google") ||
-              v.name.includes("Antonio") ||
-              v.name.includes("Luciana") ||
-              v.name.includes("Felipe") ||
-              v.name.includes("Daniel") ||
-              v.name.includes("Francisca"))
-        ) || voices.find((v) => v.lang.startsWith("pt"))
-    }
-
-    if (activeVoice) utterance.voice = activeVoice
-    utterance.rate = 1.30
-    utterance.pitch = 0.96
-
-    // Wait until the speech finishes completely before advancing to the next step
-    utterance.onend = () => {
-      if (!isPaused) {
-        timerRef.current = setTimeout(() => {
-          handleNext()
-        }, 1500)
-      }
-    }
-
-    utterance.onerror = () => {
-      if (!isPaused) {
-        timerRef.current = setTimeout(() => {
-          handleNext()
-        }, 2500)
-      }
-    }
-
-    if (voiceEnabled) {
-      window.speechSynthesis.speak(utterance)
-    } else {
-      const readingDuration = Math.max(5000, text.length * 50)
-      timerRef.current = setTimeout(() => {
-        handleNext()
-      }, readingDuration)
-    }
+    // Fallback reading timer if voice is muted
+    const readingDuration = Math.max(4000, text.length * 45)
+    timerRef.current = setTimeout(() => {
+      handleNext()
+    }, readingDuration)
   }
 
   // Typewriter effect for active step
@@ -212,9 +158,6 @@ export function TourHudControls() {
       if (tourAudioRef.current) {
         tourAudioRef.current.pause()
       }
-      if (typeof window !== "undefined" && "speechSynthesis" in window) {
-        window.speechSynthesis.cancel()
-      }
     }
   }, [isActive, currentStepIndex, isPaused, voiceEnabled])
 
@@ -222,9 +165,6 @@ export function TourHudControls() {
     if (tourAudioRef.current) {
       tourAudioRef.current.pause()
       tourAudioRef.current.currentTime = 0
-    }
-    if (typeof window !== "undefined" && "speechSynthesis" in window) {
-      window.speechSynthesis.cancel()
     }
     if (currentStepIndex < TOUR_STEPS.length - 1) {
       setCurrentStepIndex((prev) => prev + 1)
@@ -242,9 +182,6 @@ export function TourHudControls() {
       tourAudioRef.current.currentTime = 0
       tourAudioRef.current = null
     }
-    if (typeof window !== "undefined" && "speechSynthesis" in window) {
-      window.speechSynthesis.cancel()
-    }
   }
 
   const togglePause = () => {
@@ -258,9 +195,6 @@ export function TourHudControls() {
       if (timerRef.current) clearTimeout(timerRef.current)
       if (tourAudioRef.current) {
         tourAudioRef.current.pause()
-      }
-      if (typeof window !== "undefined" && "speechSynthesis" in window) {
-        window.speechSynthesis.cancel()
       }
     }
   }

@@ -50,9 +50,6 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
   const [isTyping, setIsTyping] = useState(false)
   const [displayedText, setDisplayedText] = useState("")
   const [voiceEnabled, setVoiceEnabled] = useState(true)
-  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([])
-  const [selectedVoiceURI, setSelectedVoiceURI] = useState<string>("")
-  const [showVoiceSettings, setShowVoiceSettings] = useState(false)
   
   // Real Groq AI Chat States
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([])
@@ -62,8 +59,9 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
   const messageEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const abortControllerRef = useRef<AbortController | null>(null)
 
-  // Load saved voice preference and available voices
+  // Load saved voice preference
   useEffect(() => {
     if (typeof window === "undefined") return
 
@@ -71,36 +69,6 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
     if (savedVoiceState !== null) {
       setVoiceEnabled(savedVoiceState === "true")
     }
-
-    if (!("speechSynthesis" in window)) return
-
-    const loadVoices = () => {
-      const voices = window.speechSynthesis.getVoices()
-      if (voices.length > 0) {
-        setAvailableVoices(voices)
-        const saved = localStorage.getItem("jarvis_selected_voice")
-        if (saved && voices.some((v) => v.voiceURI === saved)) {
-          setSelectedVoiceURI(saved)
-        } else {
-          const defaultPt = voices.find(
-            (v) =>
-              (v.lang === "pt-BR" || v.lang.startsWith("pt")) &&
-              (v.name.includes("Natural") ||
-                v.name.includes("Neural") ||
-                v.name.includes("Google") ||
-                v.name.includes("Antonio") ||
-                v.name.includes("Luciana") ||
-                v.name.includes("Francisca"))
-          ) || voices.find((v) => v.lang.startsWith("pt"))
-          if (defaultPt) {
-            setSelectedVoiceURI(defaultPt.voiceURI)
-          }
-        }
-      }
-    }
-
-    loadVoices()
-    window.speechSynthesis.onvoiceschanged = loadVoices
   }, [])
 
   // Toggle voice and save preference
@@ -110,12 +78,13 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
     if (typeof window !== "undefined") {
       localStorage.setItem("jarvis_voice_enabled", String(nextState))
       if (!nextState) {
+        if (abortControllerRef.current) {
+          abortControllerRef.current.abort()
+        }
         if (audioRef.current) {
           audioRef.current.pause()
           audioRef.current.currentTime = 0
-        }
-        if ("speechSynthesis" in window) {
-          window.speechSynthesis.cancel()
+          audioRef.current = null
         }
       }
     }
@@ -238,43 +207,33 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
       .trim()
   }
 
-  // Voice Preview Test
-  const handleTestVoice = (voice: SpeechSynthesisVoice) => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return
-    window.speechSynthesis.cancel()
-    const utterance = new SpeechSynthesisUtterance(
-      "Sistemas calibrados, Senhor. Eu sou o Járvis, e este é o meu canal de sintetização de voz."
-    )
-    utterance.voice = voice
-    utterance.rate = 1.30
-    utterance.pitch = 0.96
-    window.speechSynthesis.speak(utterance)
-    setSelectedVoiceURI(voice.voiceURI)
-    localStorage.setItem("jarvis_selected_voice", voice.voiceURI)
-  }
-
-  // Humanized J.A.R.V.I.S. Neural Audio Player (Edge TTS + SpeechSynthesis Fallback)
+  // Exclusive Humanized J.A.R.V.I.S. Neural Audio Player (Edge TTS API ONLY)
   const speakHumanizedJarvis = async (text: string) => {
     if (!voiceEnabled || typeof window === "undefined") return
 
     const spokenText = cleanSpeechText(text)
     if (!spokenText) return
 
-    // Stop any existing audio
+    // Stop any existing ongoing audio or request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort()
+    }
     if (audioRef.current) {
       audioRef.current.pause()
       audioRef.current.currentTime = 0
-    }
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.cancel()
+      audioRef.current = null
     }
 
+    const controller = new AbortController()
+    abortControllerRef.current = controller
+
     try {
-      // 1. Primary: Microsoft Edge Neural TTS Audio Stream (/api/jarvis/tts)
+      // Exclusively: Microsoft Edge Neural TTS Audio Stream (/api/jarvis/tts)
       const res = await fetch("/api/jarvis/tts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: spokenText }),
+        signal: controller.signal,
       })
 
       if (res.ok) {
@@ -283,47 +242,12 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
         const audio = new Audio(audioUrl)
         audioRef.current = audio
         await audio.play()
-        return
       }
-    } catch (err) {
-      console.warn("Edge Neural TTS failed, using browser speech fallback...", err)
-    }
-
-    // 2. Fallback: Browser Native Speech Synthesis
-    if (!("speechSynthesis" in window)) return
-    const sentences = spokenText.match(/[^.!?]+[.!?]?/g) || [spokenText]
-    const voices = availableVoices.length > 0 ? availableVoices : window.speechSynthesis.getVoices()
-    
-    let activeVoice = voices.find((v) => v.voiceURI === selectedVoiceURI)
-    if (!activeVoice) {
-      activeVoice =
-        voices.find(
-          (v) =>
-            (v.lang === "pt-BR" || v.lang.startsWith("pt")) &&
-            (v.name.includes("Natural") ||
-              v.name.includes("Neural") ||
-              v.name.includes("Google") ||
-              v.name.includes("Antonio") ||
-              v.name.includes("Luciana") ||
-              v.name.includes("Francisca"))
-        ) || voices.find((v) => v.lang.startsWith("pt"))
-    }
-
-    sentences.forEach((sentence, index) => {
-      const trimmed = sentence.trim()
-      if (!trimmed) return
-
-      const utterance = new SpeechSynthesisUtterance(trimmed)
-      if (activeVoice) utterance.voice = activeVoice
-      utterance.rate = 1.30
-      utterance.pitch = 0.96
-
-      if (index === sentences.length - 1) {
-        utterance.pitch = 0.93
+    } catch (err: any) {
+      if (err.name !== "AbortError") {
+        console.warn("J.A.R.V.I.S. Neural TTS Audio error:", err)
       }
-
-      window.speechSynthesis.speak(utterance)
-    })
+    }
   }
 
   // Direct AI Query Handler
@@ -658,27 +582,16 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
               </div>
 
               {/* Header Actions (Voice Settings, Mute & Close) */}
+              {/* Header Actions (Mute & Close) */}
               <div className="flex items-center gap-1.5">
                 <button
-                  onClick={() => setShowVoiceSettings(!showVoiceSettings)}
-                  className={`p-2 sm:p-1.5 rounded-xl border text-xs transition-colors cursor-pointer ${
-                    showVoiceSettings
-                      ? "bg-amber-500/20 border-amber-400 text-amber-300 shadow-[0_0_10px_rgba(245,158,11,0.3)]"
-                      : "border-white/10 text-muted-foreground hover:text-foreground hover:bg-white/10"
-                  }`}
-                  title="Configurar e testar vozes neurais"
-                >
-                  <Cpu className="w-4 h-4" />
-                </button>
-
-                <button
-                  onClick={() => setVoiceEnabled(!voiceEnabled)}
+                  onClick={toggleVoice}
                   className={`p-2 sm:p-1.5 rounded-xl border text-xs transition-colors cursor-pointer ${
                     voiceEnabled
-                      ? "bg-amber-500/20 border-amber-400 text-amber-300"
+                      ? "bg-amber-500/20 border-amber-400 text-amber-300 shadow-[0_0_10px_rgba(245,158,11,0.2)]"
                       : "border-white/10 text-muted-foreground hover:text-foreground hover:bg-white/10"
                   }`}
-                  title={voiceEnabled ? "Voz ativada" : "Ativar voz sintetizada"}
+                  title={voiceEnabled ? "Voz ativada (Edge Neural TTS)" : "Ativar voz do J.A.R.V.I.S."}
                 >
                   {voiceEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
                 </button>
@@ -692,63 +605,6 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
                 </button>
               </div>
             </div>
-
-            {/* Voice Calibration Drawer */}
-            <AnimatePresence>
-              {showVoiceSettings && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  className="relative z-20 p-3 sm:p-4 bg-gray-900/95 border-b border-amber-500/40 text-xs font-mono space-y-2.5 overflow-hidden shrink-0 shadow-lg"
-                >
-                  <div className="flex items-center justify-between pb-1 border-b border-white/10 text-amber-400 font-bold text-[11px]">
-                    <div className="flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                      <span>CANAL DE VOZ // ESCOLHA & TESTE</span>
-                    </div>
-                    <button
-                      onClick={() => setShowVoiceSettings(false)}
-                      className="text-muted-foreground hover:text-white text-xs cursor-pointer"
-                    >
-                      ✕ Fechar
-                    </button>
-                  </div>
-
-                  <p className="text-[10px] text-muted-foreground">
-                    Selecione a voz neural de sua preferência e clique em <b>Ouvir</b> para calibrar o áudio:
-                  </p>
-
-                  <div className="max-h-40 overflow-y-auto space-y-1.5 pr-1">
-                    {availableVoices
-                      .filter((v) => v.lang.startsWith("pt") || v.lang.startsWith("en"))
-                      .map((voice) => (
-                        <div
-                          key={voice.voiceURI}
-                          className={`p-2 rounded-xl border flex items-center justify-between gap-2 transition-all ${
-                            selectedVoiceURI === voice.voiceURI
-                              ? "bg-amber-500/20 border-amber-400 text-amber-300 shadow-[0_0_12px_rgba(245,158,11,0.2)]"
-                              : "bg-black/50 border-white/10 text-slate-300 hover:border-amber-500/40"
-                          }`}
-                        >
-                          <div className="truncate flex-1">
-                            <div className="font-bold truncate text-[11px]">{voice.name}</div>
-                            <div className="text-[9px] text-muted-foreground">{voice.lang}</div>
-                          </div>
-                          <Button
-                            type="button"
-                            size="sm"
-                            onClick={() => handleTestVoice(voice)}
-                            className="h-7 px-2.5 bg-amber-500 hover:bg-amber-400 text-black text-[10px] font-bold rounded-lg flex items-center gap-1 cursor-pointer transition-colors shadow-sm shrink-0"
-                          >
-                            <span>▶️ Ouvir</span>
-                          </Button>
-                        </div>
-                      ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
 
             {/* Terminal Body: Message Stream & Actions (FLEX-1 FULL SCROLL) */}
             <div className="relative z-10 p-3 sm:p-4 flex-1 overflow-y-auto flex flex-col gap-3 min-h-0">

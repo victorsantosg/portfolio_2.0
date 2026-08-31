@@ -16,24 +16,34 @@ export function JarvisGuideDrone({ targetHref, startPos, onComplete }: JarvisGui
   const [targetTitle, setTargetTitle] = useState("DESTINO")
   const [isArrived, setIsArrived] = useState(false)
 
-  // Voice synthesis with authentic "Járvis" phonetic intonation
-  const speakJarvisVoice = (phrase: string) => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return
-    window.speechSynthesis.cancel()
+  const droneAudioRef = useRef<HTMLAudioElement | null>(null)
 
-    const phonetic = phrase.replace(/J\.A\.R\.V\.I\.S\./gi, "Járvis").replace(/JARVIS/gi, "Járvis")
-    const utterance = new SpeechSynthesisUtterance(phonetic)
-    utterance.lang = "pt-BR"
-    utterance.rate = 1.05
-    utterance.pitch = 0.95
+  // Exclusive Neural Voice Synthesis via Edge TTS API (/api/jarvis/tts)
+  const speakJarvisVoice = async (phrase: string) => {
+    if (typeof window === "undefined") return
 
-    const voices = window.speechSynthesis.getVoices()
-    const ptVoice =
-      voices.find((v) => v.lang.includes("pt-BR") && (v.name.includes("Daniel") || v.name.includes("Google") || v.name.includes("Natural") || v.name.includes("Luciana"))) ||
-      voices.find((v) => v.lang.includes("pt"))
-    if (ptVoice) utterance.voice = ptVoice
+    if (droneAudioRef.current) {
+      droneAudioRef.current.pause()
+      droneAudioRef.current.currentTime = 0
+    }
 
-    window.speechSynthesis.speak(utterance)
+    try {
+      const res = await fetch("/api/jarvis/tts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: phrase }),
+      })
+
+      if (res.ok) {
+        const blob = await res.blob()
+        const audioUrl = URL.createObjectURL(blob)
+        const audio = new Audio(audioUrl)
+        droneAudioRef.current = audio
+        await audio.play()
+      }
+    } catch (err) {
+      console.warn("Drone Neural TTS failed:", err)
+    }
   }
 
   useEffect(() => {
