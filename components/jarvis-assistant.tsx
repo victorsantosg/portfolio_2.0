@@ -219,8 +219,10 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
       abortControllerRef.current.abort()
     }
     if (audioRef.current) {
-      audioRef.current.pause()
-      audioRef.current.currentTime = 0
+      try {
+        audioRef.current.pause()
+        audioRef.current.currentTime = 0
+      } catch (_) {}
       audioRef.current = null
     }
 
@@ -241,7 +243,13 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
         const audioUrl = URL.createObjectURL(blob)
         const audio = new Audio(audioUrl)
         audioRef.current = audio
-        await audio.play()
+
+        const playPromise = audio.play()
+        if (playPromise !== undefined) {
+          playPromise.catch((err) => {
+            console.warn("Audio play prevented by browser autoplay policy:", err)
+          })
+        }
       }
     } catch (err: any) {
       if (err.name !== "AbortError") {
@@ -397,7 +405,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
         setDisplayedText(fullText)
         if (typewriterRef.current) clearInterval(typewriterRef.current)
       }
-    }, 10)
+    }, 8)
 
     return typewriterRef.current
   }
@@ -412,12 +420,6 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
 
     return () => {
       if (typewriterRef.current) clearInterval(typewriterRef.current)
-      if (audioRef.current) {
-        audioRef.current.pause()
-      }
-      if (typeof window !== "undefined" && "speechSynthesis" in window) {
-        window.speechSynthesis.cancel()
-      }
     }
   }, [currentState, isOpen, voiceEnabled])
 

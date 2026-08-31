@@ -57,6 +57,8 @@ export async function POST(req: Request) {
     return new Response(audioBuffer, {
       headers: {
         "Content-Type": "audio/mpeg",
+        "Content-Length": audioBuffer.length.toString(),
+        "Accept-Ranges": "bytes",
         "Cache-Control": "public, max-age=3600, s-maxage=3600",
       },
     })
