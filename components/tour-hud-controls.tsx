@@ -135,6 +135,17 @@ export function TourHudControls() {
       })
     )
 
+    // Open/Close 3D Project Holo-Deck
+    if (currentStep.id === "maker_lab" || currentStep.id === "projects") {
+      window.dispatchEvent(
+        new CustomEvent("open-holodeck-project", {
+          detail: { stepId: currentStep.id },
+        })
+      )
+    } else {
+      window.dispatchEvent(new CustomEvent("close-holodeck-project"))
+    }
+
     // Typewriter
     let idx = 0
     setDisplayedNarration("")
@@ -160,6 +171,7 @@ export function TourHudControls() {
       if (tourAudioRef.current) {
         tourAudioRef.current.pause()
       }
+      window.dispatchEvent(new CustomEvent("close-holodeck-project"))
     }
   }, [isActive, currentStepIndex, isPaused, voiceEnabled])
 
@@ -168,6 +180,7 @@ export function TourHudControls() {
       tourAudioRef.current.pause()
       tourAudioRef.current.currentTime = 0
     }
+    window.dispatchEvent(new CustomEvent("close-holodeck-project"))
     if (currentStepIndex < TOUR_STEPS.length - 1) {
       setCurrentStepIndex((prev) => prev + 1)
     } else {
@@ -178,6 +191,7 @@ export function TourHudControls() {
   const handleClose = () => {
     setIsActive(false)
     setIsPaused(false)
+    window.dispatchEvent(new CustomEvent("close-holodeck-project"))
     if (timerRef.current) clearTimeout(timerRef.current)
     if (tourAudioRef.current) {
       tourAudioRef.current.pause()

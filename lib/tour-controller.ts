@@ -34,22 +34,22 @@ export const TOUR_STEPS: TourStep[] = [
   {
     id: "maker_lab",
     title: "PROTOCOLO 03 // DIGITAL TWIN 3D & WMS",
-    subtitle: "Gêmeo Digital de Armazém em Produção",
+    subtitle: "Materializando Gêmeo Digital no Holo-Deck",
     targetSection: "#maker-lab",
     narration:
-      "Adentrando o Maker Lab e acionando sensores tridimensionais. Aqui o Senhor Victor construiu o Gêmeo Digital do armazém logístico com mais de 11.200 posições reais de estoque, cálculo dinâmico de curva de giro e shelf-life em Three.js. Um verdadeiro centro de comando holográfico em produção.",
-    duration: 13000,
+      "Materializando o Holo-Deck 3D de projetos. Observe no holograma: este é o Gêmeo Digital do armazém logístico do Cometa Supermercados com mais de 11.200 posições reais de estoque modeladas em Three.js, cálculo automático FEFO e mapa térmico em tempo real.",
+    duration: 13500,
     threePreset: "frios",
     threeLevel: "all",
   },
   {
     id: "projects",
     title: "PROTOCOLO 04 // GALERIA DE PROTÓTIPOS",
-    subtitle: "Aplicações Escaláveis, ETL & Agentes de IA",
+    subtitle: "Raio-X de Arquitetura no Holo-Deck",
     targetSection: "#projetos",
     narration:
-      "Inspecionando os protótipos ativos de software. De plataformas SaaS completas em Next.js e Fastify a robôs de automação ETL em Python e agentes autônomos de IA integrados a modelos de linguagem. Se existe um gargalo operacional na sua empresa, o Criador projeta a solução para automatizá-lo.",
-    duration: 12000,
+      "Projetando no Holo-Deck a arquitetura do ERP de Inventário e Auditoria Corporativa. Desenvolvido com Next.js 16, Fastify e PostgreSQL, processando mais de 5.000 requisições por segundo com latência de apenas 28 milissegundos e integridade ACID.",
+    duration: 13000,
   },
   {
     id: "quote",

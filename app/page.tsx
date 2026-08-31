@@ -16,6 +16,7 @@ import { GameHUD } from "@/components/game-hud"
 import { ScrollAssemblyCanvas } from "@/components/three/scroll-assembly-canvas"
 import { JarvisAssistant } from "@/components/jarvis-assistant"
 import { TourHudControls } from "@/components/tour-hud-controls"
+import { JarvisProjectHolodeck } from "@/components/three/jarvis-project-holodeck"
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true)
@@ -37,6 +38,7 @@ export default function Home() {
         <Navbar />
         <GameHUD />
         <TourHudControls />
+        <JarvisProjectHolodeck />
         <JarvisAssistant isReady={!isLoading} />
         <HeroSection isLoaded={!isLoading} />
         <AboutSection />
