@@ -16,6 +16,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { TOUR_STEPS, TourStep } from "@/lib/tour-controller"
 
+import { JarvisTourHologram } from "@/components/three/jarvis-tour-hologram"
+
 export function TourHudControls() {
   const [isActive, setIsActive] = useState(false)
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
@@ -207,12 +209,12 @@ export function TourHudControls() {
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -30 }}
-        className="fixed top-20 left-1/2 -translate-x-1/2 z-[9999] w-[94vw] max-w-2xl flex flex-col gap-2 pointer-events-auto"
+        className="fixed top-18 sm:top-20 left-1/2 -translate-x-1/2 z-[9999] w-[95vw] max-w-3xl flex flex-col gap-2 pointer-events-auto"
       >
-        {/* Main HUD Banner */}
-        <div className="relative p-3 sm:p-4 rounded-2xl bg-gray-950/95 border-2 border-amber-500/60 shadow-[0_0_40px_rgba(245,158,11,0.3)] backdrop-blur-2xl overflow-hidden">
-          {/* Subtle Ambient Scanline */}
-          <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-transparent to-amber-500/10 pointer-events-none" />
+        {/* Main HUD Banner with Integrated 3D Holographic Stage */}
+        <div className="relative p-3.5 sm:p-4 rounded-2xl bg-gray-950/98 border-2 border-amber-500/60 shadow-[0_0_50px_rgba(245,158,11,0.35)] backdrop-blur-2xl overflow-hidden">
+          {/* Subtle Ambient Scanline Grid */}
+          <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-sky-500/5 to-amber-500/10 pointer-events-none" />
 
           {/* Header Row */}
           <div className="relative z-10 flex items-center justify-between pb-2 border-b border-amber-500/30 text-xs font-mono">
@@ -232,7 +234,7 @@ export function TourHudControls() {
                 onClick={() => setVoiceEnabled(!voiceEnabled)}
                 className={`p-1.5 rounded-lg border transition-colors ${
                   voiceEnabled
-                    ? "bg-amber-500/20 border-amber-400 text-amber-300"
+                    ? "bg-amber-500/20 border-amber-400 text-amber-300 shadow-[0_0_10px_rgba(245,158,11,0.2)]"
                     : "border-white/10 text-muted-foreground"
                 }`}
                 title={voiceEnabled ? "Mudo" : "Ativar Voz"}
@@ -242,7 +244,7 @@ export function TourHudControls() {
 
               <button
                 onClick={togglePause}
-                className="p-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 text-amber-300 hover:bg-amber-500/30 transition-colors"
+                className="p-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 text-amber-300 hover:bg-amber-500/30 transition-colors cursor-pointer"
                 title={isPaused ? "Retomar Tour" : "Pausar Tour"}
               >
                 {isPaused ? <Play className="w-3.5 h-3.5" /> : <Pause className="w-3.5 h-3.5" />}
@@ -250,7 +252,7 @@ export function TourHudControls() {
 
               <button
                 onClick={handleNext}
-                className="p-1.5 rounded-lg border border-amber-500/40 bg-amber-500 text-black font-bold hover:bg-amber-400 transition-colors"
+                className="p-1.5 rounded-lg border border-amber-500/40 bg-amber-500 text-black font-bold hover:bg-amber-400 transition-colors cursor-pointer shadow-sm"
                 title="Próxima Etapa"
               >
                 <SkipForward className="w-3.5 h-3.5" />
@@ -258,7 +260,7 @@ export function TourHudControls() {
 
               <button
                 onClick={handleClose}
-                className="p-1.5 rounded-lg border border-white/20 text-muted-foreground hover:text-foreground hover:bg-white/10 transition-colors ml-1"
+                className="p-1.5 rounded-lg border border-white/20 text-muted-foreground hover:text-foreground hover:bg-white/10 transition-colors ml-1 cursor-pointer"
                 title="Encerrar Tour"
               >
                 <X className="w-3.5 h-3.5" />
@@ -266,25 +268,40 @@ export function TourHudControls() {
             </div>
           </div>
 
-          {/* Active Step Narration Stream */}
-          <div className="relative z-10 pt-2.5">
-            <div className="text-[11px] font-mono text-amber-300 font-bold flex items-center gap-1.5 mb-1">
-              <Sparkles className="w-3 h-3 text-amber-400" />
-              <span>{currentStep.title} — {currentStep.subtitle}</span>
+          {/* Hologram Stage & Active Step Narration Row */}
+          <div className="relative z-10 pt-2.5 flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+            {/* 3D Holographic Sci-Fi Viewport */}
+            <div className="relative w-24 h-24 sm:w-28 sm:h-28 shrink-0 rounded-2xl bg-black/80 border border-sky-500/40 shadow-[0_0_20px_rgba(56,189,248,0.25)] overflow-hidden flex flex-col items-center justify-center">
+              <div className="absolute top-1 left-1.5 text-[8px] font-mono text-sky-400 font-bold z-10 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />
+                <span>3D HOLO</span>
+              </div>
+              <JarvisTourHologram stepId={currentStep.id} />
+              <div className="absolute bottom-1 inset-x-0 text-center text-[7px] font-mono text-sky-400/70 tracking-widest uppercase pointer-events-none">
+                STARK PROTOCOL
+              </div>
             </div>
-            <p className="text-xs sm:text-[13px] font-mono text-slate-200 leading-relaxed min-h-[36px]">
-              {displayedNarration}
-              <span className="inline-block w-1.5 h-3 ml-1 bg-amber-400 animate-pulse align-middle" />
-            </p>
+
+            {/* Narration Text Stream */}
+            <div className="flex-1 min-w-0">
+              <div className="text-[11px] font-mono text-amber-300 font-bold flex items-center gap-1.5 mb-1">
+                <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <span className="truncate">{currentStep.title} — {currentStep.subtitle}</span>
+              </div>
+              <p className="text-xs sm:text-[13px] font-mono text-slate-200 leading-relaxed min-h-[48px]">
+                {displayedNarration}
+                <span className="inline-block w-1.5 h-3 ml-1 bg-amber-400 animate-pulse align-middle" />
+              </p>
+            </div>
           </div>
 
           {/* Bottom Progress Bar */}
-          <div className="relative z-10 mt-2.5 h-1 w-full bg-white/10 rounded-full overflow-hidden">
+          <div className="relative z-10 mt-3 h-1 w-full bg-white/10 rounded-full overflow-hidden">
             <motion.div
               initial={{ width: "0%" }}
               animate={{ width: `${((currentStepIndex + 1) / TOUR_STEPS.length) * 100}%` }}
               transition={{ duration: 0.4 }}
-              className="h-full bg-gradient-to-r from-amber-500 to-orange-500 shadow-[0_0_8px_#f59e0b]"
+              className="h-full bg-gradient-to-r from-sky-500 via-amber-500 to-orange-500 shadow-[0_0_8px_#f59e0b]"
             />
           </div>
         </div>
