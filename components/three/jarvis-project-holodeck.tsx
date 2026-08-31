@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion"
+import * as THREE from "three"
 import {
   X,
   Sparkles,
