@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useEffect, useRef } from "react"
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import {
@@ -39,6 +39,24 @@ export function IdPassCard() {
   const glareY = useTransform(mouseY, [-0.5, 0.5], ["0%", "100%"])
 
   const [scanStatus, setScanStatus] = useState("SCANNING BIOMETRICS...")
+
+  // Listen to Jarvis Autonomous Tour Trigger
+  useEffect(() => {
+    const handleTriggerScan = () => {
+      handleCardClick()
+    }
+    const handleCloseScan = () => {
+      setIsScanning(false)
+      setIsModalOpen(false)
+    }
+
+    window.addEventListener("trigger-id-card-scan", handleTriggerScan)
+    window.addEventListener("close-id-card-scan", handleCloseScan)
+    return () => {
+      window.removeEventListener("trigger-id-card-scan", handleTriggerScan)
+      window.removeEventListener("close-id-card-scan", handleCloseScan)
+    }
+  }, [])
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return

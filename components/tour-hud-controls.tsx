@@ -135,6 +135,15 @@ export function TourHudControls() {
       })
     )
 
+    // Trigger ID Pass Card Scan in About Section
+    if (currentStep.id === "about") {
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent("trigger-id-card-scan"))
+      }, 700)
+    } else {
+      window.dispatchEvent(new CustomEvent("close-id-card-scan"))
+    }
+
     // Open/Close 3D Project Holo-Deck
     if (currentStep.id === "maker_lab" || currentStep.id === "projects") {
       window.dispatchEvent(
@@ -172,6 +181,7 @@ export function TourHudControls() {
         tourAudioRef.current.pause()
       }
       window.dispatchEvent(new CustomEvent("close-holodeck-project"))
+      window.dispatchEvent(new CustomEvent("close-id-card-scan"))
     }
   }, [isActive, currentStepIndex, isPaused, voiceEnabled])
 
@@ -181,6 +191,7 @@ export function TourHudControls() {
       tourAudioRef.current.currentTime = 0
     }
     window.dispatchEvent(new CustomEvent("close-holodeck-project"))
+    window.dispatchEvent(new CustomEvent("close-id-card-scan"))
     if (currentStepIndex < TOUR_STEPS.length - 1) {
       setCurrentStepIndex((prev) => prev + 1)
     } else {
@@ -192,6 +203,7 @@ export function TourHudControls() {
     setIsActive(false)
     setIsPaused(false)
     window.dispatchEvent(new CustomEvent("close-holodeck-project"))
+    window.dispatchEvent(new CustomEvent("close-id-card-scan"))
     if (timerRef.current) clearTimeout(timerRef.current)
     if (tourAudioRef.current) {
       tourAudioRef.current.pause()

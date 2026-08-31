@@ -25,11 +25,11 @@ export const TOUR_STEPS: TourStep[] = [
   {
     id: "about",
     title: "PROTOCOLO 02 // HISTÓRICO DE MISSÕES",
-    subtitle: "Engenharia de Missão Crítica & Formação",
+    subtitle: "Escaneando Credenciais Biométricas",
     targetSection: "#sobre",
     narration:
-      "Acessando o histórico de missões do Criador. Victor é graduado em Análise de Sistemas pela UNIFOR e pós-graduado em Full Stack pela INFNET. Ele liderou a modernização do inventário corporativo do Cometa Supermercados, eliminando distorções contábeis e conectando ERPs legados a dashboards em tempo real.",
-    duration: 11500,
+      "Escaneando credenciais biométricas de Victor Santos. Acesso Nível 4 confirmado: graduado em Análise de Sistemas pela UNIFOR e pós-graduado em Full Stack pela INFNET. Observe o crachá holográfico abrindo com o histórico de missões e certificações de engenharia.",
+    duration: 12500,
   },
   {
     id: "maker_lab",
