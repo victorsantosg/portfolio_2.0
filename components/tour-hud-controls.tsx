@@ -232,10 +232,10 @@ export function TourHudControls() {
   return (
     <AnimatePresence>
       <motion.div
-        initial={{ opacity: 0, y: -30 }}
+        initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -30 }}
-        className="fixed top-18 sm:top-20 left-1/2 -translate-x-1/2 z-[9999] w-[95vw] max-w-3xl flex flex-col gap-2 pointer-events-auto"
+        exit={{ opacity: 0, y: 40 }}
+        className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-[9999] w-[95vw] max-w-3xl flex flex-col gap-2 pointer-events-auto"
       >
         {/* Main HUD Banner with Integrated 3D Holographic Stage */}
         <div className="relative p-3.5 sm:p-4 rounded-2xl bg-gray-950/98 border-2 border-amber-500/60 shadow-[0_0_50px_rgba(245,158,11,0.35)] backdrop-blur-2xl overflow-hidden">
