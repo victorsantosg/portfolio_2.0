@@ -246,8 +246,22 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
 
         const playPromise = audio.play()
         if (playPromise !== undefined) {
-          playPromise.catch((err) => {
-            console.warn("Audio play prevented by browser autoplay policy:", err)
+          playPromise.catch(() => {
+            // Browser autoplay blocked because user hasn't clicked page yet
+            // Queue playback on the very first user interaction anywhere
+            const unlockAndPlay = () => {
+              if (audioRef.current && audioRef.current.paused) {
+                audioRef.current.play().catch(() => {})
+              }
+              window.removeEventListener("pointerdown", unlockAndPlay)
+              window.removeEventListener("click", unlockAndPlay)
+              window.removeEventListener("touchstart", unlockAndPlay)
+              window.removeEventListener("keydown", unlockAndPlay)
+            }
+            window.addEventListener("pointerdown", unlockAndPlay, { once: true })
+            window.addEventListener("click", unlockAndPlay, { once: true })
+            window.addEventListener("touchstart", unlockAndPlay, { once: true })
+            window.addEventListener("keydown", unlockAndPlay, { once: true })
           })
         }
       }
@@ -516,7 +530,13 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
 
         {/* Holographic Glowing Sphere Trigger Button - Discreto & Elegante */}
         <motion.button
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => {
+            const next = !isOpen
+            setIsOpen(next)
+            if (next && currentState !== "ai_chat") {
+              speakHumanizedJarvis(dialogContent[currentState].text)
+            }
+          }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className="relative w-13 h-13 sm:w-14 sm:h-14 rounded-full flex items-center justify-center cursor-pointer group shadow-[0_0_20px_rgba(245,158,11,0.35)]"
@@ -626,6 +646,19 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
                       <span className="inline-block w-2 h-3.5 ml-1 bg-amber-400 animate-pulse align-middle" />
                     )}
                   </p>
+
+                  {/* Replay / Listen Voice Trigger */}
+                  <div className="mt-2.5 pt-2 border-t border-amber-500/15 flex items-center justify-between">
+                    <button
+                      type="button"
+                      onClick={() => speakHumanizedJarvis(displayedText || dialogContent[currentState].text)}
+                      className="text-[10px] font-mono text-amber-400/90 hover:text-amber-300 flex items-center gap-1.5 px-2 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20 hover:border-amber-500/40 transition-all cursor-pointer"
+                    >
+                      <Volume2 className="w-3 h-3 text-amber-400" />
+                      <span>Ouvir Voz do J.A.R.V.I.S.</span>
+                    </button>
+                    <span className="text-[9px] text-muted-foreground font-mono">Neural Audio 1.3x</span>
+                  </div>
                 </div>
               ) : (
                 /* Interactive Conversational History Thread */
