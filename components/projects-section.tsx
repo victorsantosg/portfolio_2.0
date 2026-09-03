@@ -22,7 +22,8 @@ import {
   Cpu,
   X,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Sparkles,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -339,6 +340,16 @@ export function ProjectsSection() {
     setSelectedProjectId(project.id)
   }
 
+  const openInHolodeck = (project: any) => {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("open-holodeck-project", {
+          detail: { project, id: project.id, projectId: project.id },
+        })
+      )
+    }
+  }
+
   return (
     <section id="projetos" className="relative py-20 md:py-28 overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
@@ -412,6 +423,7 @@ export function ProjectsSection() {
               <HorizontalScrollRow
                 projects={projects.filter((p) => p.category === "corporate")}
                 openProjectDetails={openProjectDetails}
+                openInHolodeck={openInHolodeck}
                 setZoomImage={setZoomImage}
               />
             </motion.div>
@@ -437,6 +449,7 @@ export function ProjectsSection() {
               <HorizontalScrollRow
                 projects={projects.filter((p) => p.category === "personal")}
                 openProjectDetails={openProjectDetails}
+                openInHolodeck={openInHolodeck}
                 setZoomImage={setZoomImage}
               />
             </motion.div>
@@ -445,20 +458,20 @@ export function ProjectsSection() {
       </div>
 
       <Dialog open={!!selectedProject} onOpenChange={(open) => !open && setSelectedProjectId(null)}>
-        <DialogContent className="max-w-3xl bg-[#0c0a08]/95 backdrop-blur-2xl border border-[#ee7112]/50 p-0 overflow-hidden shadow-[0_25px_70px_rgba(238,113,18,0.25)] rounded-2xl">
-          <div className="flex items-center justify-between border-b border-[#ee7112]/20 px-6 py-4 bg-gradient-to-r from-[#18120c] via-[#0f0c08] to-[#18120c]">
-            <DialogTitle className="text-xl font-bold flex items-center gap-3 text-foreground">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#ee7112] animate-pulse" />
-              <span>{selectedProject?.title}</span>
+        <DialogContent className="w-[95vw] sm:max-w-2xl md:max-w-3xl max-h-[90vh] bg-[#0c0a08]/95 backdrop-blur-2xl border border-[#ee7112]/50 p-0 overflow-hidden shadow-[0_25px_70px_rgba(238,113,18,0.25)] rounded-2xl flex flex-col">
+          <div className="flex items-center justify-between border-b border-[#ee7112]/20 px-4 sm:px-6 py-3.5 bg-gradient-to-r from-[#18120c] via-[#0f0c08] to-[#18120c] shrink-0">
+            <DialogTitle className="text-base sm:text-xl font-bold flex items-center gap-3 text-foreground truncate pr-6">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#ee7112] animate-pulse shrink-0" />
+              <span className="truncate">{selectedProject?.title}</span>
             </DialogTitle>
           </div>
 
           {selectedProject && (
-            <div className="flex flex-col h-[75vh]">
+            <div className="flex flex-col flex-1 overflow-hidden min-h-0">
               {/* Content */}
-              <div className="flex-1 overflow-y-auto p-6 space-y-6">
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
                 <div 
-                  className="aspect-video rounded-xl bg-secondary overflow-hidden relative border border-border/50 shadow-inner cursor-zoom-in"
+                  className="aspect-video rounded-xl bg-secondary overflow-hidden relative border border-border/50 shadow-inner cursor-zoom-in max-h-[320px]"
                   onClick={() => setZoomImage(selectedProject.image)}
                 >
                   <Image
@@ -469,37 +482,37 @@ export function ProjectsSection() {
                   />
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    <div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4 min-w-0">
+                    <div className="min-w-0">
                       <h4 className="font-semibold text-primary flex items-center gap-2 mb-2">
-                        <Zap className="h-4 w-4" />
-                        {t.projects.challenge}
+                        <Zap className="h-4 w-4 shrink-0" />
+                        <span>{t.projects.challenge}</span>
                       </h4>
-                      <p className="text-muted-foreground text-sm leading-relaxed">
+                      <p className="text-muted-foreground text-sm leading-relaxed break-words">
                         {selectedProject.details.challenge}
                       </p>
                     </div>
 
-                    <div>
+                    <div className="min-w-0">
                       <h4 className="font-semibold text-primary flex items-center gap-2 mb-2">
-                        <Code className="h-4 w-4" />
-                        {t.projects.solution}
+                        <Code className="h-4 w-4 shrink-0" />
+                        <span>{t.projects.solution}</span>
                       </h4>
-                      <p className="text-muted-foreground text-sm leading-relaxed">
+                      <p className="text-muted-foreground text-sm leading-relaxed break-words">
                         {selectedProject.details.solution}
                       </p>
                     </div>
                   </div>
 
-                  <div>
+                  <div className="min-w-0">
                     <h4 className="font-semibold mb-3">{t.projects.stackTitle}</h4>
                     <div className="flex flex-wrap gap-1.5">
                       {selectedProject.details.techStack.map((tech: string) => (
                         <Badge
                           key={tech}
                           variant="secondary"
-                          className="bg-secondary text-foreground hover:bg-secondary/80 border border-border/30"
+                          className="bg-secondary text-foreground hover:bg-secondary/80 border border-border/30 text-xs"
                         >
                           {tech}
                         </Badge>
@@ -510,45 +523,61 @@ export function ProjectsSection() {
               </div>
 
               {/* Dialog Footer */}
-              <div className="border-t border-border bg-secondary/20 p-4 flex flex-col sm:flex-row items-center gap-3">
-                {selectedProject.isPrivate ? (
-                  <div className="w-full sm:flex-1 text-xs text-amber-500 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2.5 flex items-center gap-2 font-medium">
-                    <span className="h-2 w-2 rounded-full bg-amber-500 shrink-0 animate-pulse" />
-                    {language === "pt"
-                      ? "Código-fonte restrito e projeto não publicado externamente por questões de confidencialidade/uso interno."
-                      : "Source code restricted and project not published externally due to confidentiality/internal use."}
-                  </div>
-                ) : (
-                  <>
-                    <Button
-                      asChild
-                      className="w-full sm:flex-1 bg-primary text-primary-foreground font-semibold"
-                    >
-                      <a
-                        href={selectedProject.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
+              <div className="border-t border-border/40 bg-secondary/30 p-3 sm:p-4 flex flex-col gap-2.5 shrink-0">
+                <Button
+                  onClick={() => {
+                    const p = selectedProject
+                    setSelectedProjectId(null)
+                    openInHolodeck(p)
+                  }}
+                  className="w-full bg-gradient-to-r from-sky-500 via-sky-400 to-amber-500 hover:from-sky-400 hover:to-amber-400 text-black font-extrabold shadow-[0_0_20px_rgba(56,189,248,0.35)] cursor-pointer text-xs sm:text-sm h-10 rounded-xl flex items-center justify-center gap-2"
+                >
+                  <Sparkles className="h-4 w-4 text-black shrink-0" />
+                  <span>Projetar no Holodeck 3D (Exploded View & Slicer)</span>
+                </Button>
+
+                <div className="flex flex-col sm:flex-row items-center gap-2 w-full">
+                  {selectedProject.isPrivate ? (
+                    <div className="w-full text-xs text-amber-500 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2 flex items-center gap-2 font-medium">
+                      <span className="h-2 w-2 rounded-full bg-amber-500 shrink-0 animate-pulse" />
+                      <span className="leading-snug">
+                        {language === "pt"
+                          ? "Código-fonte restrito e projeto não publicado externamente por questões de confidencialidade/uso interno."
+                          : "Source code restricted and project not published externally due to confidentiality/internal use."}
+                      </span>
+                    </div>
+                  ) : (
+                    <>
+                      <Button
+                        asChild
+                        className="w-full sm:flex-1 bg-primary text-primary-foreground font-semibold h-9 rounded-xl text-xs sm:text-sm"
                       >
-                        <ExternalLink className="mr-2 h-4 w-4" />
-                        {t.projects.btnDemo}
-                      </a>
-                    </Button>
-                    <Button
-                      asChild
-                      variant="outline"
-                      className="w-full sm:flex-1 font-semibold"
-                    >
-                      <a
-                        href={selectedProject.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        <a
+                          href={selectedProject.demo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <ExternalLink className="mr-2 h-4 w-4" />
+                          {t.projects.btnDemo}
+                        </a>
+                      </Button>
+                      <Button
+                        asChild
+                        variant="outline"
+                        className="w-full sm:flex-1 font-semibold h-9 rounded-xl text-xs sm:text-sm"
                       >
-                        <Github className="mr-2 h-4 w-4" />
-                        {t.projects.btnCode}
-                      </a>
-                    </Button>
-                  </>
-                )}
+                        <a
+                          href={selectedProject.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Github className="mr-2 h-4 w-4" />
+                          {t.projects.btnCode}
+                        </a>
+                      </Button>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           )}
@@ -586,10 +615,12 @@ export function ProjectsSection() {
 function HorizontalScrollRow({
   projects,
   openProjectDetails,
+  openInHolodeck,
   setZoomImage,
 }: {
   projects: any[]
   openProjectDetails: (project: any) => void
+  openInHolodeck: (project: any) => void
   setZoomImage: (img: string) => void
 }) {
   return (
@@ -607,6 +638,7 @@ function HorizontalScrollRow({
             <ProjectCard
               project={project}
               onViewDetails={() => openProjectDetails(project)}
+              onHolodeckClick={() => openInHolodeck(project)}
               onImageClick={setZoomImage}
             />
           </motion.div>
@@ -619,10 +651,12 @@ function HorizontalScrollRow({
 function ProjectCard({
   project,
   onViewDetails,
+  onHolodeckClick,
   onImageClick,
 }: {
   project: any
   onViewDetails: () => void
+  onHolodeckClick: () => void
   onImageClick: (imageUrl: string) => void
 }) {
   const { language, t } = useLanguage()
@@ -656,7 +690,7 @@ function ProjectCard({
   const handleClick = (e: React.MouseEvent) => {
     setIsClicking(true)
     setTimeout(() => setIsClicking(false), 400)
-    onViewDetails()
+    onHolodeckClick()
   }
 
   return (
@@ -736,9 +770,7 @@ function ProjectCard({
                     : "bg-emerald-500/30 text-emerald-200 border-emerald-400/60 shadow-[0_0_18px_rgba(16,185,129,0.5)]"
                 }`}
               >
-                {project.category === "corporate"
-                  ? (language === "pt" ? "🏢 Corporativo" : "🏢 Corporate")
-                  : (language === "pt" ? "⚡ Automação / App" : "⚡ Automation / App")}
+                {project.category === "corporate" ? "🏢 Corporativo" : "🚀 Pessoal"}
               </Badge>
             </div>
 
@@ -788,9 +820,14 @@ function ProjectCard({
           <div className="flex items-center gap-1.5 sm:gap-2 w-full">
             <Button
               size="sm"
-              className="flex-1 text-[10px] sm:text-xs py-0.5 h-7 sm:h-8 bg-[#ee7112]/20 text-[#ee7112] hover:bg-[#ee7112] hover:text-white border border-[#ee7112]/40 transition-all duration-300 font-semibold shadow-[0_0_15px_rgba(238,113,18,0.15)] group-hover:shadow-[0_0_20px_rgba(238,113,18,0.4)]"
+              onClick={(e) => {
+                e.stopPropagation()
+                onHolodeckClick()
+              }}
+              className="flex-1 text-[10px] sm:text-xs py-0.5 h-7 sm:h-8 bg-sky-500/20 text-sky-300 hover:bg-sky-400 hover:text-black border border-sky-400/40 transition-all duration-300 font-bold shadow-[0_0_15px_rgba(56,189,248,0.2)] group-hover:shadow-[0_0_20px_rgba(56,189,248,0.4)] flex items-center justify-center gap-1 cursor-pointer"
+              title="Explorar Réplica 3D no Holodeck com Exploded View"
             >
-              {t.projects.btnDetails}
+              <span>Holodeck 3D</span>
             </Button>
             {!project.isPrivate ? (
               <Button

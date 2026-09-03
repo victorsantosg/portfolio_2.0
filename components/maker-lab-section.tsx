@@ -20,6 +20,7 @@ import {
   Activity,
   Maximize2,
   X,
+  Sparkles,
 } from "lucide-react"
 import { SandboxViewer } from "@/components/three/sandbox-viewer"
 import { Button } from "@/components/ui/button"
@@ -314,6 +315,23 @@ export function MakerLabSection() {
                 INDUSTRIAL GRADE
               </span>
             </div>
+
+            {/* Launch in Holodeck 3D Button */}
+            <Button
+              onClick={() => {
+                if (typeof window !== "undefined") {
+                  window.dispatchEvent(
+                    new CustomEvent("open-holodeck-project", {
+                      detail: { id: "wms_3d", stepId: "wms_3d" },
+                    })
+                  )
+                }
+              }}
+              className="w-full h-11 rounded-2xl bg-gradient-to-r from-sky-500 via-sky-400 to-amber-500 hover:from-sky-400 hover:to-amber-400 text-black font-extrabold shadow-[0_0_30px_rgba(56,189,248,0.35)] cursor-pointer text-xs sm:text-sm flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
+            >
+              <Sparkles className="w-4 h-4 text-black" />
+              <span>Explodir no Holodeck 3D & Fatiador Maker (STL)</span>
+            </Button>
           </div>
         </div>
       </div>

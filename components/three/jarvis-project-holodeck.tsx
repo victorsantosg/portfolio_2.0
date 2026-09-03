@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion"
 import * as THREE from "three"
 import {
@@ -16,303 +16,240 @@ import {
   Minimize2,
   Terminal,
   Zap,
+  Volume2,
+  VolumeX,
+  RotateCw,
+  Printer,
+  Download,
+  Play,
+  Pause,
+  RefreshCw,
+  Eye,
+  Sliders,
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-
-export interface HoloProjectData {
-  id: string
-  title: string
-  subtitle: string
-  image: string
-  tags: string[]
-  metrics: { label: string; value: string; color?: string }[]
-  architecture: string
-  solution: string
-  liveDemoHref?: string
-}
-
-export const HOLODECK_PROJECTS: Record<string, HoloProjectData> = {
-  maker_lab: {
-    id: "wms_3d",
-    title: "DIGITAL TWIN WMS // 3D COMETA",
-    subtitle: "Gêmeo Digital de Armazém Logístico com 11.200 Posições Reais",
-    image: "/wms-estoque-real-1.png",
-    tags: ["Three.js", "Next.js 16", "React 19", "FEFO Algorithm", "TypeScript", "Tailwind CSS v4"],
-    metrics: [
-      { label: "Capacidade Modelada", value: "11.200+ Posições", color: "text-amber-400" },
-      { label: "Taxa de Atualização", value: "60 FPS ao Vivo", color: "text-sky-400" },
-      { label: "Precisão de Rota", value: "Curva FEFO 100%", color: "text-emerald-400" },
-    ],
-    architecture: "Three.js WebGL + Shaders customizados para renderização de estantes porta-paletes, câmaras de frios e docas com mapa de calor térmico e telemetria tridimensional.",
-    solution: "Eliminou perdas por vencimento e otimizou rotas de empilhadeiras em armazéns de alta rotação no Cometa Supermercados.",
-    liveDemoHref: "#maker-lab",
-  },
-  projects: {
-    id: "erp_inventario",
-    title: "ERP INVENTÁRIO CORPORATIVO // FULL STACK",
-    subtitle: "Sistema de Alta Concorrência para Auditoria e Gestão de Perdas",
-    image: "/inventario_img_enhanced.png",
-    tags: ["Next.js 16", "Fastify", "Prisma ORM", "PostgreSQL", "Docker", "TanStack Table"],
-    metrics: [
-      { label: "Latência de API", value: "28ms média", color: "text-sky-400" },
-      { label: "Concorrência", value: "5.000+ Reqs/s", color: "text-amber-400" },
-      { label: "Integridade de Dados", value: "100% ACID", color: "text-emerald-400" },
-    ],
-    architecture: "Backend resiliente em Node.js com Fastify e Prisma ORM para queries de altíssima velocidade em bancos PostgreSQL particionados.",
-    solution: "Sincronização em tempo real de contagens cegas de estoque com prevenção ativa de divergências fiscais e operacionais.",
-    liveDemoHref: "#projetos",
-  },
-}
+import {
+  HoloProjectData,
+  HOLODECK_REGISTRY,
+  getHolodeckProject,
+  exportMeshesToSTL,
+} from "@/lib/holodeck-data"
+import { buildArchetypeScene, ArchetypeSceneResult } from "@/components/three/holodeck-archetypes"
 
 interface Holo3DSceneProps {
-  projectId: string
-  cameraPreset?: string
+  project: HoloProjectData
+  explosionProgress: number
+  isSlicerMode: boolean
+  sliceProgress: number
+  onSceneReady?: (result: ArchetypeSceneResult) => void
+  onToggleRealImage?: () => void
 }
 
-function Holo3DLiveScene({ projectId }: Holo3DSceneProps) {
+function Holo3DLiveScene({
+  project,
+  explosionProgress,
+  isSlicerMode,
+  sliceProgress,
+  onSceneReady,
+  onToggleRealImage,
+}: Holo3DSceneProps) {
   const mountRef = useRef<HTMLDivElement>(null)
   const isDraggingRef = useRef(false)
-  const previousMousePositionRef = useRef({ x: 0, y: 0 })
+  const previousPointerPosRef = useRef({ x: 0, y: 0 })
+  const sceneResultRef = useRef<ArchetypeSceneResult | null>(null)
+  const rootGroupRef = useRef<THREE.Group | null>(null)
+
+  // Track zoom distance and focus states
+  const cameraDistanceRef = useRef(5.8)
+  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null)
+  const [isZoomFocused, setIsZoomFocused] = useState(false)
+  const isZoomFocusedRef = useRef(false)
+  const [isPaused, setIsPaused] = useState(false)
+  const isPausedRef = useRef(false)
+
+  useEffect(() => {
+    isZoomFocusedRef.current = isZoomFocused
+  }, [isZoomFocused])
+
+  useEffect(() => {
+    isPausedRef.current = isPaused
+  }, [isPaused])
+
+  // Keep animated props in refs for smooth requestAnimationFrame
+  const explosionRef = useRef(explosionProgress)
+  const isSlicerRef = useRef(isSlicerMode)
+  const sliceProgRef = useRef(sliceProgress)
+
+  useEffect(() => {
+    explosionRef.current = explosionProgress
+  }, [explosionProgress])
+
+  useEffect(() => {
+    isSlicerRef.current = isSlicerMode
+  }, [isSlicerMode])
+
+  useEffect(() => {
+    sliceProgRef.current = sliceProgress
+  }, [sliceProgress])
 
   useEffect(() => {
     if (!mountRef.current) return
     const container = mountRef.current
-    const width = container.clientWidth || 600
-    const height = container.clientHeight || 340
+    const width = container.clientWidth || 700
+    const height = container.clientHeight || 380
 
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100)
-    camera.position.set(0, 4, 9)
-    camera.lookAt(0, 0, 0)
+    camera.position.set(0, 1.35, cameraDistanceRef.current)
+    camera.lookAt(0, 0.95, 0)
+    cameraRef.current = camera
 
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" })
     renderer.setSize(width, height)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2.5))
+    renderer.outputColorSpace = THREE.SRGBColorSpace
     container.appendChild(renderer.domElement)
 
     // Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.9)
     scene.add(ambientLight)
 
-    const cyanLight = new THREE.PointLight(0x38bdf8, 4, 15)
-    cyanLight.position.set(3, 5, 4)
+    const cyanLight = new THREE.PointLight(0x38bdf8, 5, 20)
+    cyanLight.position.set(4, 6, 4)
     scene.add(cyanLight)
 
-    const amberLight = new THREE.PointLight(0xf59e0b, 3, 15)
-    amberLight.position.set(-3, -2, 4)
+    const amberLight = new THREE.PointLight(0xf59e0b, 4, 20)
+    amberLight.position.set(-4, -3, 4)
     scene.add(amberLight)
 
-    // Grid Floor
-    const gridHelper = new THREE.GridHelper(12, 24, 0x38bdf8, 0x1e293b)
-    gridHelper.position.y = -1.2
+    const accentLight = new THREE.PointLight(0x10b981, 3, 15)
+    accentLight.position.set(0, 4, -4)
+    scene.add(accentLight)
+
+    // Holographic Grid Floor
+    const gridHelper = new THREE.GridHelper(14, 28, 0x38bdf8, 0x1e293b)
+    gridHelper.position.y = -1.6
     scene.add(gridHelper)
 
-    // Holographic Base Ring
-    const ringGeo = new THREE.RingGeometry(3.5, 3.7, 48)
+    // Outer Hologram Emitter Ring
+    const ringGeo = new THREE.RingGeometry(3.6, 3.8, 64)
     const ringMat = new THREE.MeshBasicMaterial({
       color: 0x38bdf8,
       side: THREE.DoubleSide,
       transparent: true,
-      opacity: 0.4,
+      opacity: 0.45,
       wireframe: true,
     })
-    const ring = new THREE.Mesh(ringGeo, ringMat)
-    ring.rotation.x = Math.PI / 2
-    ring.position.y = -1.19
-    scene.add(ring)
+    const emitterRing = new THREE.Mesh(ringGeo, ringMat)
+    emitterRing.rotation.x = Math.PI / 2
+    emitterRing.position.y = -1.59
+    scene.add(emitterRing)
 
-    const rootGroup = new THREE.Group()
-    scene.add(rootGroup)
+    // Build Archetype 3D Scene with REAL project screenshot texture
+    const sceneResult = buildArchetypeScene(project.archetype, project.image)
+    sceneResultRef.current = sceneResult
+    rootGroupRef.current = sceneResult.rootGroup
+    scene.add(sceneResult.rootGroup)
 
-    // Laser Sweep Beam
-    const laserGeo = new THREE.PlaneGeometry(8, 0.05)
-    const laserMat = new THREE.MeshBasicMaterial({
-      color: 0x38bdf8,
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.8,
-    })
-    const laser = new THREE.Mesh(laserGeo, laserMat)
-    laser.rotation.x = Math.PI / 2
-    rootGroup.add(laser)
-
-    let animateCustom: (time: number) => void = () => {}
-
-    if (projectId === "wms_3d") {
-      // 3D WMS Warehouse Miniature with Multi-Tier Racks & Pallets
-      const warehouseGroup = new THREE.Group()
-
-      const rackMat = new THREE.MeshStandardMaterial({
-        color: 0x0284c7,
-        wireframe: true,
-        emissive: 0x0369a1,
-        emissiveIntensity: 0.3,
-      })
-
-      const palletColors = [0xf59e0b, 0x10b981, 0x38bdf8, 0xe11d48]
-
-      // 4 Rows of 5 Racks
-      for (let row = -2; row <= 2; row++) {
-        if (row === 0) continue // Central aisle
-        for (let col = -3; col <= 3; col++) {
-          for (let level = 0; level < 3; level++) {
-            const boxGeo = new THREE.BoxGeometry(0.5, 0.3, 0.5)
-            const color = palletColors[(Math.abs(row * 3 + col + level)) % palletColors.length]
-            const boxMat = new THREE.MeshStandardMaterial({
-              color: color,
-              emissive: color,
-              emissiveIntensity: 0.4,
-              wireframe: level === 2,
-            })
-            const box = new THREE.Mesh(boxGeo, boxMat)
-            box.position.set(col * 0.7, level * 0.45 - 0.7, row * 0.9)
-            warehouseGroup.add(box)
-          }
-
-          // Rack Frame Uprights
-          const frameGeo = new THREE.BoxGeometry(0.55, 1.4, 0.55)
-          const frame = new THREE.Mesh(frameGeo, rackMat)
-          frame.position.set(col * 0.7, -0.25, row * 0.9)
-          warehouseGroup.add(frame)
-        }
-      }
-
-      // Miniature Trucks at Docks
-      for (let t = -2; t <= 2; t++) {
-        const truckGroup = new THREE.Group()
-        const cabGeo = new THREE.BoxGeometry(0.35, 0.3, 0.3)
-        const cabMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b })
-        const cab = new THREE.Mesh(cabGeo, cabMat)
-        cab.position.set(0, -0.95, -2.2)
-
-        const trailerGeo = new THREE.BoxGeometry(0.35, 0.4, 0.7)
-        const trailerMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0 })
-        const trailer = new THREE.Mesh(trailerGeo, trailerMat)
-        trailer.position.set(0, -0.9, -1.6)
-
-        truckGroup.add(cab, trailer)
-        truckGroup.position.x = t * 1.1
-        warehouseGroup.add(truckGroup)
-      }
-
-      rootGroup.add(warehouseGroup)
-
-      animateCustom = (time) => {
-        warehouseGroup.rotation.y = time * 0.25
-        laser.position.z = Math.sin(time * 2) * 2.5
-        laser.position.y = -0.3 + Math.sin(time * 4) * 0.4
-      }
-    } else {
-      // 3D Cloud Data Center & Server Matrix (ERP & Microservices)
-      const serverGroup = new THREE.Group()
-
-      // 4 Futuristic Server Blades Towers
-      for (let s = -2; s <= 2; s++) {
-        if (s === 0) continue
-        const towerGeo = new THREE.BoxGeometry(0.6, 2.0, 0.6)
-        const towerMat = new THREE.MeshStandardMaterial({
-          color: 0x0f172a,
-          emissive: 0x0284c7,
-          emissiveIntensity: 0.2,
-          wireframe: true,
-        })
-        const tower = new THREE.Mesh(towerGeo, towerMat)
-        tower.position.set(s * 1.0, -0.2, 0)
-        serverGroup.add(tower)
-
-        // Blinking LED Activity Modules
-        for (let l = 0; l < 5; l++) {
-          const ledGeo = new THREE.BoxGeometry(0.5, 0.08, 0.55)
-          const ledColor = l % 2 === 0 ? 0x10b981 : 0xf59e0b
-          const ledMat = new THREE.MeshStandardMaterial({
-            color: ledColor,
-            emissive: ledColor,
-            emissiveIntensity: 0.7,
-          })
-          const led = new THREE.Mesh(ledGeo, ledMat)
-          led.position.set(s * 1.0, l * 0.35 - 0.9, 0)
-          serverGroup.add(led)
-        }
-      }
-
-      // Central Floating Quantum Core (Database / API)
-      const coreGeo = new THREE.IcosahedronGeometry(0.6, 1)
-      const coreMat = new THREE.MeshStandardMaterial({
-        color: 0x38bdf8,
-        emissive: 0x0284c7,
-        emissiveIntensity: 0.8,
-        wireframe: true,
-      })
-      const core = new THREE.Mesh(coreGeo, coreMat)
-      core.position.set(0, 0, 0)
-      serverGroup.add(core)
-
-      // Orbiting Data Stream Particles
-      const streamCount = 120
-      const streamGeo = new THREE.BufferGeometry()
-      const streamPos = new Float32Array(streamCount * 3)
-      for (let p = 0; p < streamCount * 3; p += 3) {
-        const radius = 1.2 + Math.random() * 1.5
-        const angle = Math.random() * Math.PI * 2
-        streamPos[p] = Math.cos(angle) * radius
-        streamPos[p + 1] = (Math.random() - 0.5) * 1.8
-        streamPos[p + 2] = Math.sin(angle) * radius
-      }
-      streamGeo.setAttribute("position", new THREE.BufferAttribute(streamPos, 3))
-      const streamMat = new THREE.PointsMaterial({
-        color: 0x38bdf8,
-        size: 0.05,
-        transparent: true,
-        opacity: 0.8,
-      })
-      const streamPoints = new THREE.Points(streamGeo, streamMat)
-      serverGroup.add(streamPoints)
-
-      rootGroup.add(serverGroup)
-
-      animateCustom = (time) => {
-        serverGroup.rotation.y = time * 0.3
-        core.rotation.x = time * 1.2
-        core.rotation.y = time * 1.5
-        streamPoints.rotation.y = -time * 0.8
-        const pulse = 1 + Math.sin(time * 5) * 0.15
-        core.scale.set(pulse, pulse, pulse)
-      }
+    if (onSceneReady) {
+      onSceneReady(sceneResult)
     }
 
-    // Mouse Drag Rotation
-    const onMouseDown = (e: MouseEvent) => {
+    // Pointer Interaction (Mouse & Touch Orbit)
+    let touchStartDist = 0
+
+    const onPointerDown = (e: MouseEvent | TouchEvent) => {
       isDraggingRef.current = true
-      previousMousePositionRef.current = { x: e.clientX, y: e.clientY }
+      if ("touches" in e) {
+        if (e.touches.length === 1) {
+          previousPointerPosRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }
+        } else if (e.touches.length === 2) {
+          const dx = e.touches[0].clientX - e.touches[1].clientX
+          const dy = e.touches[0].clientY - e.touches[1].clientY
+          touchStartDist = Math.sqrt(dx * dx + dy * dy)
+        }
+      } else {
+        previousPointerPosRef.current = { x: e.clientX, y: e.clientY }
+      }
     }
-    const onMouseMove = (e: MouseEvent) => {
-      if (!isDraggingRef.current) return
-      const deltaX = e.clientX - previousMousePositionRef.current.x
-      const deltaY = e.clientY - previousMousePositionRef.current.y
-      rootGroup.rotation.y += deltaX * 0.01
-      rootGroup.rotation.x += deltaY * 0.01
-      previousMousePositionRef.current = { x: e.clientX, y: e.clientY }
+
+    const onPointerMove = (e: MouseEvent | TouchEvent) => {
+      if (!isDraggingRef.current || !rootGroupRef.current) return
+      if ("touches" in e) {
+        if (e.touches.length === 1) {
+          const deltaX = e.touches[0].clientX - previousPointerPosRef.current.x
+          const deltaY = e.touches[0].clientY - previousPointerPosRef.current.y
+          rootGroupRef.current.rotation.y += deltaX * 0.008
+          rootGroupRef.current.rotation.x += deltaY * 0.008
+          previousPointerPosRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }
+        } else if (e.touches.length === 2 && cameraRef.current) {
+          const dx = e.touches[0].clientX - e.touches[1].clientX
+          const dy = e.touches[0].clientY - e.touches[1].clientY
+          const dist = Math.sqrt(dx * dx + dy * dy)
+          const factor = touchStartDist / dist
+          cameraDistanceRef.current = THREE.MathUtils.clamp(cameraDistanceRef.current * factor, 4, 14)
+          cameraRef.current.position.setLength(cameraDistanceRef.current)
+          touchStartDist = dist
+        }
+      } else {
+        const deltaX = e.clientX - previousPointerPosRef.current.x
+        const deltaY = e.clientY - previousPointerPosRef.current.y
+        rootGroupRef.current.rotation.y += deltaX * 0.008
+        rootGroupRef.current.rotation.x += deltaY * 0.008
+        previousPointerPosRef.current = { x: e.clientX, y: e.clientY }
+      }
     }
-    const onMouseUp = () => {
+
+    const onPointerUp = () => {
       isDraggingRef.current = false
     }
 
-    container.addEventListener("mousedown", onMouseDown)
-    window.addEventListener("mousemove", onMouseMove)
-    window.addEventListener("mouseup", onMouseUp)
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault()
+      if (!cameraRef.current) return
+      cameraDistanceRef.current = THREE.MathUtils.clamp(
+        cameraDistanceRef.current + e.deltaY * 0.006,
+        4.5,
+        13.5
+      )
+      cameraRef.current.position.setLength(cameraDistanceRef.current)
+    }
 
+    container.addEventListener("mousedown", onPointerDown)
+    window.addEventListener("mousemove", onPointerMove)
+    window.addEventListener("mouseup", onPointerUp)
+
+    container.addEventListener("touchstart", onPointerDown, { passive: true })
+    window.addEventListener("touchmove", onPointerMove, { passive: true })
+    window.addEventListener("touchend", onPointerUp)
+    container.addEventListener("wheel", onWheel, { passive: false })
+
+    // Animation Loop
     let animId: number
     const clock = new THREE.Clock()
 
     const animate = () => {
       animId = requestAnimationFrame(animate)
       const time = clock.getElapsedTime()
-      if (!isDraggingRef.current) {
-        rootGroup.position.y = Math.sin(time * 1.5) * 0.05
-        ring.rotation.z = time * 0.3
+
+      if (rootGroupRef.current && !isDraggingRef.current) {
+        if (!isPausedRef.current) {
+          rootGroupRef.current.rotation.y += 0.0012
+        }
+        rootGroupRef.current.position.y = Math.sin(time * 1.5) * 0.03
+        emitterRing.rotation.z = time * 0.15
       }
-      animateCustom(time)
+
+      // Smooth camera interpolation for Focus Zoom
+      const targetDist = isZoomFocusedRef.current ? 3.8 : cameraDistanceRef.current
+      camera.position.z += (targetDist - camera.position.z) * 0.08
+      const targetCamY = isZoomFocusedRef.current ? 1.45 : 1.35
+      camera.position.y += (targetCamY - camera.position.y) * 0.08
+      const targetLookY = isZoomFocusedRef.current ? 1.45 : 0.95
+      camera.lookAt(0, targetLookY, 0)
+
+      sceneResult.animate(time, explosionRef.current, isSlicerRef.current, sliceProgRef.current)
       renderer.render(scene, camera)
     }
 
@@ -320,8 +257,8 @@ function Holo3DLiveScene({ projectId }: Holo3DSceneProps) {
 
     const handleResize = () => {
       if (!container) return
-      const w = container.clientWidth || 600
-      const h = container.clientHeight || 340
+      const w = container.clientWidth || 700
+      const h = container.clientHeight || 380
       camera.aspect = w / h
       camera.updateProjectionMatrix()
       renderer.setSize(w, h)
@@ -331,100 +268,98 @@ function Holo3DLiveScene({ projectId }: Holo3DSceneProps) {
 
     return () => {
       cancelAnimationFrame(animId)
-      container.removeEventListener("mousedown", onMouseDown)
-      window.removeEventListener("mousemove", onMouseMove)
-      window.removeEventListener("mouseup", onMouseUp)
+      container.removeEventListener("mousedown", onPointerDown)
+      window.removeEventListener("mousemove", onPointerMove)
+      window.removeEventListener("mouseup", onPointerUp)
+      container.removeEventListener("touchstart", onPointerDown)
+      window.removeEventListener("touchmove", onPointerMove)
+      window.removeEventListener("touchend", onPointerUp)
+      container.removeEventListener("wheel", onWheel)
       window.removeEventListener("resize", handleResize)
+
+      sceneResult.dispose()
       if (container && renderer.domElement) {
         container.removeChild(renderer.domElement)
       }
       renderer.dispose()
     }
-  }, [projectId])
+  }, [project.id, project.archetype, project.image])
 
   return (
     <div
       ref={mountRef}
-      className="relative w-full h-[260px] sm:h-[340px] rounded-2xl overflow-hidden bg-black/90 border border-sky-400/50 shadow-2xl cursor-grab active:cursor-grabbing select-none"
+      className="relative w-full h-[320px] sm:h-[420px] md:h-[470px] rounded-2xl overflow-hidden bg-black/95 border border-sky-400/50 shadow-[0_0_50px_rgba(56,189,248,0.2)] cursor-grab active:cursor-grabbing select-none"
     >
-      {/* 3D Viewport Controls & HUD Overlays */}
-      <div className="absolute top-2.5 left-2.5 z-10 flex items-center gap-1.5 pointer-events-none">
-        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-        <span className="text-[10px] font-mono text-sky-300 font-bold bg-black/80 px-2 py-0.5 rounded-lg border border-sky-400/40 backdrop-blur-md">
-          THREE.JS 3D LIVE • 60 FPS
+      {/* 3D Viewport HUD Overlays */}
+      <div className="absolute top-2.5 left-2.5 z-10 flex items-center gap-2 pointer-events-none">
+        <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+        <span className="text-[10px] font-mono text-sky-300 font-bold bg-black/85 px-2.5 py-1 rounded-lg border border-sky-400/40 backdrop-blur-md">
+          {isSlicerMode ? "🖨️ FATIAMENTO 3D (0.20mm)" : "🎮 EXPLODED 3D LIVE • 60 FPS"}
         </span>
       </div>
 
-      <div className="absolute top-2.5 right-2.5 z-10 text-[9px] font-mono text-muted-foreground bg-black/80 px-2 py-0.5 rounded-lg border border-white/10 pointer-events-none">
-        🖱️ Arraste para girar 3D
+      <div className="absolute top-2.5 right-2.5 z-10 flex items-center gap-1.5 pointer-events-auto">
+        {/* Toggle Zoom Focus */}
+        <button
+          onClick={() => setIsZoomFocused(!isZoomFocused)}
+          className={`flex items-center gap-1 text-[9px] font-mono font-bold px-2.5 py-1 rounded-lg border cursor-pointer transition-all shadow-md ${
+            isZoomFocused
+              ? "bg-sky-500 text-black border-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.5)]"
+              : "text-sky-300 bg-black/80 hover:bg-sky-500/20 border-sky-500/30"
+          }`}
+          title={isZoomFocused ? "Voltar ao ângulo geral" : "Aproximar zoom para ler todas as frases e números"}
+        >
+          <Maximize2 className="w-3 h-3" />
+          <span>{isZoomFocused ? "Zoom 100%" : "🔍 Foco na Tela"}</span>
+        </button>
+
+        {/* Pause Rotation */}
+        <button
+          onClick={() => setIsPaused(!isPaused)}
+          className={`flex items-center gap-1 text-[9px] font-mono font-bold px-2 py-1 rounded-lg border cursor-pointer transition-all ${
+            isPaused
+              ? "bg-amber-500 text-black border-amber-400"
+              : "text-slate-300 bg-black/80 hover:text-white border-white/10"
+          }`}
+          title={isPaused ? "Retomar rotação automática" : "Pausar rotação para leitura"}
+        >
+          {isPaused ? <Play className="w-3 h-3" /> : <Pause className="w-3 h-3" />}
+        </button>
+
+        {/* Switch to native HD */}
+        {onToggleRealImage && (
+          <button
+            onClick={onToggleRealImage}
+            className="flex items-center gap-1 text-[9px] font-mono font-bold text-amber-300 bg-amber-500/20 hover:bg-amber-500 hover:text-black px-2.5 py-1 rounded-lg border border-amber-500/40 cursor-pointer transition-all shadow-md"
+            title="Ver captura real da aplicação em 100% de nitidez nativa"
+          >
+            <Eye className="w-3 h-3" />
+            <span>Foto Real HD</span>
+          </button>
+        )}
       </div>
 
-      {/* Floating 3D Callout Tags */}
-      {projectId === "wms_3d" ? (
-        <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-3">
-          <div className="flex justify-between items-start mt-8">
-            <motion.div
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ repeat: Infinity, repeatType: "reverse", duration: 2 }}
-              className="text-[9px] font-mono text-emerald-300 bg-emerald-950/80 border border-emerald-500/50 px-2 py-1 rounded-md shadow-[0_0_10px_rgba(16,185,129,0.3)] backdrop-blur-sm"
+      {/* Dynamic Layer Indicators */}
+      {!isSlicerMode && (
+        <div className="absolute bottom-2.5 inset-x-2.5 z-10 pointer-events-none flex items-center justify-between gap-1 overflow-x-auto">
+          {project.layers.map((layer, i) => (
+            <div
+              key={i}
+              className="text-[9px] font-mono px-2 py-1 rounded-md bg-black/80 border border-white/15 backdrop-blur-md flex items-center gap-1.5 shrink-0"
             >
-              📍 CÂMARA DE FRIOS (-18°C)
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ repeat: Infinity, repeatType: "reverse", duration: 2.3, delay: 0.5 }}
-              className="text-[9px] font-mono text-amber-300 bg-amber-950/80 border border-amber-500/50 px-2 py-1 rounded-md shadow-[0_0_10px_rgba(245,158,11,0.3)] backdrop-blur-sm"
-            >
-              ⚡ CURVA FEFO (ALGORITMO)
-            </motion.div>
-          </div>
-
-          <div className="flex justify-center mb-2">
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ repeat: Infinity, repeatType: "reverse", duration: 2.5, delay: 1 }}
-              className="text-[9px] font-mono text-sky-300 bg-sky-950/80 border border-sky-500/50 px-2.5 py-1 rounded-md shadow-[0_0_10px_rgba(56,189,248,0.3)] backdrop-blur-sm"
-            >
-              🚛 12 DOCAS DE EXPEDIÇÃO & RECEBIMENTO
-            </motion.div>
-          </div>
+              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: layer.color }} />
+              <span className="text-white font-semibold">L{i + 1}: {layer.name}</span>
+            </div>
+          ))}
         </div>
-      ) : (
-        <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-3">
-          <div className="flex justify-between items-start mt-8">
-            <motion.div
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ repeat: Infinity, repeatType: "reverse", duration: 2 }}
-              className="text-[9px] font-mono text-sky-300 bg-sky-950/80 border border-sky-500/50 px-2 py-1 rounded-md shadow-[0_0_10px_rgba(56,189,248,0.3)] backdrop-blur-sm"
-            >
-              ⚡ FASTIFY ENGINE (28ms)
-            </motion.div>
+      )}
 
-            <motion.div
-              initial={{ opacity: 0, x: 10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ repeat: Infinity, repeatType: "reverse", duration: 2.3, delay: 0.5 }}
-              className="text-[9px] font-mono text-amber-300 bg-amber-950/80 border border-amber-500/50 px-2 py-1 rounded-md shadow-[0_0_10px_rgba(245,158,11,0.3)] backdrop-blur-sm"
-            >
-              🛡️ PRISMA ORM (5K REQS/S)
-            </motion.div>
-          </div>
-
-          <div className="flex justify-center mb-2">
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ repeat: Infinity, repeatType: "reverse", duration: 2.5, delay: 1 }}
-              className="text-[9px] font-mono text-emerald-300 bg-emerald-950/80 border border-emerald-500/50 px-2.5 py-1 rounded-md shadow-[0_0_10px_rgba(16,185,129,0.3)] backdrop-blur-sm"
-            >
-              🗄️ POSTGRESQL CLUSTER (100% ACID)
-            </motion.div>
-          </div>
+      {/* Slicer Indicator */}
+      {isSlicerMode && (
+        <div className="absolute bottom-2.5 inset-x-2.5 z-10 pointer-events-none flex items-center justify-between p-2 rounded-lg bg-black/85 border border-amber-500/40 font-mono text-[10px] text-amber-300">
+          <span>Camada: {Math.round((sliceProgress / 100) * 350)} / 350 (0.2mm)</span>
+          <span>Bocal: 0.4mm E3D</span>
+          <span>Filamento: {project.printSpecs.filamentWeight}</span>
         </div>
       )}
     </div>
@@ -434,29 +369,57 @@ function Holo3DLiveScene({ projectId }: Holo3DSceneProps) {
 export function JarvisProjectHolodeck() {
   const [activeProject, setActiveProject] = useState<HoloProjectData | null>(null)
   const [isExpanded, setIsExpanded] = useState(false)
-  const [viewMode, setViewMode] = useState<"visual" | "xray">("visual")
+  const [displayMode, setDisplayMode] = useState<"3d" | "real_image">("3d")
+  const [isImageLightboxOpen, setIsImageLightboxOpen] = useState(false)
+  const [activeTab, setActiveTab] = useState<"architecture" | "slicer">("architecture")
+  const [explosionProgress, setExplosionProgress] = useState(35)
+  const [sliceProgress, setSliceProgress] = useState(50)
+  const [selectedLayerIndex, setSelectedLayerIndex] = useState<number | null>(null)
+  const [isDownloading, setIsDownloading] = useState(false)
+  const [downloadSuccess, setDownloadSuccess] = useState(false)
 
-  // 3D Tilt Effect Values
-  const x = useMotionValue(0)
-  const y = useMotionValue(0)
-  const mouseXSpring = useSpring(x, { stiffness: 300, damping: 30 })
-  const mouseYSpring = useSpring(y, { stiffness: 300, damping: 30 })
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["8deg", "-8deg"])
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-8deg", "8deg"])
+  // Voice Narration State
+  const [isVoicePlaying, setIsVoicePlaying] = useState(false)
+  const [isVoiceMuted, setIsVoiceMuted] = useState(false)
+  const [isVoiceLoading, setIsVoiceLoading] = useState(false)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const sceneResultRef = useRef<ArchetypeSceneResult | null>(null)
 
-  // Listen to Holodeck Trigger Events from Tour or Manual Action
+  // Load saved voice preference
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    const saved = localStorage.getItem("jarvis_voice_enabled")
+    if (saved !== null) {
+      setIsVoiceMuted(saved === "false")
+    }
+  }, [])
+
+  // Listen to open/close events
   useEffect(() => {
     const handleOpen = (e: any) => {
-      const stepId = e.detail?.stepId || e.detail?.id
-      if (stepId && HOLODECK_PROJECTS[stepId]) {
-        setActiveProject(HOLODECK_PROJECTS[stepId])
-      } else if (e.detail?.project) {
-        setActiveProject(e.detail.project)
+      const stepId = e.detail?.stepId || e.detail?.id || e.detail?.projectId
+      let foundProj: HoloProjectData
+
+      if (e.detail?.project) {
+        foundProj = getHolodeckProject(e.detail.project.id || e.detail.project.title, e.detail.project)
+      } else if (stepId) {
+        foundProj = getHolodeckProject(stepId)
+      } else {
+        foundProj = HOLODECK_REGISTRY.erp
       }
+
+      setActiveProject(foundProj)
+      setDisplayMode("3d")
+      setIsImageLightboxOpen(false)
+      setExplosionProgress(35)
+      setActiveTab("architecture")
+      setSelectedLayerIndex(null)
     }
 
     const handleClose = () => {
       setActiveProject(null)
+      setIsImageLightboxOpen(false)
+      stopVoice()
     }
 
     window.addEventListener("open-holodeck-project", handleOpen)
@@ -467,21 +430,118 @@ export function JarvisProjectHolodeck() {
     }
   }, [])
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    const width = rect.width
-    const height = rect.height
-    const mouseX = e.clientX - rect.left
-    const mouseY = e.clientY - rect.top
-    const xPct = mouseX / width - 0.5
-    const yPct = mouseY / height - 0.5
-    x.set(xPct)
-    y.set(yPct)
+  // Listen to Escape key to close image lightbox
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (isImageLightboxOpen) {
+          setIsImageLightboxOpen(false)
+        }
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [isImageLightboxOpen])
+
+  // Stop voice helper
+  const stopVoice = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause()
+      audioRef.current.currentTime = 0
+      audioRef.current = null
+    }
+    setIsVoicePlaying(false)
+    setIsVoiceLoading(false)
+  }, [])
+
+  // Play voice narration for the active project
+  const playNarration = useCallback(async (project: HoloProjectData) => {
+    stopVoice()
+    if (isVoiceMuted || !project.ttsBriefing) return
+
+    setIsVoiceLoading(true)
+    try {
+      const res = await fetch("/api/jarvis/tts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: project.ttsBriefing }),
+      })
+
+      if (!res.ok) throw new Error("TTS request failed")
+      const blob = await res.blob()
+      const audioUrl = URL.createObjectURL(blob)
+      const audio = new Audio(audioUrl)
+      audioRef.current = audio
+
+      audio.onplay = () => {
+        setIsVoiceLoading(false)
+        setIsVoicePlaying(true)
+      }
+      audio.onended = () => {
+        setIsVoicePlaying(false)
+      }
+      audio.onerror = () => {
+        setIsVoiceLoading(false)
+        setIsVoicePlaying(false)
+      }
+
+      await audio.play()
+    } catch (err) {
+      console.warn("Failed to play Jarvis narration:", err)
+      setIsVoiceLoading(false)
+      setIsVoicePlaying(false)
+    }
+  }, [isVoiceMuted, stopVoice])
+
+  // Trigger speech when active project opens
+  useEffect(() => {
+    if (activeProject && !isVoiceMuted) {
+      const timer = setTimeout(() => {
+        playNarration(activeProject)
+      }, 500)
+      return () => clearTimeout(timer)
+    } else {
+      stopVoice()
+    }
+  }, [activeProject, isVoiceMuted, playNarration, stopVoice])
+
+  // Toggle voice mute
+  const toggleMute = () => {
+    const nextMuted = !isVoiceMuted
+    setIsVoiceMuted(nextMuted)
+    if (typeof window !== "undefined") {
+      localStorage.setItem("jarvis_voice_enabled", String(!nextMuted))
+    }
+    if (nextMuted) {
+      stopVoice()
+    } else if (activeProject) {
+      playNarration(activeProject)
+    }
   }
 
-  const handleMouseLeave = () => {
-    x.set(0)
-    y.set(0)
+  // Handle STL Download
+  const handleDownloadSTL = () => {
+    if (!sceneResultRef.current || !activeProject) return
+    setIsDownloading(true)
+
+    try {
+      const blob = exportMeshesToSTL(sceneResultRef.current.rootGroup, activeProject.id)
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = `${activeProject.id}_maker_model.stl`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+
+      setDownloadSuccess(true)
+      setTimeout(() => setDownloadSuccess(false), 3500)
+    } catch (err) {
+      console.error("Error exporting STL:", err)
+    } finally {
+      setIsDownloading(false)
+    }
   }
 
   if (!activeProject) return null
@@ -492,112 +552,383 @@ export function JarvisProjectHolodeck() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[9998] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-xl pointer-events-auto"
-        onClick={() => setActiveProject(null)}
+        className="fixed inset-0 z-[9998] flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/85 backdrop-blur-xl pointer-events-auto"
+        onClick={() => {
+          setActiveProject(null)
+          stopVoice()
+        }}
       >
-        {/* Hologram Projection Laser Emitters (Top & Bottom) */}
+        {/* Hologram Projection Laser Emitters (Top & Bottom Glows) */}
         <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-sky-500/20 via-sky-500/5 to-transparent pointer-events-none" />
         <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-amber-500/25 via-amber-500/5 to-transparent pointer-events-none" />
 
-        {/* 3D Holo-Deck Main Card Container */}
+        {/* Main Solid Crisp Card Container (No 3D tilt blurring) */}
         <motion.div
-          initial={{ scale: 0.85, y: 40, opacity: 0 }}
-          animate={{ scale: 1, y: 0, opacity: 1 }}
-          exit={{ scale: 0.85, y: 40, opacity: 0 }}
-          transition={{ type: "spring", damping: 25, stiffness: 260 }}
-          style={{
-            rotateX: rotateX,
-            rotateY: rotateY,
-            transformStyle: "preserve-3d",
-          }}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.95, opacity: 0 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
           onClick={(e) => e.stopPropagation()}
           className={`relative w-full ${
-            isExpanded ? "max-w-5xl" : "max-w-3xl"
-          } rounded-3xl bg-gray-950/98 border-2 border-sky-400/70 shadow-[0_0_90px_rgba(56,189,248,0.4),0_0_30px_rgba(245,158,11,0.25)] overflow-hidden transition-all duration-300`}
+            isExpanded ? "max-w-6xl" : "max-w-4xl"
+          } rounded-3xl bg-gray-950 border-2 border-sky-400/60 shadow-[0_0_90px_rgba(56,189,248,0.35),0_0_30px_rgba(245,158,11,0.2)] overflow-hidden transition-all duration-300 font-mono`}
         >
-          {/* Holographic Scanline Overlay */}
-          <div className="absolute inset-0 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px] opacity-15 pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-b from-sky-400/10 via-transparent to-amber-500/10 pointer-events-none" />
 
           {/* Top Header Bar */}
-          <div className="relative z-10 flex items-center justify-between p-3 sm:p-4 border-b border-sky-500/30 bg-black/70 font-mono text-xs">
+          <div className="relative z-10 flex flex-wrap items-center justify-between p-3 sm:p-4 border-b border-sky-500/30 bg-black/75 text-xs gap-2">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-sky-400 animate-ping" />
               <span className="font-extrabold text-sky-400 tracking-wider flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>HOLO-DECK // PROJEÇÃO 3D AO VIVO</span>
+                <span>HOLODECK 3D // SHOWROOM INTERATIVO</span>
               </span>
             </div>
 
+            {/* Top Toolbar Actions */}
             <div className="flex items-center gap-2">
+              {/* Voice Narration Button */}
               <button
-                onClick={() => setViewMode(viewMode === "visual" ? "xray" : "visual")}
-                className={`px-2.5 py-1 rounded-lg border text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1 ${
-                  viewMode === "xray"
-                    ? "bg-amber-500 text-black border-amber-400 shadow-[0_0_10px_rgba(245,158,11,0.4)]"
-                    : "bg-sky-500/15 border-sky-400/40 text-sky-300 hover:bg-sky-500/25"
+                onClick={toggleMute}
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[11px] font-bold transition-all cursor-pointer ${
+                  !isVoiceMuted
+                    ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/50 shadow-[0_0_10px_rgba(16,185,129,0.3)]"
+                    : "bg-gray-900 text-muted-foreground border-white/10 hover:text-white"
                 }`}
+                title={isVoiceMuted ? "Ativar Narração do Jarvis" : "Silenciar Narração"}
               >
-                <Layers className="w-3 h-3" />
-                <span>{viewMode === "xray" ? "⚡ Raio-X Ativo" : "🔍 Raio-X Arquitetura"}</span>
+                {!isVoiceMuted ? <Volume2 className="w-3.5 h-3.5 text-emerald-400" /> : <VolumeX className="w-3.5 h-3.5" />}
+                <span className="hidden sm:inline">
+                  {isVoiceLoading ? "Sintetizando..." : isVoicePlaying ? "Jarvis Falando" : isVoiceMuted ? "Voz Mudo" : "Voz Ativa"}
+                </span>
               </button>
 
+              {/* Expand / Minimize */}
               <button
                 onClick={() => setIsExpanded(!isExpanded)}
                 className="p-1.5 rounded-lg border border-white/10 text-muted-foreground hover:text-white transition-colors cursor-pointer"
-                title={isExpanded ? "Reduzir" : "Expandir"}
+                title={isExpanded ? "Reduzir Janela" : "Expandir Tela"}
               >
                 {isExpanded ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
               </button>
 
+              {/* Close Button */}
               <button
-                onClick={() => setActiveProject(null)}
+                onClick={() => {
+                  setActiveProject(null)
+                  stopVoice()
+                }}
                 className="p-1.5 rounded-lg border border-white/20 text-muted-foreground hover:text-red-400 hover:border-red-500/50 transition-colors cursor-pointer ml-1"
-                title="Fechar Holograma"
+                title="Fechar Holodeck"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
           </div>
 
-          {/* Hologram Body */}
-          <div className="relative z-10 p-4 sm:p-5 space-y-3.5 max-h-[78vh] overflow-y-auto font-mono">
-            {/* Title & Subtitle */}
+          {/* Top Pinned Sub-Header Bar (Title + Switcher always visible!) */}
+          <div className="relative z-10 px-4 sm:px-6 py-3 border-b border-sky-500/20 bg-black/90 backdrop-blur-md flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shrink-0">
             <div>
-              <div className="text-[10px] text-amber-400 font-bold uppercase tracking-widest flex items-center gap-1.5 mb-1">
-                <Activity className="w-3 h-3 animate-pulse" />
-                <span>SISTEMA 3D EM PRODUÇÃO AUDITADO POR J.A.R.V.I.S.</span>
+              <div className="text-[10px] text-amber-400 font-bold uppercase tracking-widest flex items-center gap-1.5 mb-0.5">
+                <Activity className="w-3 h-3 animate-pulse text-amber-400" />
+                <span>MODELO HOLOGRÁFICO PARAMÉTRICO // PROJETO EM PRODUÇÃO</span>
               </div>
-              <h3 className="text-base sm:text-xl font-extrabold text-white tracking-wide">
+              <h3 className="text-sm sm:text-lg font-extrabold text-white tracking-wide truncate max-w-[500px]">
                 {activeProject.title}
               </h3>
-              <p className="text-xs sm:text-sm text-slate-300 mt-0.5">
-                {activeProject.subtitle}
-              </p>
             </div>
 
-            {/* LIVE 3D WEBGL SCENE (Replaces static image with animated 3D) */}
-            {viewMode === "visual" ? (
-              <Holo3DLiveScene projectId={activeProject.id} />
-            ) : (
-              /* X-Ray Architecture Breakdown View */
-              <div className="p-4 rounded-2xl bg-black/90 border border-amber-500/40 space-y-3 shadow-inner">
-                <div className="text-xs font-bold text-amber-400 flex items-center gap-1.5 pb-2 border-b border-amber-500/20">
-                  <Terminal className="w-4 h-4 text-amber-400" />
-                  <span>DIAGNÓSTICO ARQUITETURAL // DESAFIO & SOLUÇÃO</span>
-                </div>
-                <div className="text-xs text-slate-200 leading-relaxed">
-                  <p className="font-semibold text-sky-300 mb-1">⚙️ Arquitetura Técnica:</p>
-                  <p className="text-slate-300 bg-gray-900/80 p-2.5 rounded-xl border border-white/5">{activeProject.architecture}</p>
-                </div>
-                <div className="text-xs text-slate-200 leading-relaxed">
-                  <p className="font-semibold text-emerald-400 mb-1">🎯 Solução de Engenharia:</p>
-                  <p className="text-slate-300 bg-gray-900/80 p-2.5 rounded-xl border border-white/5">{activeProject.solution}</p>
+            {/* Mode Switcher Tabs */}
+            <div className="flex items-center gap-1.5 bg-black/80 p-1 rounded-xl border border-sky-400/40 shrink-0">
+              <button
+                onClick={() => setDisplayMode("3d")}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  displayMode === "3d"
+                    ? "bg-sky-500 text-black shadow-lg shadow-sky-500/30"
+                    : "text-muted-foreground hover:text-white"
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>🎮 Holograma 3D</span>
+              </button>
+              <button
+                onClick={() => setDisplayMode("real_image")}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  displayMode === "real_image"
+                    ? "bg-amber-500 text-black shadow-lg shadow-amber-500/30"
+                    : "text-muted-foreground hover:text-white"
+                }`}
+              >
+                <Eye className="w-3.5 h-3.5" />
+                <span>📸 Captura Real HD</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Hologram Body Content */}
+          <div className="relative z-10 p-4 sm:p-5 space-y-4 max-h-[75vh] overflow-y-auto">
+            {/* Quick 3D Sub-controls when in 3D Mode */}
+            {displayMode === "3d" && (
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-xs text-slate-300">
+                  {activeProject.subtitle}
+                </p>
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => setActiveTab("architecture")}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
+                      activeTab === "architecture"
+                        ? "bg-sky-500/20 text-sky-300 border border-sky-400/50"
+                        : "text-muted-foreground hover:text-white"
+                    }`}
+                  >
+                    <Layers className="w-3 h-3" />
+                    <span>Exploded</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("slicer")}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
+                      activeTab === "slicer"
+                        ? "bg-amber-500/20 text-amber-300 border border-amber-400/50"
+                        : "text-muted-foreground hover:text-white"
+                    }`}
+                  >
+                    <Printer className="w-3 h-3" />
+                    <span>Slicer 3D</span>
+                  </button>
                 </div>
               </div>
             )}
+
+            {/* LIVE 3D WEBGL CANVAS OR HIGH-RES REAL PRODUCTION IMAGE */}
+            {displayMode === "3d" ? (
+              <Holo3DLiveScene
+                project={activeProject}
+                explosionProgress={activeTab === "architecture" ? explosionProgress : 0}
+                isSlicerMode={activeTab === "slicer"}
+                sliceProgress={sliceProgress}
+                onToggleRealImage={() => setDisplayMode("real_image")}
+                onSceneReady={(res) => {
+                  sceneResultRef.current = res
+                }}
+              />
+            ) : (
+              /* Real High-Resolution Production Screenshot Showcase */
+              <div className="relative w-full h-[340px] sm:h-[440px] md:h-[490px] rounded-2xl overflow-hidden bg-black/95 border-2 border-amber-500/50 shadow-[0_0_60px_rgba(245,158,11,0.25)] flex flex-col group select-none">
+                <div 
+                  className="flex-1 relative overflow-hidden bg-[#070a12] flex items-center justify-center p-3 cursor-zoom-in"
+                  onClick={() => setIsImageLightboxOpen(true)}
+                  title="Clique para expandir em tela cheia na mesma página"
+                >
+                  <img
+                    src={activeProject.image}
+                    alt={activeProject.title}
+                    className="max-w-full max-h-full object-contain rounded-lg shadow-2xl border border-white/10 transition-transform duration-300 hover:scale-[1.02]"
+                  />
+
+                  {/* Status Badges */}
+                  <div className="absolute top-3 left-3 z-10 flex items-center gap-2 pointer-events-none">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+                    <span className="text-[10px] font-mono text-emerald-300 font-bold bg-black/90 px-3 py-1.5 rounded-lg border border-emerald-500/40 backdrop-blur-md shadow-lg">
+                      100% NITIDEZ ORIGINAL • SISTEMA EM PRODUÇÃO
+                    </span>
+                  </div>
+
+                  <div className="absolute top-3 right-3 z-10">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setIsImageLightboxOpen(true)
+                      }}
+                      className="text-[10px] font-mono font-bold text-amber-300 bg-black/90 hover:bg-amber-500 hover:text-black px-3 py-1.5 rounded-lg border border-amber-500/40 backdrop-blur-md transition-all flex items-center gap-1.5 cursor-pointer shadow-lg"
+                      title="Expandir em tela cheia (permanece na mesma página)"
+                    >
+                      <Maximize2 className="w-3.5 h-3.5" />
+                      <span>Tela Cheia (Sem sair)</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Bottom Footer Overlay */}
+                <div className="p-3 bg-black/90 border-t border-white/10 flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-muted-foreground">
+                  <span className="text-white font-medium flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-emerald-400" />
+                    <span>Clique na imagem para dar zoom em tela cheia na mesma página.</span>
+                  </span>
+                  <button
+                    onClick={() => setDisplayMode("3d")}
+                    className="text-sky-400 hover:text-sky-300 font-bold flex items-center gap-1.5 cursor-pointer transition-colors"
+                  >
+                    <span>Voltar à Arquitetura 3D</span>
+                    <Sparkles className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Interactive Control Panel (Sliders & Callouts) */}
+            <div className="p-3.5 rounded-2xl bg-black/75 border border-sky-400/30 space-y-3">
+              {activeTab === "architecture" ? (
+                /* Exploded View Slider Controls */
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-sky-300 font-bold flex items-center gap-1.5">
+                      <Sliders className="w-3.5 h-3.5" />
+                      <span>Deslocamento Tridimensional das Camadas (Exploded View):</span>
+                    </span>
+                    <span className="text-amber-400 font-extrabold text-sm">{explosionProgress}%</span>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => setExplosionProgress(0)}
+                      className="text-[10px] px-2 py-1 rounded bg-gray-900 border border-white/10 hover:border-sky-400 text-muted-foreground hover:text-white cursor-pointer"
+                    >
+                      Montado (0%)
+                    </button>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={explosionProgress}
+                      onChange={(e) => setExplosionProgress(Number(e.target.value))}
+                      className="flex-1 accent-sky-400 h-2 bg-gray-900 rounded-lg cursor-pointer"
+                    />
+                    <button
+                      onClick={() => setExplosionProgress(100)}
+                      className="text-[10px] px-2 py-1 rounded bg-gray-900 border border-white/10 hover:border-amber-400 text-muted-foreground hover:text-white cursor-pointer"
+                    >
+                      Explodido (100%)
+                    </button>
+                  </div>
+
+                  {/* Interactive Layer Callout Buttons */}
+                  <div className="pt-2">
+                    <div className="text-[10px] text-muted-foreground mb-1.5">
+                      Clique em uma camada para inspecionar a decisão arquitetural:
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      {activeProject.layers.map((layer, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setSelectedLayerIndex(selectedLayerIndex === idx ? null : idx)}
+                          className={`p-2 rounded-xl border text-left transition-all cursor-pointer ${
+                            selectedLayerIndex === idx
+                              ? "bg-sky-500/20 border-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.3)]"
+                              : "bg-gray-950/80 border-white/10 hover:border-white/30"
+                          }`}
+                        >
+                          <div className="flex items-center gap-1.5 mb-0.5">
+                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: layer.color }} />
+                            <span className="text-[11px] font-bold text-white truncate">{layer.name}</span>
+                          </div>
+                          <div className="text-[9px] text-sky-300 truncate">{layer.tech}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Selected Layer Details Note */}
+                  {selectedLayerIndex !== null && activeProject.layers[selectedLayerIndex] && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="p-3 rounded-xl bg-gray-900/90 border border-sky-400/40 text-xs text-slate-200"
+                    >
+                      <div className="font-bold text-sky-400 mb-0.5 flex items-center justify-between">
+                        <span>{activeProject.layers[selectedLayerIndex].name} • {activeProject.layers[selectedLayerIndex].tech}</span>
+                        <button
+                          onClick={() => setSelectedLayerIndex(null)}
+                          className="text-muted-foreground hover:text-white text-[10px]"
+                        >
+                          Fechar
+                        </button>
+                      </div>
+                      <p className="text-slate-300 text-[11px] leading-relaxed">
+                        {activeProject.layers[selectedLayerIndex].description}
+                      </p>
+                    </motion.div>
+                  )}
+                </div>
+              ) : (
+                /* 3D Slicer / Maker Print Controls */
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-amber-400 font-bold flex items-center gap-1.5">
+                      <Printer className="w-3.5 h-3.5" />
+                      <span>Simulação de Fatiador em Camadas (Slicer 0.20mm):</span>
+                    </span>
+                    <span className="text-amber-400 font-extrabold text-sm">{sliceProgress}%</span>
+                  </div>
+
+                  <input
+                    type="range"
+                    min="5"
+                    max="100"
+                    value={sliceProgress}
+                    onChange={(e) => setSliceProgress(Number(e.target.value))}
+                    className="w-full accent-amber-400 h-2 bg-gray-900 rounded-lg cursor-pointer"
+                  />
+
+                  {/* 3D Printing Specs & Export Button */}
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-1 border-t border-white/10">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px] text-muted-foreground flex-1">
+                      <div className="bg-gray-950 p-2 rounded-lg border border-white/10">
+                        <div className="text-[9px]">Dimensões:</div>
+                        <div className="font-bold text-white">{activeProject.printSpecs.dimensions}</div>
+                      </div>
+                      <div className="bg-gray-950 p-2 rounded-lg border border-white/10">
+                        <div className="text-[9px]">Filamento:</div>
+                        <div className="font-bold text-white">{activeProject.printSpecs.filamentWeight}</div>
+                      </div>
+                      <div className="bg-gray-950 p-2 rounded-lg border border-white/10">
+                        <div className="text-[9px]">Camada:</div>
+                        <div className="font-bold text-white">{activeProject.printSpecs.layerHeight}</div>
+                      </div>
+                      <div className="bg-gray-950 p-2 rounded-lg border border-white/10">
+                        <div className="text-[9px]">Preenchimento:</div>
+                        <div className="font-bold text-white">{activeProject.printSpecs.infill}</div>
+                      </div>
+                    </div>
+
+                    <Button
+                      onClick={handleDownloadSTL}
+                      disabled={isDownloading}
+                      className={`h-10 px-4 rounded-xl font-bold text-xs flex items-center gap-2 cursor-pointer transition-all ${
+                        downloadSuccess
+                          ? "bg-emerald-500 text-black hover:bg-emerald-400"
+                          : "bg-amber-500 hover:bg-amber-400 text-black shadow-lg shadow-amber-500/20"
+                      }`}
+                    >
+                      <Download className="w-4 h-4" />
+                      <span>{downloadSuccess ? "✓ Arquivo STL Baixado!" : "Baixar STL para Impressão 3D"}</span>
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Architecture Diagnosis & Solution Briefing */}
+            <div className="grid md:grid-cols-2 gap-3 text-xs">
+              <div className="p-3.5 rounded-2xl bg-black/60 border border-sky-400/30 space-y-1.5">
+                <div className="font-bold text-sky-300 flex items-center gap-1.5">
+                  <Cpu className="w-3.5 h-3.5 text-sky-400" />
+                  <span>ARQUITETURA TÉCNICA</span>
+                </div>
+                <p className="text-slate-300 leading-relaxed text-[11px] bg-gray-950/60 p-2.5 rounded-xl border border-white/5">
+                  {activeProject.architecture}
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-black/60 border border-emerald-400/30 space-y-1.5">
+                <div className="font-bold text-emerald-300 flex items-center gap-1.5">
+                  <Shield className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>SOLUÇÃO DE ENGENHARIA</span>
+                </div>
+                <p className="text-slate-300 leading-relaxed text-[11px] bg-gray-950/60 p-2.5 rounded-xl border border-white/5">
+                  {activeProject.solution}
+                </p>
+              </div>
+            </div>
 
             {/* Live Metrics Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
@@ -614,7 +945,7 @@ export function JarvisProjectHolodeck() {
               ))}
             </div>
 
-            {/* Tech Stack Tags */}
+            {/* Tech Stack Badges */}
             <div className="flex flex-wrap items-center gap-1.5 pt-1">
               {activeProject.tags.map((tag, idx) => (
                 <Badge
@@ -627,25 +958,116 @@ export function JarvisProjectHolodeck() {
               ))}
             </div>
 
-            {/* Bottom Actions */}
-            <div className="pt-2 flex items-center justify-between gap-3 border-t border-white/10">
-              <span className="text-[10px] text-muted-foreground flex items-center gap-1">
+            {/* Footer Navigation Bar */}
+            <div className="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-white/10">
+              <span className="text-[10px] text-muted-foreground flex items-center gap-1.5">
                 <Zap className="w-3 h-3 text-amber-400" />
-                <span>Renderização 3D WebGL ativa</span>
+                <span>Malha paramétrica Three.js renderizada a 60 FPS • Áudio Neural J.A.R.V.I.S.</span>
               </span>
 
               <div className="flex items-center gap-2">
+                {activeProject.githubHref && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    asChild
+                    className="h-8 px-3 text-xs border-white/20 hover:border-sky-400 hover:text-sky-300 cursor-pointer"
+                  >
+                    <a href={activeProject.githubHref} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="w-3.5 h-3.5 mr-1" />
+                      <span>GitHub</span>
+                    </a>
+                  </Button>
+                )}
+
                 <Button
                   size="sm"
-                  onClick={() => setActiveProject(null)}
+                  onClick={() => {
+                    setActiveProject(null)
+                    stopVoice()
+                  }}
                   className="h-8 px-4 bg-sky-500 hover:bg-sky-400 text-black font-bold text-xs rounded-xl shadow-lg shadow-sky-500/20 cursor-pointer"
                 >
-                  <span>Continuar Tour</span>
+                  <span>Fechar Holodeck</span>
                 </Button>
               </div>
             </div>
           </div>
         </motion.div>
+
+        {/* In-Page Fullscreen Image Lightbox Modal */}
+        <AnimatePresence>
+          {isImageLightboxOpen && activeProject && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setIsImageLightboxOpen(false)}
+              className="fixed inset-0 z-[120] bg-black/95 backdrop-blur-2xl flex flex-col items-center justify-between p-4 sm:p-6 select-none cursor-zoom-out"
+            >
+              {/* Lightbox Top Header */}
+              <div 
+                className="w-full max-w-6xl flex items-center justify-between p-3 rounded-xl bg-black/80 border border-white/10 text-xs font-mono z-20"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+                  <span className="text-emerald-300 font-bold uppercase tracking-wider">
+                    {activeProject.title} • 100% NITIDEZ ORIGINAL
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <span className="text-[10px] text-muted-foreground hidden sm:inline">
+                    Pressione ESC ou clique para sair do zoom
+                  </span>
+                  <button
+                    onClick={() => setIsImageLightboxOpen(false)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/20 text-red-300 hover:bg-red-500 hover:text-white border border-red-500/40 text-xs font-bold transition-all cursor-pointer shadow-lg"
+                    title="Fechar zoom e voltar"
+                  >
+                    <Minimize2 className="w-3.5 h-3.5" />
+                    <span>Sair do Zoom (ESC)</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Centered High-Resolution Image */}
+              <div 
+                className="flex-1 w-full max-w-6xl flex items-center justify-center p-2 relative overflow-auto"
+                onClick={() => setIsImageLightboxOpen(false)}
+              >
+                <motion.img
+                  initial={{ scale: 0.95 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                  src={activeProject.image}
+                  alt={activeProject.title}
+                  className="max-w-full max-h-[82vh] object-contain rounded-2xl shadow-[0_0_100px_rgba(245,158,11,0.3)] border-2 border-amber-500/40"
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </div>
+
+              {/* Lightbox Bottom Status */}
+              <div 
+                className="w-full max-w-6xl p-2.5 rounded-xl bg-black/80 border border-white/10 text-[11px] font-mono text-center text-slate-300 flex items-center justify-between z-20"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <span className="text-amber-400 font-medium">
+                  🔍 Modo Alta Definição • Imagem real sem distorção 3D
+                </span>
+                <button
+                  onClick={() => setIsImageLightboxOpen(false)}
+                  className="text-sky-400 hover:text-sky-300 underline font-bold cursor-pointer"
+                >
+                  Voltar ao Holodeck ➔
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
     </AnimatePresence>
   )

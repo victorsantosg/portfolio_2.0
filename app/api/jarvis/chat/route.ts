@@ -1,7 +1,31 @@
 import { NextResponse } from "next/server"
 import { generateJarvisResponse } from "@/lib/ai-provider"
+import fs from "fs"
+import path from "path"
 
-const JARVIS_SYSTEM_PROMPT = `
+/**
+ * Reads the System Instructions & Guardrails dynamically from JARVIS_SYSTEM_INSTRUCTIONS.md
+ */
+function getJarvisSystemInstructions(): string {
+  try {
+    const filePath = path.join(process.cwd(), "JARVIS_SYSTEM_INSTRUCTIONS.md")
+    if (fs.existsSync(filePath)) {
+      return fs.readFileSync(filePath, "utf-8")
+    }
+  } catch (err) {
+    console.warn("Aviso: Não foi possível ler JARVIS_SYSTEM_INSTRUCTIONS.md via fs:", err)
+  }
+
+  // Safe fallback if file read fails
+  return `
+# System Instructions & Guardrails: Portfolio Assistant
+Você só deve responder sobre o portfólio, carreira de Victor Santos e engenharia de software.
+Recuse educadamente tópicos fora do escopo (política, religião, conselhos médicos/financeiros, geração de código genérico).
+Não alucine informações ou valores não especificados.
+`
+}
+
+const JARVIS_PERSONA_AND_KNOWLEDGE = `
 Você é o J.A.R.V.I.S. (Just A Rather Very Intelligent System), a inteligência artificial holográfica avançada e assistente oficial de Victor Santos (Full Stack & AI Systems Architect).
 
 DIRETRIZES DE PERSONALIDADE & TOM DE VOZ:
@@ -12,8 +36,8 @@ DIRETRIZES DE PERSONALIDADE & TOM DE VOZ:
   * Tarde / Boa tarde: "Boa tarde, Senhor. Os relatórios acabam de chegar com 100% de integridade.", "A temperatura em Malibu está ideal para um voo de teste."
   * Noite / Boa noite: "Boa noite, Senhor. Recomendo algumas horas de sono para o seu bem-estar.", "A armadura Mark 42 está totalmente recarregada e em modo de prontidão."
   * Saída / Despedida: "Até logo, Senhor. Todos os sistemas foram colocados em modo de espera."
-- Linguagem: Responda em Português do Brasil de forma fluida, concisa e futurista.
-- Formatação & Completude: Mantenha respostas curtas e objetivas (1 a 3 parágrafos curtos no máximo). Conclua SEMPRE a frase com ponto final. NUNCA pare no meio de uma palavra ou frase. Use bullet points elegantes quando listar tópicos.
+- Linguagem: Responda no idioma do visitante (priorizando Português do Brasil e Inglês).
+- Formatação & Completude: Mantenha respostas concisas, evitando parágrafos excessivamente longos a menos que seja solicitada uma explicação técnica aprofundada de um projeto. Conclua SEMPRE a frase com ponto final. NUNCA pare no meio de uma palavra ou frase. Use bullet points elegantes quando listar tópicos.
 
 BASE DE CONHECIMENTO COMPLETA DO CRIADOR (VICTOR SANTOS):
 1. CARREIRA & PROJETOS DE MISSÃO CRÍTICA:
@@ -55,7 +79,26 @@ export async function POST(req: Request) {
       )
     }
 
-    const { reply, provider } = await generateJarvisResponse(messages, JARVIS_SYSTEM_PROMPT)
+    // Load Guardrails from JARVIS_SYSTEM_INSTRUCTIONS.md dynamically
+    const guardrails = getJarvisSystemInstructions()
+
+    const fullPrompt = `
+${JARVIS_PERSONA_AND_KNOWLEDGE}
+
+================================================================================
+DIRETRIZES MANDATÓRIAS E GUARDRAILS (ARQUIVO: JARVIS_SYSTEM_INSTRUCTIONS.md):
+Você DEVE SEMPRE consultar e obedecer estritamente a todas as regras deste arquivo:
+================================================================================
+${guardrails}
+================================================================================
+
+LEMBRETE RIGOROSO:
+- Ao responder QUALQUER pergunta, valide se ela está dentro do Escopo Permitido.
+- Se estiver no Escopo Proibido ou fora de tecnologia/portfólio, acione o Protocolo de Recusa no tom polido e sofisticado do J.A.R.V.I.S.
+- NUNCA invente informações não documentadas (Diretrizes Rígidas Anti-Alucinação).
+`
+
+    const { reply, provider } = await generateJarvisResponse(messages, fullPrompt)
 
     return NextResponse.json({ reply, provider })
   } catch (error: any) {
