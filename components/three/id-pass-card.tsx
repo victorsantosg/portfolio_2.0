@@ -176,7 +176,7 @@ export function IdPassCard() {
                 {/* Photo with Cyber Border */}
                 <div className="relative w-24 h-28 rounded-xl overflow-hidden border-2 border-primary/60 bg-gray-900 shadow-[0_0_15px_rgba(34,197,94,0.3)] shrink-0">
                   <Image
-                    src="/img_victor.jpeg"
+                    src="/img_victor.png"
                     alt="Victor Santos"
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"

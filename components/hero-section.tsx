@@ -152,7 +152,7 @@ function InteractiveHeroAvatar({
           className="relative w-full h-full rounded-full overflow-hidden border border-gray-800 bg-gray-900 flex items-center justify-center shadow-2xl"
         >
           <Image
-            src="/img_victor.jpeg"
+            src="/img_victor.png"
             alt="Victor Santos"
             fill
             className="object-cover transition-all duration-500 group-hover:scale-115 group-hover:brightness-110"
