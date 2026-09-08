@@ -17,16 +17,24 @@ import { Button } from "@/components/ui/button"
 import { TOUR_STEPS, TourStep } from "@/lib/tour-controller"
 
 import { JarvisTourHologram } from "@/components/three/jarvis-tour-hologram"
+import { jarvisVoice } from "@/lib/jarvis-voice"
 
 export function TourHudControls() {
   const [isActive, setIsActive] = useState(false)
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
-  const [voiceEnabled, setVoiceEnabled] = useState(true)
+  const [voiceEnabled, setVoiceEnabled] = useState(!jarvisVoice.isMuted())
   const [displayedNarration, setDisplayedNarration] = useState("")
   const timerRef = useRef<NodeJS.Timeout | null>(null)
 
   const currentStep = TOUR_STEPS[currentStepIndex] || TOUR_STEPS[0]
+
+  // Sincroniza estado de mudo com o gerenciador de voz
+  useEffect(() => {
+    return jarvisVoice.subscribe((state) => {
+      setVoiceEnabled(!state.isMuted)
+    })
+  }, [])
 
   // Listen to Global Custom Event to Start Tour
   useEffect(() => {
@@ -40,75 +48,33 @@ export function TourHudControls() {
     return () => window.removeEventListener("start-jarvis-tour", handleStartTour)
   }, [])
 
-  const tourAudioRef = useRef<HTMLAudioElement | null>(null)
-
-  // Speak narration and trigger next step on completion (Edge Neural TTS + Fallback)
-  const speakText = async (text: string) => {
+  // Speak narration and trigger next step on completion (via central jarvisVoice)
+  const speakText = (text: string) => {
     if (typeof window === "undefined") return
 
-    // Stop existing audio
-    if (tourAudioRef.current) {
-      tourAudioRef.current.pause()
-      tourAudioRef.current.currentTime = 0
-    }
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.cancel()
-    }
+    // Limpa falas anteriores do tour
+    jarvisVoice.stop("tour")
 
-    const spokenText = text
-      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-      .replace(/https?:\/\/[^\s)]+/g, "")
-      .replace(/([a-zA-Z0-9._%+-]+)@([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g, "$1 arroba $2")
-      .replace(/[*_~`#>\\]/g, "")
-      .replace(/[•▪▸►■✦✧★\-\–\—]/g, " ")
-      .replace(/\/\//g, " - ")
-      .replace(/\+55\s*(\d{2})\s*(\d{4,5})-?(\d{4})/g, "DDD $1, $2 $3")
-      .replace(/J\.A\.R\.V\.I\.S\./gi, "Járvis")
-      .replace(/\bJARVIS\b/gi, "Járvis")
-      .replace(/\bJarvis\b/g, "Járvis")
-      .replace(/[:;]+/g, ",")
-      .replace(/\n+/g, ", ")
-      .replace(/\s+/g, " ")
-      .replace(/\s+([.,!?])/g, "$1")
-      .trim()
-
-    if (voiceEnabled) {
-      try {
-        // 1. Exclusively: Microsoft Edge Neural TTS (/api/jarvis/tts)
-        const res = await fetch("/api/jarvis/tts", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: spokenText }),
-        })
-
-        if (res.ok) {
-          const blob = await res.blob()
-          const audioUrl = URL.createObjectURL(blob)
-          const audio = new Audio(audioUrl)
-          tourAudioRef.current = audio
-
-          audio.onended = () => {
-            if (!isPaused) {
-              timerRef.current = setTimeout(() => {
-                handleNext()
-              }, 1200)
-            }
+    if (voiceEnabled && !jarvisVoice.isMuted()) {
+      jarvisVoice.speak({
+        text,
+        source: "tour",
+        onEnd: () => {
+          if (!isPaused) {
+            timerRef.current = setTimeout(() => {
+              handleNext()
+            }, 1200)
           }
-
-          audio.onerror = () => {
-            if (!isPaused) {
-              timerRef.current = setTimeout(() => {
-                handleNext()
-              }, 2500)
-            }
+        },
+        onError: () => {
+          if (!isPaused) {
+            timerRef.current = setTimeout(() => {
+              handleNext()
+            }, 2500)
           }
-
-          await audio.play()
-          return
-        }
-      } catch (err) {
-        console.warn("Edge TTS failed for tour:", err)
-      }
+        },
+      })
+      return
     }
 
     // Fallback reading timer if voice is muted
@@ -148,7 +114,7 @@ export function TourHudControls() {
     if (currentStep.id === "maker_lab" || currentStep.id === "projects") {
       window.dispatchEvent(
         new CustomEvent("open-holodeck-project", {
-          detail: { stepId: currentStep.id },
+          detail: { stepId: currentStep.id, fromTour: true, silent: true },
         })
       )
     } else {
@@ -177,19 +143,14 @@ export function TourHudControls() {
     return () => {
       clearInterval(typeInterval)
       if (timerRef.current) clearTimeout(timerRef.current)
-      if (tourAudioRef.current) {
-        tourAudioRef.current.pause()
-      }
+      jarvisVoice.stop("tour")
       window.dispatchEvent(new CustomEvent("close-holodeck-project"))
       window.dispatchEvent(new CustomEvent("close-id-card-scan"))
     }
   }, [isActive, currentStepIndex, isPaused, voiceEnabled])
 
   const handleNext = () => {
-    if (tourAudioRef.current) {
-      tourAudioRef.current.pause()
-      tourAudioRef.current.currentTime = 0
-    }
+    jarvisVoice.stop("tour")
     window.dispatchEvent(new CustomEvent("close-holodeck-project"))
     window.dispatchEvent(new CustomEvent("close-id-card-scan"))
     if (currentStepIndex < TOUR_STEPS.length - 1) {
@@ -205,25 +166,17 @@ export function TourHudControls() {
     window.dispatchEvent(new CustomEvent("close-holodeck-project"))
     window.dispatchEvent(new CustomEvent("close-id-card-scan"))
     if (timerRef.current) clearTimeout(timerRef.current)
-    if (tourAudioRef.current) {
-      tourAudioRef.current.pause()
-      tourAudioRef.current.currentTime = 0
-      tourAudioRef.current = null
-    }
+    jarvisVoice.stop("tour")
   }
 
   const togglePause = () => {
     if (isPaused) {
       setIsPaused(false)
-      if (tourAudioRef.current && tourAudioRef.current.paused) {
-        tourAudioRef.current.play().catch(() => {})
-      }
+      jarvisVoice.resume()
     } else {
       setIsPaused(true)
       if (timerRef.current) clearTimeout(timerRef.current)
-      if (tourAudioRef.current) {
-        tourAudioRef.current.pause()
-      }
+      jarvisVoice.pause()
     }
   }
 
@@ -257,8 +210,8 @@ export function TourHudControls() {
             {/* Controls */}
             <div className="flex items-center gap-1.5">
               <button
-                onClick={() => setVoiceEnabled(!voiceEnabled)}
-                className={`p-1.5 rounded-lg border transition-colors ${
+                onClick={() => jarvisVoice.toggleMute()}
+                className={`p-1.5 rounded-lg border transition-colors cursor-pointer ${
                   voiceEnabled
                     ? "bg-amber-500/20 border-amber-400 text-amber-300 shadow-[0_0_10px_rgba(245,158,11,0.2)]"
                     : "border-white/10 text-muted-foreground"

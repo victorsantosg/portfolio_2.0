@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import * as THREE from "three"
+import { jarvisVoice } from "@/lib/jarvis-voice"
 
 interface JarvisGuideDroneProps {
   targetHref: string | null
@@ -16,34 +17,13 @@ export function JarvisGuideDrone({ targetHref, startPos, onComplete }: JarvisGui
   const [targetTitle, setTargetTitle] = useState("DESTINO")
   const [isArrived, setIsArrived] = useState(false)
 
-  const droneAudioRef = useRef<HTMLAudioElement | null>(null)
-
   // Exclusive Neural Voice Synthesis via Edge TTS API (/api/jarvis/tts)
-  const speakJarvisVoice = async (phrase: string) => {
+  const speakJarvisVoice = (phrase: string) => {
     if (typeof window === "undefined") return
-
-    if (droneAudioRef.current) {
-      droneAudioRef.current.pause()
-      droneAudioRef.current.currentTime = 0
-    }
-
-    try {
-      const res = await fetch("/api/jarvis/tts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: phrase }),
-      })
-
-      if (res.ok) {
-        const blob = await res.blob()
-        const audioUrl = URL.createObjectURL(blob)
-        const audio = new Audio(audioUrl)
-        droneAudioRef.current = audio
-        await audio.play()
-      }
-    } catch (err) {
-      console.warn("Drone Neural TTS failed:", err)
-    }
+    jarvisVoice.speak({
+      text: phrase,
+      source: "drone",
+    })
   }
 
   useEffect(() => {
@@ -108,6 +88,7 @@ export function JarvisGuideDrone({ targetHref, startPos, onComplete }: JarvisGui
       clearTimeout(scrollTimer)
       clearTimeout(arriveTimer)
       clearTimeout(finishTimer)
+      jarvisVoice.stop("drone")
     }
   }, [targetHref])
 

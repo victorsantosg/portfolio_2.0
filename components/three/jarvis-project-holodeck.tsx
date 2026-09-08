@@ -36,6 +36,7 @@ import {
   exportMeshesToSTL,
 } from "@/lib/holodeck-data"
 import { buildArchetypeScene, ArchetypeSceneResult } from "@/components/three/holodeck-archetypes"
+import { jarvisVoice } from "@/lib/jarvis-voice"
 
 interface Holo3DSceneProps {
   project: HoloProjectData
@@ -380,24 +381,55 @@ export function JarvisProjectHolodeck() {
 
   // Voice Narration State
   const [isVoicePlaying, setIsVoicePlaying] = useState(false)
-  const [isVoiceMuted, setIsVoiceMuted] = useState(false)
+  const [isVoiceMuted, setIsVoiceMuted] = useState(jarvisVoice.isMuted())
   const [isVoiceLoading, setIsVoiceLoading] = useState(false)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const isFromTourRef = useRef(false)
   const sceneResultRef = useRef<ArchetypeSceneResult | null>(null)
 
-  // Load saved voice preference
+  // Sincroniza estado de voz com o JarvisVoiceManager
   useEffect(() => {
-    if (typeof window === "undefined") return
-    const saved = localStorage.getItem("jarvis_voice_enabled")
-    if (saved !== null) {
-      setIsVoiceMuted(saved === "false")
-    }
+    return jarvisVoice.subscribe((state) => {
+      setIsVoiceMuted(state.isMuted)
+      setIsVoicePlaying(state.isSpeaking)
+      setIsVoiceLoading(state.isLoading)
+    })
+  }, [])
+
+  // Stop voice helper
+  const stopVoice = useCallback(() => {
+    jarvisVoice.stop("holodeck")
+    setIsVoicePlaying(false)
+    setIsVoiceLoading(false)
+  }, [])
+
+  // Play voice narration for the active project
+  const playNarration = useCallback((project: HoloProjectData) => {
+    if (jarvisVoice.isMuted() || !project.ttsBriefing) return
+
+    jarvisVoice.stop("holodeck")
+    jarvisVoice.speak({
+      text: project.ttsBriefing,
+      source: "holodeck",
+      onLoading: (loading) => setIsVoiceLoading(loading),
+      onStart: () => {
+        setIsVoiceLoading(false)
+        setIsVoicePlaying(true)
+      },
+      onEnd: () => {
+        setIsVoicePlaying(false)
+      },
+      onError: () => {
+        setIsVoiceLoading(false)
+        setIsVoicePlaying(false)
+      },
+    })
   }, [])
 
   // Listen to open/close events
   useEffect(() => {
     const handleOpen = (e: any) => {
       const stepId = e.detail?.stepId || e.detail?.id || e.detail?.projectId
+      isFromTourRef.current = !!(e.detail?.fromTour || e.detail?.silent)
       let foundProj: HoloProjectData
 
       if (e.detail?.project) {
@@ -419,6 +451,7 @@ export function JarvisProjectHolodeck() {
     const handleClose = () => {
       setActiveProject(null)
       setIsImageLightboxOpen(false)
+      isFromTourRef.current = false
       stopVoice()
     }
 
@@ -428,7 +461,7 @@ export function JarvisProjectHolodeck() {
       window.removeEventListener("open-holodeck-project", handleOpen)
       window.removeEventListener("close-holodeck-project", handleClose)
     }
-  }, [])
+  }, [stopVoice])
 
   // Listen to Escape key to close image lightbox
   useEffect(() => {
@@ -443,78 +476,22 @@ export function JarvisProjectHolodeck() {
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [isImageLightboxOpen])
 
-  // Stop voice helper
-  const stopVoice = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.pause()
-      audioRef.current.currentTime = 0
-      audioRef.current = null
-    }
-    setIsVoicePlaying(false)
-    setIsVoiceLoading(false)
-  }, [])
-
-  // Play voice narration for the active project
-  const playNarration = useCallback(async (project: HoloProjectData) => {
-    stopVoice()
-    if (isVoiceMuted || !project.ttsBriefing) return
-
-    setIsVoiceLoading(true)
-    try {
-      const res = await fetch("/api/jarvis/tts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: project.ttsBriefing }),
-      })
-
-      if (!res.ok) throw new Error("TTS request failed")
-      const blob = await res.blob()
-      const audioUrl = URL.createObjectURL(blob)
-      const audio = new Audio(audioUrl)
-      audioRef.current = audio
-
-      audio.onplay = () => {
-        setIsVoiceLoading(false)
-        setIsVoicePlaying(true)
-      }
-      audio.onended = () => {
-        setIsVoicePlaying(false)
-      }
-      audio.onerror = () => {
-        setIsVoiceLoading(false)
-        setIsVoicePlaying(false)
-      }
-
-      await audio.play()
-    } catch (err) {
-      console.warn("Failed to play Jarvis narration:", err)
-      setIsVoiceLoading(false)
-      setIsVoicePlaying(false)
-    }
-  }, [isVoiceMuted, stopVoice])
-
-  // Trigger speech when active project opens
+  // Trigger speech when active project opens (apenas se NÃO foi aberto pelo tour e não estiver mudo)
   useEffect(() => {
-    if (activeProject && !isVoiceMuted) {
+    if (activeProject && !isFromTourRef.current && !isVoiceMuted) {
       const timer = setTimeout(() => {
         playNarration(activeProject)
       }, 500)
       return () => clearTimeout(timer)
-    } else {
+    } else if (!activeProject) {
       stopVoice()
     }
   }, [activeProject, isVoiceMuted, playNarration, stopVoice])
 
   // Toggle voice mute
   const toggleMute = () => {
-    const nextMuted = !isVoiceMuted
-    setIsVoiceMuted(nextMuted)
-    if (typeof window !== "undefined") {
-      localStorage.setItem("jarvis_voice_enabled", String(!nextMuted))
-    }
-    if (nextMuted) {
-      stopVoice()
-    } else if (activeProject) {
+    const nextMuted = jarvisVoice.toggleMute()
+    if (!nextMuted && activeProject && !isFromTourRef.current) {
       playNarration(activeProject)
     }
   }

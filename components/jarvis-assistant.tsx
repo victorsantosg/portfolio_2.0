@@ -25,6 +25,7 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
+import { jarvisVoice } from "@/lib/jarvis-voice"
 
 type JarvisState =
   | "welcome"
@@ -49,7 +50,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
   const [currentState, setCurrentState] = useState<JarvisState>("welcome")
   const [isTyping, setIsTyping] = useState(false)
   const [displayedText, setDisplayedText] = useState("")
-  const [voiceEnabled, setVoiceEnabled] = useState(true)
+  const [voiceEnabled, setVoiceEnabled] = useState(!jarvisVoice.isMuted())
   
   // Real Groq AI Chat States
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([])
@@ -58,36 +59,17 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
 
   const messageEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
-  const abortControllerRef = useRef<AbortController | null>(null)
 
-  // Load saved voice preference
+  // Sincroniza estado de voz com o JarvisVoiceManager
   useEffect(() => {
-    if (typeof window === "undefined") return
-
-    const savedVoiceState = localStorage.getItem("jarvis_voice_enabled")
-    if (savedVoiceState !== null) {
-      setVoiceEnabled(savedVoiceState === "true")
-    }
+    return jarvisVoice.subscribe((state) => {
+      setVoiceEnabled(!state.isMuted)
+    })
   }, [])
 
   // Toggle voice and save preference
   const toggleVoice = () => {
-    const nextState = !voiceEnabled
-    setVoiceEnabled(nextState)
-    if (typeof window !== "undefined") {
-      localStorage.setItem("jarvis_voice_enabled", String(nextState))
-      if (!nextState) {
-        if (abortControllerRef.current) {
-          abortControllerRef.current.abort()
-        }
-        if (audioRef.current) {
-          audioRef.current.pause()
-          audioRef.current.currentTime = 0
-          audioRef.current = null
-        }
-      }
-    }
+    jarvisVoice.toggleMute()
   }
 
   // Helper to generate dynamic time-of-day greetings (Stark Industries / Jarvis Persona)
@@ -207,69 +189,15 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
       .trim()
   }
 
-  // Exclusive Humanized J.A.R.V.I.S. Neural Audio Player (Edge TTS API ONLY)
-  const speakHumanizedJarvis = async (text: string) => {
-    if (!voiceEnabled || typeof window === "undefined") return
+  // Exclusive Humanized J.A.R.V.I.S. Neural Audio Player (via central jarvisVoice)
+  const speakHumanizedJarvis = (text: string) => {
+    if (!voiceEnabled || typeof window === "undefined" || jarvisVoice.isMuted()) return
 
-    const spokenText = cleanSpeechText(text)
-    if (!spokenText) return
-
-    // Stop any existing ongoing audio or request
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort()
-    }
-    if (audioRef.current) {
-      try {
-        audioRef.current.pause()
-        audioRef.current.currentTime = 0
-      } catch (_) {}
-      audioRef.current = null
-    }
-
-    const controller = new AbortController()
-    abortControllerRef.current = controller
-
-    try {
-      // Exclusively: Microsoft Edge Neural TTS Audio Stream (/api/jarvis/tts)
-      const res = await fetch("/api/jarvis/tts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: spokenText }),
-        signal: controller.signal,
-      })
-
-      if (res.ok) {
-        const blob = await res.blob()
-        const audioUrl = URL.createObjectURL(blob)
-        const audio = new Audio(audioUrl)
-        audioRef.current = audio
-
-        const playPromise = audio.play()
-        if (playPromise !== undefined) {
-          playPromise.catch(() => {
-            // Browser autoplay blocked because user hasn't clicked page yet
-            // Queue playback on the very first user interaction anywhere
-            const unlockAndPlay = () => {
-              if (audioRef.current && audioRef.current.paused) {
-                audioRef.current.play().catch(() => {})
-              }
-              window.removeEventListener("pointerdown", unlockAndPlay)
-              window.removeEventListener("click", unlockAndPlay)
-              window.removeEventListener("touchstart", unlockAndPlay)
-              window.removeEventListener("keydown", unlockAndPlay)
-            }
-            window.addEventListener("pointerdown", unlockAndPlay, { once: true })
-            window.addEventListener("click", unlockAndPlay, { once: true })
-            window.addEventListener("touchstart", unlockAndPlay, { once: true })
-            window.addEventListener("keydown", unlockAndPlay, { once: true })
-          })
-        }
-      }
-    } catch (err: any) {
-      if (err.name !== "AbortError") {
-        console.warn("J.A.R.V.I.S. Neural TTS Audio error:", err)
-      }
-    }
+    jarvisVoice.stop("assistant")
+    jarvisVoice.speak({
+      text,
+      source: "assistant",
+    })
   }
 
   // Direct AI Query Handler
@@ -619,7 +547,10 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
                 </button>
 
                 <button
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => {
+                    setIsOpen(false)
+                    jarvisVoice.stop("assistant")
+                  }}
                   className="p-2 sm:p-1.5 rounded-xl border border-white/10 text-muted-foreground hover:text-foreground hover:bg-white/10 transition-colors cursor-pointer"
                   aria-label="Fechar Terminal J.A.R.V.I.S."
                 >
