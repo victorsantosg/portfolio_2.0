@@ -20,7 +20,6 @@ import {
   Radio,
   Zap,
   Send,
-  Sparkles,
   Bot,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -451,7 +450,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
             animate={{ opacity: 1, x: 0 }}
             className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/85 backdrop-blur-md border border-amber-500/30 text-amber-400 text-[11px] font-mono shadow-[0_0_12px_rgba(245,158,11,0.2)]"
           >
-            <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
+            <Bot className="w-3 h-3 text-amber-400" />
             <span>J.A.R.V.I.S.</span>
           </motion.div>
         )}
@@ -610,7 +609,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
                       ) : (
                         <div className="max-w-[92%] rounded-2xl rounded-tl-xs bg-black/80 border border-amber-500/40 p-3 sm:p-3.5 text-xs sm:text-[13px] font-mono text-slate-200 shadow-inner">
                           <div className="text-[9px] text-amber-400 font-bold mb-1.5 flex items-center gap-1.5 pb-1 border-b border-amber-500/20">
-                            <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
+                            <Bot className="w-3 h-3 text-amber-400" />
                             <span>J.A.R.V.I.S.</span>
                           </div>
                           <p className="whitespace-pre-wrap leading-relaxed">
@@ -677,7 +676,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
                   disabled={isAiLoading}
                   className="w-full h-10 pl-3 pr-8 rounded-xl bg-gray-900/90 border border-amber-500/40 text-xs font-mono text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 shadow-inner"
                 />
-                <Sparkles className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-amber-400/60 pointer-events-none" />
+                <Bot className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-amber-400/60 pointer-events-none" />
               </div>
 
               <Button

@@ -5,7 +5,6 @@ import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from
 import * as THREE from "three"
 import {
   X,
-  Sparkles,
   Layers,
   Cpu,
   Database,
@@ -556,7 +555,6 @@ export function JarvisProjectHolodeck() {
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-sky-400 animate-ping" />
               <span className="font-extrabold text-sky-400 tracking-wider flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5" />
                 <span>HOLODECK 3D // SHOWROOM INTERATIVO</span>
               </span>
             </div>
@@ -624,7 +622,6 @@ export function JarvisProjectHolodeck() {
                     : "text-muted-foreground hover:text-white"
                 }`}
               >
-                <Sparkles className="w-3.5 h-3.5" />
                 <span>🎮 Holograma 3D</span>
               </button>
               <button
@@ -728,7 +725,6 @@ export function JarvisProjectHolodeck() {
                 {/* Bottom Footer Overlay */}
                 <div className="p-3 bg-black/90 border-t border-white/10 flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-muted-foreground">
                   <span className="text-white font-medium flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-emerald-400" />
                     <span>Clique na imagem para dar zoom em tela cheia na mesma página.</span>
                   </span>
                   <button
@@ -736,7 +732,6 @@ export function JarvisProjectHolodeck() {
                     className="text-sky-400 hover:text-sky-300 font-bold flex items-center gap-1.5 cursor-pointer transition-colors"
                   >
                     <span>Voltar à Arquitetura 3D</span>
-                    <Sparkles className="w-3.5 h-3.5" />
                   </button>
                 </div>
               </div>

@@ -23,18 +23,27 @@ export const TOUR_STEPS: TourStep[] = [
     threePreset: "geral",
   },
   {
-    id: "about",
+    id: "about_corporate",
     title: "PROTOCOLO 02 // HISTÓRICO DE MISSÕES",
     subtitle: "Escaneando Credenciais Biométricas",
     targetSection: "#sobre",
     narration:
-      "Escaneando credenciais biométricas de Victor Santos. Acesso Nível 4 confirmado: graduado em Análise de Sistemas pela UNIFOR e pós-graduado em Full Stack pela INFNET. Observe o crachá holográfico abrindo com o histórico de missões e certificações de engenharia.",
+      "Escaneando credenciais biométricas de Victor Santos. Acesso Nível 4 confirmado: graduado em Análise de Sistemas pela UNIFOR e pós-graduado em Full Stack pela INFNET. Observe o crachá holográfico abrindo com o histórico de missões corporativas e arquiteturas de alta concorrência entregues no Cometa Supermercados.",
     duration: 12500,
   },
   {
-    id: "maker_lab",
-    title: "PROTOCOLO 03 // DIGITAL TWIN 3D & WMS",
-    subtitle: "Materializando Gêmeo Digital no Holo-Deck",
+    id: "about_ai",
+    title: "PROTOCOLO 03 // ECOSSISTEMA DE IA AGENTIC",
+    subtitle: "Modelos de Fronteira & Engenharia de Contexto",
+    targetSection: "#sobre",
+    narration:
+      "Ativando matriz de Inteligência Artificial. Victor orquestra os modelos mais potentes do mercado mundial: GPT-6 Astra, GPT-5.6 Sol e Terra, Claude Sonnet 4.6 e Claude Opus 4.6 com modo Thinking deliberativo, e Gemini 3.8 Flash com contexto ultra-longo. Isso se soma a servidores MCP ao vivo, roteamento OmniRoute, economia cirúrgica de 70% de tokens com o padrão Caveman e grafos Graphify para análise profunda de software.",
+    duration: 15500,
+  },
+  {
+    id: "wms_3d",
+    title: "PROTOCOLO 04 // GÊMEO DIGITAL WMS 3D",
+    subtitle: "Materializando Armazém Logístico no Holo-Deck",
     targetSection: "#maker-lab",
     narration:
       "Materializando o Holo-Deck 3D de projetos. Observe no holograma: este é o Gêmeo Digital do armazém logístico do Cometa Supermercados com mais de 11.200 posições reais de estoque modeladas em Three.js, cálculo automático FEFO e mapa térmico em tempo real.",
@@ -43,9 +52,9 @@ export const TOUR_STEPS: TourStep[] = [
     threeLevel: "all",
   },
   {
-    id: "projects",
-    title: "PROTOCOLO 04 // GALERIA DE PROTÓTIPOS",
-    subtitle: "Raio-X de Arquitetura no Holo-Deck",
+    id: "erp",
+    title: "PROTOCOLO 05 // ERP INVENTÁRIO CORPORATIVO",
+    subtitle: "Raio-X de Engenharia em Nuvem de Alta Concorrência",
     targetSection: "#projetos",
     narration:
       "Projetando no Holo-Deck a arquitetura do ERP de Inventário e Auditoria Corporativa. Desenvolvido com Next.js 16, Fastify e PostgreSQL, processando mais de 5.000 requisições por segundo com latência de apenas 28 milissegundos e integridade ACID.",
@@ -53,11 +62,11 @@ export const TOUR_STEPS: TourStep[] = [
   },
   {
     id: "quote",
-    title: "PROTOCOLO 05 // ORÇAMENTO & DESPEDIDA",
-    subtitle: "Canal Direto com o Criador",
+    title: "PROTOCOLO 06 // VISÃO GERAL & CANAL DIRETO",
+    subtitle: "Apenas a Ponta do Iceberg",
     targetSection: "#orcamento",
     narration:
-      "Varredura de sistemas finalizada com sucesso, Senhor. Todos os servidores operam com 100% de estabilidade e o Victor já está na terceira xícara de café. Sugiro fortemente acioná-lo no WhatsApp antes que a cafeína acabe e ele decida recodificar toda a internet.",
-    duration: 12500,
+      "Este voo guiado foi apenas um breve resumo executivo, Senhor. O ecossistema de Victor Santos conta com diversos outros projetos complexos, sistemas em produção e dados de arquitetura. Sinta-se à vontade para vasculhar cada canto deste portfólio ou simplesmente abrir meu terminal de chat e me perguntar qualquer detalhe. E caso queira dar início a um novo projeto de alto impacto, o canal direto via WhatsApp está totalmente à sua disposição.",
+    duration: 16000,
   },
 ]

@@ -55,7 +55,12 @@ BASE DE CONHECIMENTO COMPLETA DO CRIADOR (VICTOR SANTOS):
    - Backend: Node.js, Fastify, Python 3.12, Prisma ORM, APIs RESTful e GraphQL.
    - Bancos de Dados: PostgreSQL, Supabase, Firebase, MySQL.
    - Infraestrutura & DevOps: Docker, Docker Compose, Coolify, Linux VPS, Vercel, AWS.
-   - IA & Manufatura 3D: Groq LPUs (Llama 3.3 70B), Google Gemini 1.5, Meshy AI, Fatiamento e exportação industrial .3MF / .GLB.
+   - IA & Manufatura 3D: Groq LPUs (Llama 3.3 70B), Google Gemini, Meshy AI, Fatiamento e exportação industrial .3MF / .GLB.
+   - Domínio em IA Agentic & Engenharia de Contexto:
+     * Modelos Fundacionais & Multimodalidade: OpenAI GPT (GPT-6 Astra, GPT-5.6 Sol & Terra, o1/o3-mini reasoning engines), Claude (Claude Sonnet 4.6 e Claude Opus 4.6 Thinking com raciocínio deliberativo e coding cirúrgico), Gemini (Gemini 3.8 Flash/Pro com contexto longo 1M-2M e multimodalidade) e Google Veo (vídeo cinematográfico).
+     * Prototipagem & UI Generativa: Google AI Studio (engenharia de prompt, JSON schemas, function calling), v0 da Vercel (UI generativa com React/Tailwind) e Google Stitch (design visual acelerado por IA).
+     * Arquitetura de Agentes & Protocolos: MCP (Model Context Protocol conectando ferramentas, bancos SQL/Postgres, Firecrawl scraping e APIs), Central Skills modulares e OmniRoute (roteamento inteligente de LLMs, tolerância a falhas e otimização de custo/latência).
+     * Engenharia de Contexto & Metodologias: Caveman Token-Saving (65-75% de economia de tokens com compressão cirúrgica sem perda técnica), Graphify (grafos de conhecimento e análise de dependências AST em código) e /grill-me com Karpathy Guidelines (alinhamento profundo de requisitos e código cirúrgico).
 
 4. CONTATO & REDIRECIONAMENTOS:
    - Se o usuário perguntar como contratar, pedir orçamento ou falar com o Criador, oriente com elegância para o WhatsApp Oficial (+55 85 99955-6385 / https://wa.me/5585999556385) ou indique a seção de orçamento no portfólio.
@@ -63,6 +68,7 @@ BASE DE CONHECIMENTO COMPLETA DO CRIADOR (VICTOR SANTOS):
    - GitHub: https://github.com/victorsantosg
    - LinkedIn: https://www.linkedin.com/in/victor-santos-0a86021b7/
    - Localização: Fortaleza, Ceará, Brasil.
+   - Currículo do Criador (Download PDF): https://drive.google.com/file/d/1jfBDFYGxOqpE_hPOBPUrZe26YhuR6BlF/view?usp=sharing
 `
 
 export async function POST(req: Request) {

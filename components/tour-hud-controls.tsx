@@ -10,7 +10,6 @@ import {
   Volume2,
   VolumeX,
   Compass,
-  Sparkles,
   Radio,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -101,20 +100,30 @@ export function TourHudControls() {
       })
     )
 
-    // Trigger ID Pass Card Scan in About Section
-    if (currentStep.id === "about") {
+    // Alternância de abas e escaneamento do ID na seção Sobre
+    if (currentStep.id === "about_corporate") {
       setTimeout(() => {
         window.dispatchEvent(new CustomEvent("trigger-id-card-scan"))
       }, 700)
+      window.dispatchEvent(new CustomEvent("switch-about-tab", { detail: { tab: "corporate" } }))
+    } else if (currentStep.id === "about_ai") {
+      window.dispatchEvent(new CustomEvent("close-id-card-scan"))
+      window.dispatchEvent(new CustomEvent("switch-about-tab", { detail: { tab: "ai" } }))
     } else {
       window.dispatchEvent(new CustomEvent("close-id-card-scan"))
     }
 
-    // Open/Close 3D Project Holo-Deck
-    if (currentStep.id === "maker_lab" || currentStep.id === "projects") {
+    // Abertura cirúrgica e sincronizada do Holo-Deck 3D
+    if (currentStep.id === "wms_3d") {
       window.dispatchEvent(
         new CustomEvent("open-holodeck-project", {
-          detail: { stepId: currentStep.id, fromTour: true, silent: true },
+          detail: { stepId: "wms_3d", fromTour: true, silent: true },
+        })
+      )
+    } else if (currentStep.id === "erp") {
+      window.dispatchEvent(
+        new CustomEvent("open-holodeck-project", {
+          detail: { stepId: "erp", fromTour: true, silent: true },
         })
       )
     } else {
@@ -264,7 +273,6 @@ export function TourHudControls() {
             {/* Narration Text Stream */}
             <div className="flex-1 min-w-0">
               <div className="text-[11px] font-mono text-amber-300 font-bold flex items-center gap-1.5 mb-1">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                 <span className="truncate">{currentStep.title} — {currentStep.subtitle}</span>
               </div>
               <p className="text-xs sm:text-[13px] font-mono text-slate-200 leading-relaxed min-h-[48px]">

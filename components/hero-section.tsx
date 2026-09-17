@@ -146,19 +146,20 @@ function InteractiveHeroAvatar({
           />
         )}
 
-        {/* Inner Profile Image with 3D Depth & Zoom */}
+        {/* Inner Profile Image with Crisp Clarity */}
         <div
-          style={{ transform: "translateZ(30px)" }}
-          className="relative w-full h-full rounded-full overflow-hidden border border-gray-800 bg-gray-900 flex items-center justify-center shadow-2xl"
+          className="relative w-full h-full rounded-full overflow-hidden border border-gray-800 bg-gray-900 flex items-center justify-center shadow-2xl [transform:translateZ(1px)]"
         >
           <Image
             src="/img_victor.png"
             alt="Victor Santos"
             fill
-            className="object-cover transition-all duration-500 group-hover:scale-115 group-hover:brightness-110"
+            quality={100}
+            unoptimized
+            className="object-cover transition-all duration-500 group-hover:scale-105"
+            style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-[#ee7112]/10 opacity-30 group-hover:opacity-60 transition-opacity duration-300" />
         </div>
 
         {/* Floating CPU / Cyber Chip Badge */}
@@ -325,7 +326,7 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
             </motion.div>
 
             {/* Flying Titles with Per-Word Armor Assembly Physics & Kinetic Zoom on Hover */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-balance">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4 sm:mb-5 text-balance">
               <div className="flex flex-wrap justify-center lg:justify-start gap-x-3 gap-y-1">
                 {title1.split(" ").map((word, i) => (
                   <motion.span
@@ -342,27 +343,45 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
                   </motion.span>
                 ))}
               </div>
-              <div className="flex flex-wrap justify-center lg:justify-start gap-x-3 gap-y-1 mt-1">
-                {title2.split(" ").map((word, i) => (
-                  <motion.span
-                    key={i}
-                    initial={{ opacity: 0 }}
-                    animate={getAssemblyVariants(i, i === 1 ? "scale" : i === 0 ? "left" : "right")}
-                    transition={getTransition(0.65 + i * 0.15)}
-                    className="inline-block text-gradient animate-gradient bg-[length:200%_200%]"
-                  >
-                    <KineticLetters text={word} isGradient />
-                  </motion.span>
-                ))}
-              </div>
+              {Boolean(title2 && title2.trim()) && (
+                <div className="flex flex-wrap justify-center lg:justify-start gap-x-3 gap-y-1 mt-1">
+                  {title2.split(" ").map((word, i) => (
+                    <motion.span
+                      key={i}
+                      initial={{ opacity: 0 }}
+                      animate={getAssemblyVariants(i, i === 1 ? "scale" : i === 0 ? "left" : "right")}
+                      transition={getTransition(0.65 + i * 0.15)}
+                      className="inline-block text-gradient animate-gradient bg-[length:200%_200%]"
+                    >
+                      <KineticLetters text={word} isGradient />
+                    </motion.span>
+                  ))}
+                </div>
+              )}
             </h1>
+
+            {/* Software Engineer, Stack & AI Solutions Ribbon */}
+            {(t.hero as any).headline && (
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                animate={assemblyState === "disassembled" ? { opacity: 0, y: 40 } : { opacity: 1, y: 0 }}
+                transition={getTransition(0.75)}
+                className="inline-flex flex-wrap items-center justify-center lg:justify-start gap-1.5 sm:gap-2 px-3.5 py-2 rounded-xl border border-primary/30 bg-secondary/25 backdrop-blur-md text-xs sm:text-sm font-mono mb-5 shadow-[0_0_15px_rgba(238,113,18,0.12)] text-center lg:text-left"
+              >
+                <span className="text-primary font-bold">{(t.hero as any).headline.role}</span>
+                <span className="text-border/80 hidden sm:inline">|</span>
+                <span className="text-foreground/90 font-medium">{(t.hero as any).headline.stack}</span>
+                <span className="text-border/80 hidden sm:inline">|</span>
+                <span className="text-amber-400 font-semibold">{(t.hero as any).headline.focus}</span>
+              </motion.div>
+            )}
 
             {/* Subtitle */}
             <motion.p
               initial={{ opacity: 0, y: 80 }}
               animate={assemblyState === "disassembled" ? { opacity: 0, y: 80 } : { opacity: 1, y: 0 }}
               transition={getTransition(0.85)}
-              className="text-lg md:text-xl text-muted-foreground max-w-2xl lg:max-w-none lg:text-left mb-10 text-pretty"
+              className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl lg:max-w-none lg:text-left mb-10 text-pretty leading-relaxed"
             >
               {t.hero.subtitle}
             </motion.p>

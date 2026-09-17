@@ -698,7 +698,7 @@ ${
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-48 bg-card border-border/50">
                     <DropdownMenuItem asChild className="cursor-pointer">
-                      <a href="https://drive.google.com/file/d/1Cv596z56VEIEgutcjcX7SPFurH2w03-6/view?usp=sharing" target="_blank" rel="noopener noreferrer">
+                      <a href="https://drive.google.com/file/d/1jfBDFYGxOqpE_hPOBPUrZe26YhuR6BlF/view?usp=sharing" target="_blank" rel="noopener noreferrer">
                         Português (PT-BR)
                       </a>
                     </DropdownMenuItem>

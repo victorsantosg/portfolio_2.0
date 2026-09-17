@@ -12,9 +12,14 @@ export const translations = {
     hero: {
       available: "Disponível para novos projetos",
       title1: "Desenvolvedor Full Stack",
-      titleGradient: "Web & Mobile",
+      titleGradient: "",
       title2: "",
-      subtitle: "Especialista em Next.js - Construindo aplicações de alta performance e arquiteturas robustas em nuvem, integradas a automações inteligentes que otimizam dados e processos.",
+      headline: {
+        role: "Software Engineer",
+        stack: "Node.js • Python • Next.js • PostgreSQL • Docker",
+        focus: "AI Agents & Soluções Corporativas",
+      },
+      subtitle: "Construindo aplicações de alta performance e arquiteturas robustas em nuvem, integradas a agentes inteligentes autônomos que otimizam dados e processos corporativos.",
       ctaPrimary: "Iniciar Projeto",
       ctaSecondary: "Ver Projetos",
       stats: {
@@ -75,7 +80,116 @@ export const translations = {
         "Infraestrutura & APIs: Migração de banco legado (Firestore/BigQuery) para PostgreSQL no Coolify e desenvolvimento da Analytics API para consumo otimizado de dados transacionais.",
         "Desktop TVs (Tauri): App nativo desenvolvido em Tauri (Rust/TypeScript) com pipeline de atualização remota de SDK para gerenciamento centralizado de telas nas filiais.",
         "Automação ETL & Scripts: Desenvolvimento de rotinas de carga de dados diárias com monitoramento automatizado via Telegram para acompanhamento de vendas e consistência do ERP."
-      ]
+      ],
+      tabs: {
+        corporate: "Carreira & Projetos Corporativos",
+        ai: "IA Agentic & Engenharia de Contexto",
+        aiBadge: "NOVO // VANGUARDA",
+      },
+      aiSpecialist: {
+        badge: "ARQUITETURA & ECOSSISTEMA AGENTIC",
+        title: "Especialização em IA Agentic & Engenharia de Contexto",
+        subtitle: "Domínio prático de modelos fundacionais de fronteira, ecossistemas agentic autônomos, protocolos extensíveis (MCP) e técnicas cirúrgicas de otimização de contexto para máxima eficiência de tokens e precisão de engenharia.",
+        pillars: [
+          {
+            id: "models",
+            icon: "Brain",
+            title: "Modelos Fundacionais & Multimodalidade",
+            description: "Orquestração de LLMs e modelos gerativos de última geração para diferentes níveis de raciocínio, reflexão e multimodalidade.",
+            items: [
+              {
+                name: "OpenAI GPT (GPT-6 Astra, GPT-5.6 Sol & Terra)",
+                tags: ["Astra & Sol", "Deep Reasoning", "Algorithmic Precision"],
+                detail: "Uso dos modelos mais potentes e bem avaliados do mercado (GPT-6 Astra, GPT-5.6 Sol/Terra/Lua e séries de raciocínio o1/o3-mini) para validação lógica profunda e computação complexa."
+              },
+              {
+                name: "Anthropic Claude (Sonnet 4.6 & Opus 4.6 Thinking)",
+                tags: ["Sonnet 4.6", "Opus 4.6", "Thinking Mode", "Surgical Coding"],
+                detail: "Uso de Claude Sonnet 4.6 (Thinking) e Claude Opus 4.6 (Thinking) para refatoração cirúrgica de código, arquitetura de sistemas de alta densidade e raciocínio deliberativo profundo."
+              },
+              {
+                name: "Google Gemini (Gemini 3.8 Flash, Pro & Ultra Context)",
+                tags: ["Gemini 3.8", "1M-2M Tokens", "Native Multimodal"],
+                detail: "Aproveitamento de janelas ultra-longas para processamento e ingestão de bases de código completas, áudio, visão e telemetria de dados massivos."
+              },
+              {
+                name: "Google Veo",
+                tags: ["Video Generation", "Cinematics", "Creative AI"],
+                detail: "Geração e direção de vídeo cinematográfico fotorrealista com consistência visual e espacial de última geração."
+              }
+            ]
+          },
+          {
+            id: "prototyping",
+            icon: "Layers",
+            title: "Prototipagem Rápida & UI Generativa",
+            description: "Aceleração do ciclo de concepção ao produto final através de interfaces gerativas de alta fidelidade e prompt engineering estruturado.",
+            items: [
+              {
+                name: "Google AI Studio",
+                tags: ["Prompt Engineering", "Structured JSON", "System Prompts"],
+                detail: "Criação de prompts de sistema com tipagem rígida (JSON Schemas), function calling avançado e ajuste fino de hiperparâmetros de inferência."
+              },
+              {
+                name: "v0 by Vercel",
+                tags: ["Generative UI", "React / Next.js", "Tailwind CSS"],
+                detail: "Geração acelerada de componentes e telas web modernas de altíssima fidelidade estética, unindo design responsivo a código limpo."
+              },
+              {
+                name: "Google Stitch",
+                tags: ["AI Design to Code", "Visual Prototyping", "UI Synthesis"],
+                detail: "Síntese visual ágil e transição fluida de ideias conceituais para interfaces funcionais prontas para integração de produção."
+              }
+            ]
+          },
+          {
+            id: "agents",
+            icon: "Network",
+            title: "Arquitetura de Agentes & Protocolos Extensíveis",
+            description: "Construção e conexão de agentes autônomos a ferramentas externas, bancos de dados e serviços do mundo real.",
+            items: [
+              {
+                name: "MCP (Model Context Protocol)",
+                tags: ["Anthropic Protocol", "DB Integrations", "Firecrawl Scraping"],
+                detail: "Integração segura de LLMs a fontes vivas: bancos PostgreSQL/SQL, web scraping avançado via Firecrawl, sistemas de arquivos e APIs externas."
+              },
+              {
+                name: "Central Skills & Agentes Modulares",
+                tags: ["Modular Skills", "Autonomous Execution", "On-Demand Tools"],
+                detail: "Desenvolvimento de habilidades modulares reutilizáveis com documentação executável, comandos shell e orquestração autônoma de tarefas."
+              },
+              {
+                name: "OmniRoute",
+                tags: ["Intelligent Routing", "Fallback Strategy", "Cost & Latency"],
+                detail: "Balanceamento e roteamento inteligente entre provedores de IA, tolerância a falhas, contingência em rate-limit e minimização de custos."
+              }
+            ]
+          },
+          {
+            id: "optimization",
+            icon: "Cpu",
+            title: "Otimização de Contexto, Grafos & Metodologias",
+            description: "Técnicas de engenharia de contexto para redução drástica de tokens, análise profunda de código e governança de desenvolvimento.",
+            items: [
+              {
+                name: "Caveman Token-Saving Standard",
+                tags: ["65-75% Token Reduction", "Log Compression", "Context Packaging"],
+                detail: "Eliminação cirúrgica de tokens desnecessários, compressão de logs/saídas ruidosas e empacotamento enxuto de contexto sem perder precisão técnica."
+              },
+              {
+                name: "Graphify",
+                tags: ["Knowledge Graphs", "God Nodes", "AST Dependencies"],
+                detail: "Mapeamento semântico de bases de código inteiras em grafos de conhecimento, identificando pontos críticos, fluxos e comunidades lógicas."
+              },
+              {
+                name: "/grill-me & Karpathy Guidelines",
+                tags: ["Interactive Alignment", "Surgical Changes", "Goal-Driven"],
+                detail: "Metodologia de alinhamento iterativo de requisitos antes do código, minimizando abstrações prematuras e garantindo código cirúrgico."
+              }
+            ]
+          }
+        ]
+      }
     },
     projects: {
       tagline: "<Projetos />",
@@ -253,9 +367,14 @@ export const translations = {
     hero: {
       available: "Available for new projects",
       title1: "Full Stack Developer",
-      titleGradient: "& Automation Specialist",
+      titleGradient: "",
       title2: "",
-      subtitle: "Building high-performance applications and robust cloud architectures, integrated with intelligent automations that optimize data and processes.",
+      headline: {
+        role: "Software Engineer",
+        stack: "Node.js • Python • Next.js • PostgreSQL • Docker",
+        focus: "AI Agents & Enterprise Solutions",
+      },
+      subtitle: "Building high-performance applications and robust cloud architectures, integrated with autonomous intelligent agents that optimize enterprise data and workflows.",
       ctaPrimary: "Start Project",
       ctaSecondary: "View Projects",
       stats: {
@@ -316,7 +435,116 @@ export const translations = {
         "Infrastructure & APIs: Migration of legacy database (Firestore/BigQuery) to PostgreSQL on Coolify and development of Analytics API for optimized transaction data consumption.",
         "Desktop TVs (Tauri): Native app built with Tauri (Rust/TypeScript) featuring a remote SDK update pipeline for centralized display management across stores.",
         "ETL Automation & Scripts: Implementation of daily data pipeline scripts in Python with automated Telegram alerts to monitor sales and ERP consistency."
-      ]
+      ],
+      tabs: {
+        corporate: "Career & Corporate Projects",
+        ai: "Agentic AI & Context Engineering",
+        aiBadge: "NEW // FRONTIER",
+      },
+      aiSpecialist: {
+        badge: "AGENTIC ARCHITECTURE & ECOSYSTEM",
+        title: "Agentic AI & Context Engineering Mastery",
+        subtitle: "Hands-on mastery of frontier foundation models, autonomous agentic workflows, extensible protocols (MCP), and surgical context optimization techniques for maximum token efficiency and engineering precision.",
+        pillars: [
+          {
+            id: "models",
+            icon: "Brain",
+            title: "Foundation Models & Multimodality",
+            description: "Orchestration of state-of-the-art generative and reasoning LLMs tailored for coding complexity, deliberative thinking, and multimodal processing.",
+            items: [
+              {
+                name: "OpenAI GPT (GPT-6 Astra, GPT-5.6 Sol & Terra)",
+                tags: ["Astra & Sol", "Deep Reasoning", "Algorithmic Precision"],
+                detail: "Leveraging the most powerful, top-rated foundation models on the market (GPT-6 Astra, GPT-5.6 Sol/Terra/Lua, and o1/o3-mini reasoning engines) for mission-critical logic and algorithmic verification."
+              },
+              {
+                name: "Anthropic Claude (Sonnet 4.6 & Opus 4.6 Thinking)",
+                tags: ["Sonnet 4.6", "Opus 4.6", "Thinking Mode", "Surgical Coding"],
+                detail: "Deep utilization of Claude Sonnet 4.6 (Thinking) and Claude Opus 4.6 (Thinking) for surgical code refactoring, high-density system architecture, and advanced deliberative reasoning."
+              },
+              {
+                name: "Google Gemini (Gemini 3.8 Flash, Pro & Ultra Context)",
+                tags: ["Gemini 3.8", "1M-2M Tokens", "Native Multimodal"],
+                detail: "Massive context window exploitation for full-repository comprehension, audio/video analysis, and high-throughput multimodal intelligence."
+              },
+              {
+                name: "Google Veo",
+                tags: ["Video Generation", "Cinematics", "Creative AI"],
+                detail: "Cinematic, photorealistic AI video synthesis with temporal and spatial consistency."
+              }
+            ]
+          },
+          {
+            id: "prototyping",
+            icon: "Layers",
+            title: "Rapid Prototyping & Generative UI",
+            description: "Accelerating the journey from idea to production-ready product with intelligent design synthesis and structured prompt engineering.",
+            items: [
+              {
+                name: "Google AI Studio",
+                tags: ["Prompt Engineering", "Structured JSON", "System Prompts"],
+                detail: "Crafting highly reliable system instructions, strictly typed structured outputs (JSON Schemas), function calling, and tuning inference hyperparameters."
+              },
+              {
+                name: "v0 by Vercel",
+                tags: ["Generative UI", "React / Next.js", "Tailwind CSS"],
+                detail: "Hyper-fast synthesis of visually stunning, responsive web components and full screens with clean, maintainable code."
+              },
+              {
+                name: "Google Stitch",
+                tags: ["AI Design to Code", "Visual Prototyping", "UI Synthesis"],
+                detail: "Agile visual prototyping bridging conceptual designs directly into functional production UI layouts."
+              }
+            ]
+          },
+          {
+            id: "agents",
+            icon: "Network",
+            title: "Agent Architecture & Extensible Protocols",
+            description: "Engineering autonomous agent ecosystems connected to real-world developer tools, databases, and third-party services.",
+            items: [
+              {
+                name: "MCP (Model Context Protocol)",
+                tags: ["Anthropic Protocol", "DB Integrations", "Firecrawl Scraping"],
+                detail: "Bridging LLMs securely to live context: PostgreSQL/SQL databases, advanced Firecrawl web scraping, local filesystems, and custom API servers."
+              },
+              {
+                name: "Central Skills & Modular Agents",
+                tags: ["Modular Skills", "Autonomous Execution", "On-Demand Tools"],
+                detail: "Developing reusable, decoupled agent skills loaded on demand with executable documentation, shell automation, and goal-driven execution."
+              },
+              {
+                name: "OmniRoute",
+                tags: ["Intelligent Routing", "Fallback Strategy", "Cost & Latency"],
+                detail: "Dynamic multi-provider load balancing, rate-limit fallback handling, intelligent model routing, and API cost/latency optimization."
+              }
+            ]
+          },
+          {
+            id: "optimization",
+            icon: "Cpu",
+            title: "Context Optimization, Graphs & Methodologies",
+            description: "Deep context engineering techniques for dramatic token reduction, codebase comprehension, and surgical development practices.",
+            items: [
+              {
+                name: "Caveman Token-Saving Standard",
+                tags: ["65-75% Token Reduction", "Log Compression", "Context Packaging"],
+                detail: "Surgical elimination of token waste, terminal log compression, and compact context packaging without compromising technical fidelity."
+              },
+              {
+                name: "Graphify",
+                tags: ["Knowledge Graphs", "God Nodes", "AST Dependencies"],
+                detail: "Transforming codebases into navigable knowledge graphs to uncover architecture bottlenecks, god nodes, and community clusters."
+              },
+              {
+                name: "/grill-me & Karpathy Guidelines",
+                tags: ["Interactive Alignment", "Surgical Changes", "Goal-Driven"],
+                detail: "Iterative design elicitation before implementation, eliminating premature abstractions and enforcing surgical, verified changes."
+              }
+            ]
+          }
+        ]
+      }
     },
     projects: {
       tagline: "<Projects />",

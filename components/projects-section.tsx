@@ -23,7 +23,6 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
-  Sparkles,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -532,7 +531,6 @@ export function ProjectsSection() {
                   }}
                   className="w-full bg-gradient-to-r from-sky-500 via-sky-400 to-amber-500 hover:from-sky-400 hover:to-amber-400 text-black font-extrabold shadow-[0_0_20px_rgba(56,189,248,0.35)] cursor-pointer text-xs sm:text-sm h-10 rounded-xl flex items-center justify-center gap-2"
                 >
-                  <Sparkles className="h-4 w-4 text-black shrink-0" />
                   <span>Projetar no Holodeck 3D (Exploded View & Slicer)</span>
                 </Button>
 
