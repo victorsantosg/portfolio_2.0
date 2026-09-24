@@ -2,25 +2,33 @@
 
 import { motion } from "framer-motion"
 import {
+  Brain,
+  Cpu,
+  Sparkles,
+  Bot,
+  Network,
   Code2,
   Server,
-  Smartphone,
-  Cog,
   Database,
+  Cog,
   Cloud,
-  Palette,
   Terminal,
+  Palette,
+  Zap,
 } from "lucide-react"
 import { useLanguage } from "@/hooks/use-language"
 import { jarvisVariants } from "@/lib/animations"
 
 const additionalTools = [
-  { name: "Next.js / PWA", icon: Code2 },
-  { name: "Docker & Compose", icon: Server },
-  { name: "Coolify", icon: Cloud },
+  { name: "Claude 3.7 Thinking", icon: Brain },
+  { name: "OpenAI o-series & Codex", icon: Sparkles },
+  { name: "OmniRoute AI Gateway", icon: Cpu },
+  { name: "MCP Protocol & Tools", icon: Network },
+  { name: "Next.js 16 / PWA", icon: Code2 },
+  { name: "Docker & Coolify", icon: Server },
+  { name: "Python (RPA & IA)", icon: Terminal },
+  { name: "PostgreSQL & Prisma", icon: Database },
   { name: "TypeScript", icon: Code2 },
-  { name: "Git & GitHub", icon: Terminal },
-  { name: "Figma", icon: Palette },
 ]
 
 export function TechStackSection() {
@@ -28,43 +36,69 @@ export function TechStackSection() {
 
   const categories = [
     {
+      title: t.stack.categories.aiModels,
+      systemId: "SYSTEM.AI_MODELS // INFERENCE",
+      icon: Brain,
+      techs: [
+        { name: "Claude Sonnet & Opus (Thinking)", level: 98 },
+        { name: "OpenAI GPT (Codex, Sol/Terra, o-series)", level: 96 },
+        { name: "Google Gemini (Ultra Context & Flash)", level: 95 },
+        { name: "DeepSeek R1 & Qwen 2.5 Coder", level: 93 },
+      ],
+    },
+    {
+      title: t.stack.categories.aiTools,
+      systemId: "SYSTEM.AI_GATEWAY // ORCHESTRATION",
+      icon: Cpu,
+      techs: [
+        { name: "OmniRoute (AI Gateway & Resiliência)", level: 98 },
+        { name: "MCP (Model Context Protocol & Tools)", level: 96 },
+        { name: "Combos de IA (Fusion, Think & Pipelines)", level: 95 },
+        { name: "Token Compression (Caveman, RTK -70%)", level: 94 },
+      ],
+    },
+    {
       title: t.stack.categories.web,
+      systemId: "SYSTEM.WEB_UI // ACTIVE",
       icon: Code2,
       techs: [
-        { name: "Next.js", level: 98 },
-        { name: "PWA (Mobile/Web Apps)", level: 95 },
-        { name: "React & TypeScript", level: 92 },
-        { name: "Tailwind CSS v4 & Motion", level: 90 },
+        { name: "Next.js (App Router & SSR)", level: 98 },
+        { name: "PWA (Mobile/Web Offline-First)", level: 95 },
+        { name: "React & TypeScript", level: 94 },
+        { name: "Tailwind CSS v4 & Motion", level: 92 },
       ],
     },
     {
       title: t.stack.categories.backend,
+      systemId: "SYSTEM.BACKEND // RUNNING",
       icon: Server,
       techs: [
-        { name: "Node.js & Fastify", level: 90 },
-        { name: "Prisma ORM & PostgreSQL", level: 88 },
-        { name: "REST APIs & LDAP/AD Integration", level: 88 },
-        { name: "Supabase & Firebase", level: 82 },
+        { name: "Node.js & Fastify (28ms Latency)", level: 94 },
+        { name: "Prisma ORM & PostgreSQL", level: 92 },
+        { name: "REST APIs & Integrações LDAP/ERP", level: 90 },
+        { name: "Supabase & Firebase", level: 85 },
       ],
     },
     {
       title: t.stack.categories.infra,
+      systemId: "SYSTEM.INFRA // READY",
       icon: Database,
       techs: [
         { name: "Docker & Docker Compose", level: 95 },
-        { name: "Coolify (Self-hosting & CI/CD)", level: 90 },
-        { name: "GCP BigQuery & S3 Storage", level: 85 },
-        { name: "Vitest (E2E & Unit Testing)", level: 80 },
+        { name: "Coolify (Self-hosting & CI/CD)", level: 92 },
+        { name: "GCP BigQuery & Cloud Storage", level: 88 },
+        { name: "Vitest (E2E & Testes Unitários)", level: 82 },
       ],
     },
     {
       title: t.stack.categories.automation,
+      systemId: "SYSTEM.AUTO // COMPLETED",
       icon: Cog,
       techs: [
-        { name: "Python (Pandas & NumPy)", level: 95 },
+        { name: "Python (Pandas & NumPy)", level: 96 },
         { name: "PyAutoGUI & Selenium (RPA)", level: 95 },
-        { name: "OpenAI & LLM APIs / AI Agents", level: 90 },
-        { name: "ETL & Advanced Scripting", level: 90 },
+        { name: "Agentes Autônomos & Tool Calling", level: 93 },
+        { name: "Pipelines ETL & Scripting", level: 90 },
       ],
     },
   ]
@@ -100,65 +134,69 @@ export function TechStackSection() {
           </p>
         </motion.div>
 
-        {/* Painel Dashboard 2x2 */}
-        <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:gap-8 max-w-6xl mx-auto mb-12">
+        {/* Painel Dashboard 3x2 em Desktop, 2x3 em Tablet, 1 col em Mobile */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto mb-12">
           {categories.map((category, catIndex) => (
             <motion.div
               key={category.title}
               variants={jarvisVariants}
-              custom={{ direction: "bottom", delay: catIndex * 0.1 }}
+              custom={{ direction: "bottom", delay: catIndex * 0.08 }}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="glass rounded-2xl border border-border/40 p-3 sm:p-5 lg:p-6 flex flex-col justify-between hover:border-primary/30 transition-all duration-300 relative group overflow-hidden"
+              className="glass rounded-2xl border border-border/40 p-4 sm:p-5 flex flex-col justify-between hover:border-primary/40 transition-all duration-300 relative group overflow-hidden shadow-lg"
             >
-              {/* Header do Servidor */}
+              {/* Header do Servidor / Categoria */}
               <div>
-                <div className="flex items-center justify-between mb-3 sm:mb-6 pb-2 sm:pb-4 border-b border-border/30">
-                  <div className="flex items-center gap-1.5 sm:gap-3">
-                    <div className="p-1 sm:p-2 rounded-lg bg-primary/10 text-primary border border-primary/20 shrink-0">
-                      <category.icon className="h-3.5 w-3.5 sm:h-5 sm:w-5" />
+                <div className="flex items-center justify-between mb-4 pb-3 border-b border-border/30">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="p-2 rounded-xl bg-primary/10 text-primary border border-primary/25 shrink-0 group-hover:bg-primary/20 transition-colors">
+                      <category.icon className="h-4.5 w-4.5 sm:h-5 sm:w-5" />
                     </div>
-                    <div>
-                      <h3 className="font-bold text-[10px] xs:text-xs sm:text-base text-foreground leading-tight truncate max-w-[80px] xs:max-w-none">{category.title}</h3>
-                      <p className="hidden sm:block text-[10px] text-muted-foreground font-mono mt-0.5">
-                        {catIndex === 0 && "SYSTEM.WEB_UI // ACTIVE"}
-                        {catIndex === 1 && "SYSTEM.BACKEND // RUNNING"}
-                        {catIndex === 2 && "SYSTEM.INFRA // READY"}
-                        {catIndex === 3 && "SYSTEM.AUTO // COMPLETED"}
+                    <div className="min-w-0">
+                      <h3 className="font-bold text-xs sm:text-sm text-foreground leading-snug break-words">
+                        {category.title}
+                      </h3>
+                      <p className="text-[9px] sm:text-[10px] text-muted-foreground font-mono mt-0.5 tracking-wider truncate">
+                        {category.systemId}
                       </p>
                     </div>
                   </div>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_var(--primary)] shrink-0" />
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)] shrink-0 ml-2" />
                 </div>
 
-                {/* Lista de Tecnologias */}
-                <div className="space-y-2.5 sm:space-y-4">
+                {/* Lista de Tecnologias sem truncamento */}
+                <div className="space-y-3 sm:space-y-3.5">
                   {category.techs.map((tech) => {
-                    // Determinar labels do Jarvis baseados no nível
                     let mastery = "INTERMEDIATE"
                     let ledColor = "bg-purple-500 shadow-[0_0_6px_#c084fc]"
                     if (tech.level >= 95) {
                       mastery = "EXPERT"
-                      ledColor = "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"
+                      ledColor = "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)]"
                     } else if (tech.level >= 90) {
                       mastery = "ADVANCED"
-                      ledColor = "bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.6)]"
+                      ledColor = "bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.7)]"
                     } else if (tech.level >= 80) {
                       mastery = "FLUENT"
-                      ledColor = "bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.6)]"
+                      ledColor = "bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.7)]"
                     }
 
                     return (
                       <div key={tech.name} className="space-y-1 group/row">
-                        <div className="flex items-center justify-between text-[10px] sm:text-sm">
-                          <div className="flex items-center gap-2">
-                            <span className={`w-1.5 h-1.5 rounded-full ${ledColor}`} />
-                            <span className="font-semibold text-foreground/90 group-hover/row:text-primary transition-colors text-[9px] xs:text-[11px] sm:text-sm truncate max-w-[70px] xs:max-w-none">{tech.name}</span>
+                        <div className="flex items-center justify-between text-xs sm:text-sm gap-2">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${ledColor}`} />
+                            <span className="font-semibold text-foreground/90 group-hover/row:text-primary transition-colors text-xs leading-tight">
+                              {tech.name}
+                            </span>
                           </div>
-                          <div className="flex items-center gap-2 text-[10px] sm:text-xs">
-                            <span className="font-mono text-muted-foreground hidden md:inline">{mastery}</span>
-                            <span className="font-mono text-primary font-bold text-[9px] sm:text-xs">{tech.level}%</span>
+                          <div className="flex items-center gap-1.5 shrink-0 text-xs">
+                            <span className="font-mono text-muted-foreground text-[10px] hidden sm:inline">
+                              {mastery}
+                            </span>
+                            <span className="font-mono text-primary font-bold text-xs">
+                              {tech.level}%
+                            </span>
                           </div>
                         </div>
                         <div className="h-[3px] bg-secondary/80 rounded-full overflow-hidden">
@@ -167,7 +205,7 @@ export function TechStackSection() {
                             whileInView={{ width: `${tech.level}%` }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.8, ease: "easeOut" }}
-                            className="h-full bg-linear-to-r from-primary to-primary/50 rounded-full"
+                            className="h-full bg-gradient-to-r from-primary via-amber-400 to-primary/50 rounded-full"
                           />
                         </div>
                       </div>
@@ -179,27 +217,28 @@ export function TechStackSection() {
           ))}
         </div>
 
+        {/* Badges de Ferramentas Emblemáticas no Rodapé */}
         <motion.div
           variants={jarvisVariants}
-          custom={{ direction: "bottom", delay: 0.4 }}
+          custom={{ direction: "bottom", delay: 0.3 }}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="flex flex-wrap items-center justify-center gap-2 sm:gap-3"
+          className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5"
         >
           {additionalTools.map((tool, index) => (
             <motion.div
               key={tool.name}
               variants={jarvisVariants}
-              custom={{ direction: "scale", delay: 0.5 + index * 0.05 }}
+              custom={{ direction: "scale", delay: 0.35 + index * 0.04 }}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
               whileHover={{ scale: 1.05, y: -2 }}
-              className="flex items-center gap-2 px-4 py-2 rounded-full bg-secondary border border-border/50 hover:border-primary/50 transition-colors"
+              className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-secondary/90 border border-border/50 hover:border-primary/60 hover:bg-secondary transition-all shadow-sm cursor-default"
             >
-              <tool.icon className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium">{tool.name}</span>
+              <tool.icon className="h-3.5 w-3.5 text-primary shrink-0" />
+              <span className="text-xs font-mono font-medium text-foreground/90">{tool.name}</span>
             </motion.div>
           ))}
         </motion.div>

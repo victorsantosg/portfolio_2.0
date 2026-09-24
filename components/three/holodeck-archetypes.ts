@@ -35,24 +35,33 @@ function createProjectScreenMesh(imageUrl?: string, width = 4.8, height = 2.7): 
   let screenMat: THREE.Material
   if (imageUrl) {
     const loader = new THREE.TextureLoader()
-    const texture = loader.load(imageUrl, (tex) => {
-      tex.colorSpace = THREE.SRGBColorSpace
-      tex.generateMipmaps = false // Critical: Disables downsampled mipmaps so UI text is razor sharp
-      tex.minFilter = THREE.LinearFilter // Always samples full 1080p native resolution
-      tex.magFilter = THREE.LinearFilter
-      tex.anisotropy = 16 // Maximum anisotropic filtering
-      tex.needsUpdate = true
-    })
+    const texture = loader.load(
+      imageUrl,
+      (tex) => {
+        tex.colorSpace = THREE.SRGBColorSpace
+        tex.generateMipmaps = false
+        tex.minFilter = THREE.LinearFilter
+        tex.magFilter = THREE.LinearFilter
+        tex.anisotropy = 16
+        tex.needsUpdate = true
+      },
+      undefined,
+      (err) => {
+        console.warn("Holodeck screen texture fallback applied:", err)
+      }
+    )
     texture.colorSpace = THREE.SRGBColorSpace
     texture.generateMipmaps = false
     texture.minFilter = THREE.LinearFilter
     texture.magFilter = THREE.LinearFilter
     texture.anisotropy = 16
 
-    screenMat = new THREE.MeshBasicMaterial({
+    screenMat = new THREE.MeshStandardMaterial({
       map: texture,
+      color: 0xffffff,
+      roughness: 0.2,
+      metalness: 0.1,
       side: THREE.DoubleSide,
-      toneMapped: false, // Prevents washing out and preserves razor-sharp UI text contrast
     })
   } else {
     screenMat = new THREE.MeshStandardMaterial({
@@ -341,43 +350,75 @@ export function buildArchetypeScene(archetype: ArchetypeType, imageUrl?: string)
       screenMesh.position.y = 1.48 + Math.sin(time * 2) * 0.04
     }
   } else if (archetype === "ai_neural") {
-    // LAYER 0: Input Feature Nodes
+    // LAYER 0: Quantum Gateway Platform & Circular Bus Grid
     const l0 = new THREE.Group()
-    for (let i = -2; i <= 2; i++) {
-      const node = new THREE.Mesh(
-        new THREE.SphereGeometry(0.18, 16, 16),
-        new THREE.MeshStandardMaterial({ color: 0x38bdf8, emissive: 0x0284c7, emissiveIntensity: 0.8 })
-      )
-      node.position.set(i * 0.7, -1.0, -0.6)
-      l0.add(node)
-    }
+    const busDisk = new THREE.Mesh(
+      new THREE.CylinderGeometry(2.4, 2.6, 0.25, 32),
+      new THREE.MeshStandardMaterial({
+        color: 0x0f172a,
+        emissive: 0x0284c7,
+        emissiveIntensity: 0.4,
+        roughness: 0.3,
+        metalness: 0.8,
+      })
+    )
+    busDisk.position.y = -1.1
+    l0.add(busDisk)
+
+    const busRing = new THREE.Mesh(
+      new THREE.TorusGeometry(2.5, 0.05, 16, 64),
+      new THREE.MeshBasicMaterial({ color: 0x38bdf8, wireframe: true })
+    )
+    busRing.rotation.x = Math.PI / 2
+    busRing.position.y = -0.96
+    l0.add(busRing)
     layers.push(l0)
 
-    // LAYER 1: Hidden Layer 1 Synaptic Matrix
+    // LAYER 1: Multi-Provider Nodes (OpenAI, Claude, Gemini)
     const l1 = new THREE.Group()
-    for (let i = -2.5; i <= 2.5; i++) {
-      const node = new THREE.Mesh(
-        new THREE.SphereGeometry(0.22, 16, 16),
-        new THREE.MeshStandardMaterial({ color: 0x8b5cf6, emissive: 0x6d28d9, emissiveIntensity: 0.8 })
+    const providerColors = [0x10b981, 0x8b5cf6, 0x38bdf8, 0xf59e0b]
+    for (let i = 0; i < 4; i++) {
+      const angle = (i * Math.PI) / 2
+      const x = Math.cos(angle) * 1.5
+      const z = Math.sin(angle) * 1.5
+      const pillar = new THREE.Mesh(
+        new THREE.BoxGeometry(0.35, 0.7, 0.35),
+        new THREE.MeshStandardMaterial({
+          color: providerColors[i],
+          emissive: providerColors[i],
+          emissiveIntensity: 0.6,
+          metalness: 0.5,
+        })
       )
-      node.position.set(i * 0.6, -0.5, 0)
-      l1.add(node)
+      pillar.position.set(x, -0.6, z)
+      l1.add(pillar)
     }
     layers.push(l1)
 
-    // LAYER 2: Hidden Layer 2 Activation Matrix
+    // LAYER 2: Fusion Core & Consensus Judge Engine (Central Rotating Octahedron)
     const l2 = new THREE.Group()
-    for (let i = -1.5; i <= 1.5; i++) {
-      const node = new THREE.Mesh(
-        new THREE.SphereGeometry(0.24, 16, 16),
-        new THREE.MeshStandardMaterial({ color: 0xec4899, emissive: 0xbe185d, emissiveIntensity: 0.8 })
-      )
-      node.position.set(i * 0.7, -0.05, 0)
-      l2.add(node)
-    }
+    const coreMesh = new THREE.Mesh(
+      new THREE.OctahedronGeometry(0.7, 0),
+      new THREE.MeshStandardMaterial({
+        color: 0xec4899,
+        emissive: 0xdb2777,
+        emissiveIntensity: 0.8,
+        wireframe: true,
+      })
+    )
+    coreMesh.position.set(0, -0.05, 0)
+    l2.add(coreMesh)
+
+    const ringJudge = new THREE.Mesh(
+      new THREE.TorusGeometry(1.1, 0.03, 16, 48),
+      new THREE.MeshBasicMaterial({ color: 0xf59e0b })
+    )
+    ringJudge.rotation.x = Math.PI / 3
+    ringJudge.position.set(0, -0.05, 0)
+    l2.add(ringJudge)
     layers.push(l2)
 
-    // LAYER 3: AI Model Dashboard Screen with REAL Screenshot
+    // LAYER 3: OmniRoute High-Resolution Dashboard Screen
     const l3 = new THREE.Group()
     const screenMesh = createProjectScreenMesh(imageUrl, 4.8, 2.7)
     screenMesh.position.set(0, 1.48, 0.05)
@@ -386,6 +427,10 @@ export function buildArchetypeScene(archetype: ArchetypeType, imageUrl?: string)
     layers.push(l3)
 
     customAnimate = (time) => {
+      busRing.rotation.z = time * 0.3
+      coreMesh.rotation.y = time * 1.2
+      coreMesh.rotation.x = time * 0.8
+      ringJudge.rotation.z = -time * 0.7
       screenMesh.position.y = 1.48 + Math.sin(time * 2) * 0.04
     }
   } else if (archetype === "robotics_vision") {

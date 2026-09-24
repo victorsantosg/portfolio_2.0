@@ -720,10 +720,10 @@ export function SandboxViewer({ className = "" }: SandboxViewerProps) {
       }`}
     >
       {/* Top Header Controls Bar */}
-      <div className="flex items-center justify-between gap-2 p-2 sm:p-3 border-b border-amber-500/20 bg-gray-900/80 w-full overflow-hidden">
-        {/* Camera Tour Navigation Tabs - Horizontally Scrollable on Mobile with flex-1 min-w-0 */}
-        <div className="flex-1 min-w-0 flex items-center gap-1 bg-black/60 p-1 rounded-xl border border-amber-500/20 text-xs font-mono overflow-x-auto no-scrollbar">
-          <span className="text-amber-400 font-bold px-1.5 flex items-center gap-1 shrink-0">
+      <div className="flex items-center justify-between gap-2 p-2 sm:p-2.5 border-b border-amber-500/20 bg-gray-900/80 w-full overflow-hidden">
+        {/* Camera Tour Navigation Tabs - Sem barra de rolagem nativa do Windows */}
+        <div className="flex-1 min-w-0 flex items-center gap-1 bg-black/60 p-1 rounded-xl border border-amber-500/20 text-xs font-mono overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <span className="text-amber-400 font-bold px-1.5 flex items-center gap-1 shrink-0 text-[11px]">
             <Compass className="w-3.5 h-3.5" />
             <span className="hidden md:inline">Setores:</span>
           </span>
@@ -742,119 +742,84 @@ export function SandboxViewer({ className = "" }: SandboxViewerProps) {
           ))}
         </div>
 
-        {/* Fullscreen Mode Button */}
-        <Button
-          size="sm"
-          onClick={toggleFullscreen}
-          className={`text-xs h-7.5 sm:h-8.5 px-2.5 sm:px-3 gap-1 rounded-xl font-mono font-bold shadow-lg transition-all shrink-0 ${
-            isFullscreen
-              ? "bg-red-500/20 text-red-300 border border-red-500/40 hover:bg-red-500 hover:text-white"
-              : "bg-amber-500 text-black hover:bg-amber-400 shadow-amber-500/20"
-          }`}
-        >
-          {isFullscreen ? (
-            <>
-              <X className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Sair (ESC)</span>
-            </>
-          ) : (
-            <>
-              <Maximize2 className="w-3.5 h-3.5" />
-              <span className="text-[11px] sm:text-xs">Tela Cheia</span>
-            </>
-          )}
-        </Button>
-      </div>
-
-      {/* Disclaimer & AI Diagnostic Badges */}
-      <div className="px-2.5 sm:px-3 py-1.5 bg-amber-500/10 border-b border-amber-500/20 flex flex-wrap items-center justify-between gap-1.5 text-[10px] sm:text-[11px] font-mono text-amber-300 w-full overflow-hidden">
-        <div className="flex items-center gap-1.5 min-w-0">
-          <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-          <span className="truncate">
-            <strong>3D Demo:</strong> 11.200 posições reais (WMS).
-          </span>
-        </div>
-
-        <div className="flex items-center gap-1 shrink-0">
+        {/* Quick AI Diagnostics & Fullscreen */}
+        <div className="flex items-center gap-1.5 shrink-0">
           <button
             onClick={() => triggerJarvisQuery("J.A.R.V.I.S., realize um diagnóstico imediato dos produtos com risco de validade FEFO e shelf-life no armazém.")}
-            className="px-2 py-0.5 rounded bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/40 font-bold text-[9px] flex items-center gap-1 cursor-pointer transition-colors shadow-sm"
+            className="hidden sm:flex px-2 py-1 rounded-xl bg-red-500/15 hover:bg-red-500/25 text-red-300 border border-red-500/30 font-bold text-[10px] font-mono items-center gap-1 cursor-pointer transition-colors"
+            title="Diagnóstico FEFO"
           >
-            <span>⚠️ Diagnóstico FEFO</span>
+            <span>⚠️ FEFO</span>
           </button>
           <button
             onClick={() => triggerJarvisQuery("J.A.R.V.I.S., analise os produtos de Curva A (alta rotatividade) e a eficiência de picking nas docas.")}
-            className="px-2 py-0.5 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 font-bold text-[9px] flex items-center gap-1 cursor-pointer transition-colors shadow-sm"
+            className="hidden sm:flex px-2 py-1 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 font-bold text-[10px] font-mono items-center gap-1 cursor-pointer transition-colors"
+            title="Análise Curva A"
           >
-            <span>🔥 Análise Curva A</span>
+            <span>🔥 Curva A</span>
           </button>
+
+          <Button
+            size="sm"
+            onClick={toggleFullscreen}
+            className={`text-xs h-7.5 sm:h-8 px-2.5 sm:px-3 gap-1 rounded-xl font-mono font-bold shadow-md transition-all shrink-0 cursor-pointer ${
+              isFullscreen
+                ? "bg-red-500/20 text-red-300 border border-red-500/40 hover:bg-red-500 hover:text-white"
+                : "bg-amber-500 text-black hover:bg-amber-400 shadow-amber-500/20"
+            }`}
+          >
+            {isFullscreen ? (
+              <>
+                <X className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Sair (ESC)</span>
+              </>
+            ) : (
+              <>
+                <Maximize2 className="w-3.5 h-3.5" />
+                <span className="text-[11px] sm:text-xs">Tela Cheia</span>
+              </>
+            )}
+          </Button>
         </div>
       </div>
 
       {/* Main 3D Canvas Viewport */}
-      <div className={`relative w-full max-w-full overflow-hidden ${isFullscreen ? "flex-1 h-full min-h-[500px]" : "h-[380px] sm:h-[500px]"}`}>
+      <div className={`relative w-full max-w-full overflow-hidden ${isFullscreen ? "flex-1 h-full min-h-[500px]" : "h-[390px] sm:h-[490px]"}`}>
         <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
-        {/* Desktop Left Floating Levels Selector */}
-        <div className="hidden sm:flex absolute top-4 left-4 p-2 rounded-2xl bg-black/85 backdrop-blur-md border border-amber-500/30 flex-col gap-1 text-[11px] font-mono shadow-xl select-none z-10">
-          <div className="text-[10px] font-bold text-amber-400 px-2 py-0.5 border-b border-amber-500/20 mb-0.5">
-            NÍVEIS
-          </div>
+        {/* Floating Horizontal Levels Pill Selector (Ultra Enxuto, Desobstrui o 3D) */}
+        <div className="absolute top-3 left-3 flex items-center gap-1 p-1 rounded-xl bg-black/80 backdrop-blur-md border border-amber-500/30 text-[10px] font-mono shadow-xl select-none z-10 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <span className="text-amber-400 font-bold px-1.5 text-[9px] uppercase tracking-wider hidden xs:inline">
+            Nível:
+          </span>
           <button
             onClick={() => setSelectedLevel("all")}
-            className={`px-3 py-1 rounded-lg transition-colors font-bold cursor-pointer ${
+            className={`px-2 py-0.5 rounded-lg transition-colors font-bold cursor-pointer text-[10px] ${
               selectedLevel === "all"
-                ? "bg-amber-500 text-black shadow-md"
+                ? "bg-amber-500 text-black shadow-sm"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            TODOS
+            Todos
           </button>
           {[1, 2, 3, 4, 5].map((lvl) => (
             <button
               key={lvl}
               onClick={() => setSelectedLevel(lvl)}
-              className={`px-3 py-1 rounded-lg transition-colors cursor-pointer ${
+              className={`px-1.5 py-0.5 rounded-lg transition-colors cursor-pointer text-[10px] ${
                 selectedLevel === lvl
-                  ? "bg-amber-500 text-black font-bold shadow-md"
+                  ? "bg-amber-500 text-black font-bold shadow-sm"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              NÍVEL {lvl.toString().padStart(2, "0")}
-            </button>
-          ))}
-        </div>
-
-        {/* Mobile Horizontal Top Levels Bar */}
-        <div className="sm:hidden absolute top-2 left-2 right-2 flex items-center p-1 bg-black/90 backdrop-blur-md border border-amber-500/30 rounded-xl text-[10px] font-mono shadow-xl select-none z-10 overflow-x-auto no-scrollbar gap-1">
-          <button
-            onClick={() => setSelectedLevel("all")}
-            className={`px-2 py-0.5 rounded-lg font-bold shrink-0 text-[10px] ${
-              selectedLevel === "all"
-                ? "bg-amber-500 text-black"
-                : "text-muted-foreground"
-            }`}
-          >
-            TODOS
-          </button>
-          {[1, 2, 3, 4, 5].map((lvl) => (
-            <button
-              key={lvl}
-              onClick={() => setSelectedLevel(lvl)}
-              className={`px-2 py-0.5 rounded-lg shrink-0 text-[10px] ${
-                selectedLevel === lvl
-                  ? "bg-amber-500 text-black font-bold"
-                  : "text-muted-foreground"
-              }`}
-            >
-              NV {lvl.toString().padStart(2, "0")}
+              N{lvl}
             </button>
           ))}
         </div>
 
         {/* Right Floating Compact Slot Inspection Card */}
         {activeSlot && (
-          <div className="absolute top-9 sm:top-3 right-2 sm:right-3 p-2 rounded-xl bg-black/90 backdrop-blur-md border border-amber-500/40 text-[10px] font-mono space-y-1 max-w-[170px] sm:max-w-[220px] shadow-2xl z-10 animate-in fade-in duration-150 select-none">
+          <div className="absolute top-3 right-3 p-2 rounded-xl bg-black/90 backdrop-blur-md border border-amber-500/40 text-[10px] font-mono space-y-1 max-w-[170px] sm:max-w-[210px] shadow-2xl z-10 animate-in fade-in duration-150 select-none">
             <div className="flex items-center justify-between border-b border-amber-500/30 pb-0.5">
               <span className={`text-[8px] sm:text-[9px] font-bold px-1.5 py-0.2 rounded border ${
                 activeSlot.heatLevel === "A"
@@ -900,47 +865,38 @@ export function SandboxViewer({ className = "" }: SandboxViewerProps) {
           </div>
         )}
 
-        {/* Bottom-Right Heatmap Legend */}
-        <div className="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 p-1.5 sm:p-2.5 rounded-xl bg-black/85 backdrop-blur-md border border-amber-500/30 text-[8px] sm:text-[10px] font-mono space-y-0.5 pointer-events-none shadow-xl z-10 max-w-[130px] sm:max-w-none">
-          <div className="flex items-center gap-1 text-amber-400 font-bold text-[9px] sm:text-xs pb-0.5 border-b border-amber-500/20">
-            <Flame className="w-2.5 h-2.5 text-red-500" />
-            <span>GIRO / DEMANDA</span>
+        {/* Bottom Discreta: Dica e Legenda Unificada em Linha */}
+        <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between gap-2 pointer-events-none z-10 font-mono text-[9px] sm:text-[10px]">
+          <div className="px-2.5 py-1 rounded-xl bg-black/75 backdrop-blur-md border border-amber-500/20 text-muted-foreground hidden sm:flex items-center gap-1.5 shadow-lg">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+            <span>Clique em qualquer caixa 3D para inspecionar</span>
           </div>
-          <div className="flex items-center justify-between gap-1 text-muted-foreground text-[8px]">
-            <span className="flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-red-500 shadow-[0_0_6px_#ef4444]" />
-              <span>Alta Curva (A)</span>
-            </span>
-          </div>
-          <div className="flex items-center justify-between gap-1 text-muted-foreground text-[8px]">
-            <span className="flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-              <span>Média Curva (B)</span>
-            </span>
-          </div>
-          <div className="flex items-center justify-between gap-1 text-muted-foreground text-[8px]">
-            <span className="flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              <span>Giro Regular</span>
-            </span>
-          </div>
-        </div>
 
-        {/* Tip helper */}
-        <div className="absolute bottom-4 left-4 px-3 py-1.5 rounded-xl bg-black/80 backdrop-blur-md border border-amber-500/20 text-[10px] font-mono text-muted-foreground pointer-events-none hidden sm:flex items-center gap-1.5 z-10">
-          <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-          <span>Dica: Clique em qualquer caixa 3D para abrir o modal de lote e validade</span>
+          <div className="ml-auto px-2.5 py-1 rounded-xl bg-black/80 backdrop-blur-md border border-amber-500/30 flex items-center gap-3 text-muted-foreground shadow-lg">
+            <span className="flex items-center gap-1 font-semibold text-foreground">
+              <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_6px_#ef4444]" />
+              <span>Curva A</span>
+            </span>
+            <span className="flex items-center gap-1 font-semibold text-foreground">
+              <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_6px_#f59e0b]" />
+              <span>Curva B</span>
+            </span>
+            <span className="flex items-center gap-1 font-semibold text-foreground">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_6px_#10b981]" />
+              <span>Regular</span>
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Bottom Actions Bar - 2x2 Grid on Mobile, Flex on Desktop */}
-      <div className="p-2 sm:p-3 border-t border-amber-500/20 bg-gray-900/80 w-full overflow-hidden">
-        <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-between gap-1.5 sm:gap-2 w-full">
+      {/* Bottom Actions Bar - Uniforme e Enxuta */}
+      <div className="p-2 sm:p-2.5 border-t border-amber-500/20 bg-gray-900/80 w-full overflow-hidden">
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-between gap-1.5 sm:gap-2 w-full font-mono">
           <Button
             size="sm"
             variant="outline"
             onClick={() => setAutoRotate(!autoRotate)}
-            className="text-[10px] sm:text-xs h-7 sm:h-7.5 px-2 justify-center gap-1 border-gray-700 hover:border-amber-400 text-foreground w-full sm:w-auto font-mono"
+            className="text-[10px] sm:text-xs h-7.5 px-2.5 justify-center gap-1.5 border-gray-700 hover:border-amber-400 text-foreground w-full sm:w-auto cursor-pointer"
           >
             <RotateCw className="w-3 h-3" />
             <span>{autoRotate ? "Pausar" : "Girar 360°"}</span>
@@ -950,7 +906,7 @@ export function SandboxViewer({ className = "" }: SandboxViewerProps) {
             size="sm"
             variant="outline"
             onClick={() => setWireframe(!wireframe)}
-            className="text-[10px] sm:text-xs h-7 sm:h-7.5 px-2 justify-center gap-1 border-gray-700 hover:border-amber-400 text-foreground w-full sm:w-auto font-mono"
+            className="text-[10px] sm:text-xs h-7.5 px-2.5 justify-center gap-1.5 border-gray-700 hover:border-amber-400 text-foreground w-full sm:w-auto cursor-pointer"
           >
             <Eye className="w-3 h-3" />
             <span>Wireframe CAD</span>
@@ -959,7 +915,7 @@ export function SandboxViewer({ className = "" }: SandboxViewerProps) {
           <Button
             size="sm"
             variant="outline"
-            className="text-[10px] sm:text-xs h-7 sm:h-7.5 px-2 justify-center gap-1 border-gray-700 hover:border-amber-400 text-foreground w-full sm:w-auto font-mono"
+            className="text-[10px] sm:text-xs h-7.5 px-2.5 justify-center gap-1.5 border-gray-700 hover:border-amber-400 text-foreground w-full sm:w-auto cursor-pointer"
             onClick={() => alert("Exportação do modelo 3D GLB do Armazém Cometa concluída!")}
           >
             <Download className="w-3 h-3" />
@@ -968,7 +924,7 @@ export function SandboxViewer({ className = "" }: SandboxViewerProps) {
 
           <Button
             size="sm"
-            className="text-[10px] sm:text-xs h-7 sm:h-7.5 px-2 justify-center gap-1 bg-amber-500 hover:bg-amber-400 text-black font-bold shadow-md w-full sm:w-auto font-mono"
+            className="text-[10px] sm:text-xs h-7.5 px-2.5 justify-center gap-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold shadow-md w-full sm:w-auto cursor-pointer"
             onClick={() => alert("Download do pacote .3MF para fatiamento industrial iniciado!")}
           >
             <Download className="w-3 h-3" />

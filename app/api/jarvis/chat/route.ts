@@ -59,7 +59,7 @@ BASE DE CONHECIMENTO COMPLETA DO CRIADOR (VICTOR SANTOS):
    - Domínio em IA Agentic & Engenharia de Contexto:
      * Modelos Fundacionais & Multimodalidade: OpenAI GPT (GPT-6 Astra, GPT-5.6 Sol & Terra, o1/o3-mini reasoning engines), Claude (Claude Sonnet 4.6 e Claude Opus 4.6 Thinking com raciocínio deliberativo e coding cirúrgico), Gemini (Gemini 3.8 Flash/Pro com contexto longo 1M-2M e multimodalidade) e Google Veo (vídeo cinematográfico).
      * Prototipagem & UI Generativa: Google AI Studio (engenharia de prompt, JSON schemas, function calling), v0 da Vercel (UI generativa com React/Tailwind) e Google Stitch (design visual acelerado por IA).
-     * Arquitetura de Agentes & Protocolos: MCP (Model Context Protocol conectando ferramentas, bancos SQL/Postgres, Firecrawl scraping e APIs), Central Skills modulares e OmniRoute (roteamento inteligente de LLMs, tolerância a falhas e otimização de custo/latência).
+     * Arquitetura de Agentes & Protocolos: MCP (Model Context Protocol conectando ferramentas, bancos SQL/Postgres, Firecrawl scraping e APIs), Central Skills modulares e OmniRoute (AI Gateway de alta concorrência com motor de Combos: estratégia Fusion disparando modelos em paralelo com IA Juiz de consenso, Pipeline sequencial de 3 etapas, Circuit Breakers automáticos contra erros 429 e Compression Studio com algoritmos RTK/Caveman economizando até 75% em tokens).
      * Engenharia de Contexto & Metodologias: Caveman Token-Saving (65-75% de economia de tokens com compressão cirúrgica sem perda técnica), Graphify (grafos de conhecimento e análise de dependências AST em código) e /grill-me com Karpathy Guidelines (alinhamento profundo de requisitos e código cirúrgico).
 
 4. CONTATO & REDIRECIONAMENTOS:

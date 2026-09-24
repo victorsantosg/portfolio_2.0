@@ -1,0 +1,17 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Auto Graphify to Obsidian",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-ExecutionPolicy", "Bypass",
+        "-File", "C:\\Users\\victor.peixoto\\Scripts\\Init-Project.ps1",
+        "${workspaceFolder}"
+      ],
+      "runOptions": { "runOn": "folderOpen" },
+      "presentation": { "reveal": "silent" }
+    }
+  ]
+}

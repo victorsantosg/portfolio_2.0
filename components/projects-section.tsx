@@ -36,6 +36,7 @@ import Image from "next/image"
 import { useLanguage } from "@/hooks/use-language"
 import { Input } from "@/components/ui/input"
 import { jarvisVariants } from "@/lib/animations"
+import { OmniRouteSimulator } from "@/components/omniroute-simulator"
 
 export function ProjectsSection() {
   const { language, t } = useLanguage()
@@ -44,6 +45,21 @@ export function ProjectsSection() {
   const [zoomImage, setZoomImage] = useState<string | null>(null)
 
   const projects = [
+    {
+      id: 19,
+      title: t.projects.list.omniroute.title,
+      description: t.projects.list.omniroute.description,
+      category: "corporate",
+      image: "/omniroute_dashboard.png",
+      tags: ["Next.js 16", "TypeScript", "AI Gateway", "Token Compression", "Circuit Breaker"],
+      github: "https://github.com/victorsantosg",
+      demo: "https://github.com/victorsantosg",
+      details: {
+        challenge: t.projects.list.omniroute.challenge,
+        solution: t.projects.list.omniroute.solution,
+        techStack: ["Next.js 16", "React 19", "TypeScript", "FastAPI", "OpenAI / Claude / Gemini APIs", "SSE Streaming", "SQLite (WAL)", "Tailwind CSS v4"],
+      },
+    },
     {
       id: 1,
       isPrivate: true,
@@ -170,36 +186,6 @@ export function ProjectsSection() {
       },
     },
     {
-      id: 9,
-      title: t.projects.list.data_analysis.title,
-      description: t.projects.list.data_analysis.description,
-      category: "personal",
-      image: "https://i.ibb.co/5W1BPZF6/Analisando-dados-empresa-Apostila-Jornada-Python-Aula-2-pdf-at-main-victorsantosg-Analisando-dados-e.jpg",
-      tags: ["Python", "Pandas", "Jupyter", "Plotly"],
-      github: "https://github.com/victorsantosg/Analisando_dados_empresa",
-      demo: "https://github.com/victorsantosg/Analisando_dados_empresa",
-      details: {
-        challenge: t.projects.list.data_analysis.challenge,
-        solution: t.projects.list.data_analysis.solution,
-        techStack: ["Python", "Pandas", "Plotly", "Jupyter Notebook"],
-      },
-    },
-    {
-      id: 10,
-      title: t.projects.list.cadastro_auto.title,
-      description: t.projects.list.cadastro_auto.description,
-      category: "personal",
-      image: "https://img-c.udemycdn.com/course/750x422/2364684_6b56_8.jpg",
-      tags: ["Python", "PyAutoGUI", "Excel Automation"],
-      github: "https://github.com/victorsantosg/Automatizando_preenchimento_tabela",
-      demo: "https://github.com/victorsantosg/Automatizando_preenchimento_tabela",
-      details: {
-        challenge: t.projects.list.cadastro_auto.challenge,
-        solution: t.projects.list.cadastro_auto.solution,
-        techStack: ["Python", "PyAutoGUI", "Openpyxl", "Excel"],
-      },
-    },
-    {
       id: 11,
       title: t.projects.list.score_ia.title,
       description: t.projects.list.score_ia.description,
@@ -242,66 +228,6 @@ export function ProjectsSection() {
         challenge: t.projects.list.pyautogui_opencv.challenge,
         solution: t.projects.list.pyautogui_opencv.solution,
         techStack: ["Python", "PyAutoGUI", "OpenCV", "Computer Vision"],
-      },
-    },
-    {
-      id: 14,
-      title: t.projects.list.financas.title,
-      description: t.projects.list.financas.description,
-      category: "personal",
-      image: "https://img.freepik.com/vetores-premium/conhecimento-em-financas-e-investimentos_327176-1095.jpg?w=740",
-      tags: ["React", "Netlify", "CSS personalizado"],
-      github: "https://github.com/victorsantosg",
-      demo: "https://financascontrole.netlify.app/",
-      details: {
-        challenge: t.projects.list.financas.challenge,
-        solution: t.projects.list.financas.solution,
-        techStack: ["React.js", "Vanilla CSS", "Netlify Hosting"],
-      },
-    },
-    {
-      id: 15,
-      title: t.projects.list.uniflix.title,
-      description: t.projects.list.uniflix.description,
-      category: "personal",
-      image: "https://cdn.arstechnica.net/wp-content/uploads/2022/07/netflix-800x450.jpg",
-      tags: ["HTML5", "CSS3", "JavaScript"],
-      github: "https://github.com/victorsantosg",
-      demo: "https://uniflix.netlify.app/",
-      details: {
-        challenge: t.projects.list.uniflix.challenge,
-        solution: t.projects.list.uniflix.solution,
-        techStack: ["HTML5", "CSS3", "JavaScript"],
-      },
-    },
-    {
-      id: 16,
-      title: t.projects.list.clima.title,
-      description: t.projects.list.clima.description,
-      category: "personal",
-      image: "https://www.fmmetropole.com.br/arquivos/cache/noticia/antigas/Previsao-do-Tempo/PREVISAO-DO-TEMPO-METROPOLE-FM-605x.jpg",
-      tags: ["JavaScript", "OpenWeather API", "Responsive CSS"],
-      github: "https://github.com/victorsantosg",
-      demo: "https://climavictor.netlify.app",
-      details: {
-        challenge: t.projects.list.clima.challenge,
-        solution: t.projects.list.clima.solution,
-        techStack: ["JavaScript", "OpenWeatherMap API", "CSS3"],
-      },
-    },
-    {
-      id: 17,
-      title: t.projects.list.portfolio_estudo.title,
-      description: t.projects.list.portfolio_estudo.description,
-      category: "personal",
-      image: "https://www.investopedia.com/thmb/bJ_bKFNuXw2BXn-23gldyoyLHZk=/2121x1414/filters:fill(auto,1)/GettyImages-508126658-e57932d9c64246e5b2946582a3586881.jpg",
-      tags: ["Vite", "React", "SASS", "Responsive Layout"],
-      github: "https://github.com/victorsantosg",
-      demo: "https://main--portfoliovictorr.netlify.app/",
-      details: {
-        challenge: t.projects.list.portfolio_estudo.challenge,
-        solution: t.projects.list.portfolio_estudo.solution,
-        techStack: ["Vite.js", "React", "SASS"],
       },
     },
     {
@@ -470,14 +396,16 @@ export function ProjectsSection() {
               {/* Content */}
               <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
                 <div 
-                  className="aspect-video rounded-xl bg-secondary overflow-hidden relative border border-border/50 shadow-inner cursor-zoom-in max-h-[320px]"
+                  className="aspect-video rounded-xl bg-black/90 overflow-hidden relative border border-[#ee7112]/40 shadow-xl cursor-zoom-in max-h-[360px]"
                   onClick={() => setZoomImage(selectedProject.image)}
                 >
                   <Image
                     src={selectedProject.image}
                     alt={selectedProject.title}
                     fill
-                    className="object-cover"
+                    className="object-contain"
+                    quality={100}
+                    unoptimized
                   />
                 </div>
 
@@ -520,6 +448,12 @@ export function ProjectsSection() {
                   </div>
                 </div>
               </div>
+
+              {selectedProject.id === 19 && (
+                <div className="mt-4">
+                  <OmniRouteSimulator />
+                </div>
+              )}
 
               {/* Dialog Footer */}
               <div className="border-t border-border/40 bg-secondary/30 p-3 sm:p-4 flex flex-col gap-2.5 shrink-0">
@@ -748,7 +682,9 @@ function ProjectCard({
                 src={project.image}
                 alt={project.title}
                 fill
-                className="object-cover group-hover:scale-115 group-hover:brightness-110 transition-all duration-500"
+                className="object-cover transition-all duration-500 group-hover:scale-105"
+                quality={100}
+                unoptimized
               />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center text-muted-foreground group-hover:text-primary transition-colors">
@@ -772,7 +708,7 @@ function ProjectCard({
               </Badge>
             </div>
 
-            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent opacity-40 group-hover:opacity-90 transition-opacity duration-300" />
+
           </div>
 
           {/* 3D Layer 2: Main Text Content (Z: 65px) */}

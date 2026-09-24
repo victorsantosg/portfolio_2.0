@@ -126,6 +126,12 @@ export function TourHudControls() {
           detail: { stepId: "erp", fromTour: true, silent: true },
         })
       )
+    } else if (currentStep.id === "omniroute") {
+      window.dispatchEvent(
+        new CustomEvent("open-holodeck-project", {
+          detail: { stepId: "omniroute", fromTour: true, silent: true },
+        })
+      )
     } else {
       window.dispatchEvent(new CustomEvent("close-holodeck-project"))
     }

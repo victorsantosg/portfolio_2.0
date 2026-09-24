@@ -32,6 +32,8 @@ export const translations = {
       title: "Tecnologias & Habilidades",
       subtitle: "Domínio em tecnologias modernas para entregar soluções completas e escaláveis",
       categories: {
+        aiModels: "Modelos de IA & Raciocínio (LLMs)",
+        aiTools: "Ferramentas de IA, Gateway & MCP",
         web: "Next.js & Mobile (PWA)",
         backend: "Backend & APIs",
         infra: "Infraestrutura & Deploy",
@@ -209,6 +211,12 @@ export const translations = {
       stackTitle: "Stack Completa",
       simulatorTitle: "Simulador Interativo do Projeto",
       list: {
+        omniroute: {
+          title: "OmniRoute // Orquestração Open Source de IA ⚡",
+          description: "Domínio e implementação avançada do ecossistema open source OmniRoute para orquestração de combos (Fusion & Pipeline), tolerância a falhas e compressão de tokens.",
+          challenge: "Evitar vendor lock-in e quedas de serviço corporativas por instabilidade de provedores de IA ou rate limits (HTTP 429), configurando e estendendo o gateway open source OmniRoute para normalizar chamadas heterogêneas (OpenAI, Claude, Gemini) em uma única API universal.",
+          solution: "Apliquei e dominei na prática as capacidades do ecossistema open source OmniRoute: configurei o motor de Combos com estratégia Fusion (execução paralela de múltiplos modelos sintetizados por uma IA Juiz de consenso), pipelines encadeados de 3 etapas, Circuit Breakers com mitigação de erros 429 e o estúdio de compressão com algoritmos RTK e padrão Caveman (reduzindo até 75% dos custos de tokens com fidelidade semântica total).",
+        },
         erp: {
           title: "Inventário Corporativo & Auditoria (Cometa)",
           description: "Painel gerencial e de auditoria para monitoramento da acuracidade do estoque físico em comparação com o estoque sistêmico do ERP.",
@@ -387,6 +395,8 @@ export const translations = {
       title: "Technologies & Skills",
       subtitle: "Proficiency in modern technologies to deliver complete and scalable solutions",
       categories: {
+        aiModels: "AI Models & Reasoning (LLMs)",
+        aiTools: "AI Tools, Gateway & MCP",
         web: "Next.js & Mobile (PWA)",
         backend: "Backend & APIs",
         infra: "Infrastructure & Deploy",
@@ -564,6 +574,12 @@ export const translations = {
       stackTitle: "Complete Stack",
       simulatorTitle: "Interactive Project Simulator",
       list: {
+        omniroute: {
+          title: "OmniRoute // Open Source AI Orchestration ⚡",
+          description: "Advanced engineering and practical mastery of the open-source OmniRoute ecosystem for combo orchestration (Fusion & Pipeline), fault tolerance, and token compression.",
+          challenge: "Prevent enterprise vendor lock-in and service downtime caused by provider outages or rate limits (HTTP 429), configuring and extending the open-source OmniRoute gateway to normalize heterogeneous APIs (OpenAI, Claude, Gemini) into a unified standard.",
+          solution: "Applied and mastered the capabilities of the open-source OmniRoute ecosystem in real-world scenarios: configured the Combo engine with Fusion (parallel multi-model inference synthesized by an LLM Judge with consensus scoring), sequential 3-stage Pipelines, automated zero-downtime Circuit Breakers against 429 errors, and the Compression Studio (RTK and Caveman standards delivering up to 75% token reduction with zero semantic loss).",
+        },
         erp: {
           title: "Corporate Inventory & Auditing (Cometa)",
           description: "Management and auditing dashboard to monitor physical stock accuracy against the ERP's systemic stock.",

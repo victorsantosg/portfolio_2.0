@@ -61,8 +61,18 @@ export const TOUR_STEPS: TourStep[] = [
     duration: 13000,
   },
   {
+    id: "omniroute",
+    title: "PROTOCOLO 06 // OMNIROUTE OPEN SOURCE & COMBOS",
+    subtitle: "Orquestração Avançada de IA, Fusion de Modelos & Economia de Tokens",
+    targetSection: "#projetos",
+    narration:
+      "Atenção aos sensores: projetando no Holodeck o domínio e engenharia de IA de Victor no ecossistema open source OmniRoute. Ele implementa e opera este orquestrador de alto throughput para solucionar o maior pesadelo das empresas: quedas de serviço por instabilidade de provedores e custos astronômicos de tokens. Observe no holograma o motor de Combos executando a estratégia Fusion, onde múltiplos modelos operam em paralelo e uma IA Juiz sintetiza o melhor consenso técnico. Tudo isso integrado a Circuit Breakers automáticos contra erros quatrocentos e vinte e nove e ao estúdio de compressão Caveman, que reduz até setenta e cinco por cento dos tokens sem perder contexto.",
+    duration: 18500,
+    threePreset: "geral",
+  },
+  {
     id: "quote",
-    title: "PROTOCOLO 06 // VISÃO GERAL & CANAL DIRETO",
+    title: "PROTOCOLO 07 // VISÃO GERAL & CANAL DIRETO",
     subtitle: "Apenas a Ponta do Iceberg",
     targetSection: "#orcamento",
     narration:

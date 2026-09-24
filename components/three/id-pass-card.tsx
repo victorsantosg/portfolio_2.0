@@ -179,6 +179,8 @@ export function IdPassCard() {
                     src="/img_victor.png"
                     alt="Victor Santos"
                     fill
+                    quality={100}
+                    unoptimized
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute bottom-1 right-1 w-2.5 h-2.5 rounded-full bg-primary border-2 border-black animate-ping" />

@@ -134,7 +134,10 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
 
     // Wait 3.8s after loading screen finishes to allow full armor assembly animation
     const timerHolo = setTimeout(() => {
-      setIsOpen(true)
+      // In mobile and tablet, do not intrusively auto-open full modal over the page
+      if (typeof window !== "undefined" && window.innerWidth >= 1024) {
+        setIsOpen(true)
+      }
     }, 3800)
 
     return () => clearTimeout(timerHolo)

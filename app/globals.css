@@ -223,3 +223,13 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+/* Nitidez Máxima para Imagens - Remove blur subpixel e otimiza contraste */
+img,
+picture img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}

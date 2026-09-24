@@ -107,12 +107,12 @@ export function AboutSection() {
             className="lg:col-span-8 space-y-6 order-1 lg:order-2"
           >
             {/* Seletor de Abas Estilo HUD / Cyberpunk */}
-            <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl glass border border-border/50 bg-secondary/15 backdrop-blur-md">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 p-1.5 rounded-2xl glass border border-border/50 bg-secondary/15 backdrop-blur-md w-full sm:w-auto max-w-full">
               <button
                 type="button"
                 onClick={() => setActiveTab("corporate")}
                 className={cn(
-                  "relative px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 flex items-center gap-2 cursor-pointer select-none",
+                  "relative px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 flex items-center justify-center sm:justify-start gap-2 cursor-pointer select-none w-full sm:w-auto",
                   activeTab === "corporate" ? "text-primary-foreground font-semibold" : "text-muted-foreground hover:text-foreground"
                 )}
               >
@@ -131,7 +131,7 @@ export function AboutSection() {
                 type="button"
                 onClick={() => setActiveTab("ai")}
                 className={cn(
-                  "relative px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 flex items-center gap-2 cursor-pointer select-none",
+                  "relative px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 flex items-center justify-center sm:justify-start gap-2 cursor-pointer select-none w-full sm:w-auto",
                   activeTab === "ai" ? "text-primary-foreground font-semibold" : "text-muted-foreground hover:text-foreground"
                 )}
               >

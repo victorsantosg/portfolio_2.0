@@ -74,7 +74,7 @@ export function Navbar() {
               </div>
             </motionFramer.button>
 
-            <div className="hidden md:flex items-center gap-1">
+            <div className="hidden lg:flex items-center gap-1">
               {navLinks.map((link) => (
                 <NavLink
                   key={link.href}
@@ -85,7 +85,7 @@ export function Navbar() {
               ))}
             </div>
 
-            <div className="hidden md:flex items-center gap-4">
+            <div className="hidden lg:flex items-center gap-3">
               <button
                 onClick={() => setLanguage(language === "pt" ? "en" : "pt")}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border/50 bg-secondary/50 hover:bg-secondary text-sm font-medium transition-colors"
@@ -97,14 +97,14 @@ export function Navbar() {
               <motionFramer.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                 <Button
                   onClick={() => scrollToSection("#orcamento")}
-                  className="relative overflow-hidden bg-primary text-primary-foreground font-semibold px-6 animate-pulse-glow"
+                  className="relative overflow-hidden bg-primary text-primary-foreground font-semibold px-5 animate-pulse-glow text-sm"
                 >
                   {t.nav.cta}
                 </Button>
               </motionFramer.div>
             </div>
 
-            <div className="md:hidden flex items-center gap-2">
+            <div className="lg:hidden flex items-center gap-2">
               <button
                 onClick={() => setLanguage(language === "pt" ? "en" : "pt")}
                 className="flex items-center gap-1 px-2.5 py-1 rounded border border-border/50 bg-secondary/55 text-xs font-semibold hover:bg-secondary transition-colors"

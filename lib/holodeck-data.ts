@@ -39,6 +39,41 @@ export interface HoloProjectData {
 }
 
 export const HOLODECK_REGISTRY: Record<string, HoloProjectData> = {
+  // 0. OmniRoute Open Source AI Orchestration (Flagship Skill)
+  omniroute: {
+    id: "omniroute",
+    title: "OMNIROUTE // OPEN SOURCE AI ORCHESTRATION",
+    subtitle: "Domínio Avançado de Gateway de IA, Estratégias de Combos (Fusion/Pipe) e Otimização de Custos",
+    image: "/omniroute_dashboard.png",
+    archetype: "ai_neural",
+    tags: ["Open Source", "Next.js 16", "AI Gateway", "Token Compression", "Circuit Breakers", "TypeScript"],
+    metrics: [
+      { label: "Economia de Tokens", value: "-68% a -75%", color: "text-emerald-400" },
+      { label: "Combos Dominados", value: "Fusion, Pipe & Think", color: "text-sky-400" },
+      { label: "Tolerância a Falhas", value: "Zero Downtime (429)", color: "text-amber-400" },
+    ],
+    architecture:
+      "Engenharia e aplicação corporativa do gateway open source OmniRoute com normalização de formatos (OpenAI, Claude, Gemini), motor de combos paralelos (Fusion com Juiz), pipeline sequencial e compressão semântica via RTK e Caveman.",
+    solution:
+      "Elimina dependência de provedor único, previne indisponibilidades por rate limit através de Circuit Breakers e reduz drasticamente custos de inferência com compressão cirúrgica de tokens.",
+    ttsBriefing:
+      "Holodeck ativado: Ecossistema Open Source OmniRoute. Visualizando barramento neural de alta velocidade. Camada base de roteamento e Circuit Breakers, motor central de fusão de modelos com juiz de consenso, e estúdio de compressão com economia de até 75% em tokens.",
+    layers: [
+      { name: "Gateway & Tradutor Universal", tech: "OpenAI ↔ Claude ↔ Gemini", description: "Normalização de streaming SSE e conversão de schemas em tempo real", color: "#38bdf8" },
+      { name: "Motor de Combos (Fusion & Pipe)", tech: "Ensemble & Judge Router", description: "Disparo paralelo de múltiplos modelos com síntese por IA Juiz", color: "#a855f7" },
+      { name: "Estúdio de Compressão de Tokens", tech: "RTK / Caveman Standard", description: "Compactação cirúrgica de contexto reduzindo até 75% de custos", color: "#10b981" },
+      { name: "Radar de Saúde & Circuit Breakers", tech: "Health Check & Fallback", description: "Mitigação instantânea de erros 429 com comutação de provedor", color: "#f59e0b" },
+    ],
+    printSpecs: {
+      dimensions: "95 x 95 x 75 mm",
+      filamentWeight: "45g PLA Silk",
+      layerHeight: "0.16mm Fine",
+      infill: "20% Gyroid",
+    },
+    liveDemoHref: "https://github.com/victorsantosg",
+    githubHref: "https://github.com/victorsantosg",
+  },
+
   // 1. Digital Twin WMS
   wms_3d: {
     id: "wms_3d",
@@ -507,6 +542,7 @@ export function getHolodeckProject(keyOrId: string | number, fallbackProject?: a
   } else {
     // Match numeric IDs from projects-section.tsx
     const numericMap: Record<number, string> = {
+      0: "omniroute",
       1: "erp",
       2: "bi",
       3: "projects",
@@ -515,13 +551,11 @@ export function getHolodeckProject(keyOrId: string | number, fallbackProject?: a
       6: "barber",
       7: "ecu",
       8: "drum",
-      9: "bi",
-      10: "pyautogui_opencv",
       11: "score_ia",
       12: "chatbot_ia",
       13: "pyautogui_opencv",
-      14: "bi",
       18: "cupons",
+      19: "omniroute",
     }
 
     const num = parseInt(strId, 10)
