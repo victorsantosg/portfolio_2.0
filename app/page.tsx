@@ -17,6 +17,7 @@ import { ScrollAssemblyCanvas } from "@/components/three/scroll-assembly-canvas"
 import { JarvisAssistant } from "@/components/jarvis-assistant"
 import { TourHudControls } from "@/components/tour-hud-controls"
 import { JarvisProjectHolodeck } from "@/components/three/jarvis-project-holodeck"
+import { AiEcosystemSection } from "@/components/ai-ecosystem-section"
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true)
@@ -43,6 +44,7 @@ export default function Home() {
         <HeroSection isLoaded={!isLoading} />
         <AboutSection />
         <TechStackSection />
+        <AiEcosystemSection />
         <MakerLabSection />
         <ProjectsSection />
         <QuoteSection />

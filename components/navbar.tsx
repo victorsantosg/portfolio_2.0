@@ -15,6 +15,7 @@ export function Navbar() {
     { href: "#inicio", label: t.nav.home },
     { href: "#sobre", label: t.nav.about },
     { href: "#stack", label: t.nav.stack },
+    { href: "#ecossistema-ia", label: (t.nav as any).aiEcosystem ?? "AI Ecosystem" },
     { href: "#maker-lab", label: t.nav.makerLab },
     { href: "#projetos", label: t.nav.projects },
     { href: "#orcamento", label: t.nav.contact },

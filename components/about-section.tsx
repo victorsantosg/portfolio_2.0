@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils"
 
 export function AboutSection() {
   const { t } = useLanguage()
-  const [activeTab, setActiveTab] = useState<"corporate" | "ai">("corporate")
+  const [activeTab, setActiveTab] = useState<"corporate" | "ai">("ai")
 
   // Escuta evento do tour para alternar abas dinamicamente
   useEffect(() => {
