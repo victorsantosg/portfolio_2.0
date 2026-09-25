@@ -33,10 +33,10 @@ export function AboutSection() {
   }
 
   return (
-    <section id="sobre" className="relative py-20 md:py-28 overflow-hidden bg-background/80 backdrop-blur-[1px]">
+    <section id="sobre" className="relative py-12 md:py-24 overflow-hidden bg-background/80 backdrop-blur-[1px]">
       <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-secondary/10 to-background/40" />
 
-      <div className="relative container mx-auto">
+      <div className="relative container mx-auto px-4 md:px-6">
         <motion.div
           variants={jarvisVariants}
           custom={{ direction: "top" }}
@@ -106,45 +106,52 @@ export function AboutSection() {
             viewport={{ once: true }}
             className="lg:col-span-8 space-y-6 order-1 lg:order-2"
           >
-            {/* Seletor de Abas Estilo HUD / Cyberpunk */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 p-1.5 rounded-2xl glass border border-border/50 bg-secondary/15 backdrop-blur-md w-full sm:w-auto max-w-full">
-              <button
-                type="button"
-                onClick={() => setActiveTab("corporate")}
-                className={cn(
-                  "relative px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 flex items-center justify-center sm:justify-start gap-2 cursor-pointer select-none w-full sm:w-auto",
-                  activeTab === "corporate" ? "text-primary-foreground font-semibold" : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                {activeTab === "corporate" && (
-                  <motion.div
-                    layoutId="activeAboutTab"
-                    className="absolute inset-0 rounded-xl bg-primary shadow-lg shadow-primary/25"
-                    transition={{ type: "spring", stiffness: 450, damping: 32 }}
-                  />
-                )}
-                <Briefcase className="w-4 h-4 relative z-10" />
-                <span className="relative z-10">{t.about.tabs?.corporate || "Carreira Corporativa"}</span>
-              </button>
+            {/* Seletor de Visão / Abas Interativas HUD */}
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                <span className="uppercase tracking-wider font-semibold">{"// Alternar Visão Técnica:"}</span>
+              </div>
 
-              <button
-                type="button"
-                onClick={() => setActiveTab("ai")}
-                className={cn(
-                  "relative px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 flex items-center justify-center sm:justify-start gap-2 cursor-pointer select-none w-full sm:w-auto",
-                  activeTab === "ai" ? "text-primary-foreground font-semibold" : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                {activeTab === "ai" && (
-                  <motion.div
-                    layoutId="activeAboutTab"
-                    className="absolute inset-0 rounded-xl bg-primary shadow-lg shadow-primary/25"
-                    transition={{ type: "spring", stiffness: 450, damping: 32 }}
-                  />
-                )}
-                <Bot className="w-4 h-4 relative z-10" />
-                <span className="relative z-10">{t.about.tabs?.ai || "IA Agentic & Contexto"}</span>
-              </button>
+              <div className="inline-flex flex-wrap sm:flex-nowrap items-center gap-2 p-1.5 rounded-2xl bg-secondary/25 border border-border/60 shadow-lg backdrop-blur-md w-full sm:w-auto">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("corporate")}
+                  className={cn(
+                    "relative px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer select-none border flex-1 sm:flex-initial",
+                    activeTab === "corporate"
+                      ? "bg-gradient-to-r from-[#ee7112] to-amber-500 text-black font-bold border-amber-300 shadow-[0_0_20px_rgba(238,113,18,0.45)] scale-[1.01]"
+                      : "bg-white/5 border-white/10 text-foreground/85 hover:text-foreground hover:bg-white/10 hover:border-amber-500/50 hover:shadow-[0_0_12px_rgba(245,158,11,0.2)]"
+                  )}
+                >
+                  <Briefcase className={cn("w-4 h-4 shrink-0 transition-colors", activeTab === "corporate" ? "text-black" : "text-primary")} />
+                  <span className="font-semibold">{t.about.tabs?.corporate || "Carreira & Projetos Corporativos"}</span>
+                  {activeTab === "corporate" ? (
+                    <span className="w-1.5 h-1.5 rounded-full bg-black/80 animate-pulse ml-1" />
+                  ) : (
+                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/5 text-muted-foreground border border-white/10 hidden md:inline">Clique p/ alternar</span>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("ai")}
+                  className={cn(
+                    "relative px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer select-none border flex-1 sm:flex-initial",
+                    activeTab === "ai"
+                      ? "bg-gradient-to-r from-[#ee7112] to-amber-500 text-black font-bold border-amber-300 shadow-[0_0_20px_rgba(238,113,18,0.45)] scale-[1.01]"
+                      : "bg-white/5 border-white/10 text-foreground/85 hover:text-foreground hover:bg-white/10 hover:border-amber-500/50 hover:shadow-[0_0_12px_rgba(245,158,11,0.2)]"
+                  )}
+                >
+                  <Bot className={cn("w-4 h-4 shrink-0 transition-colors", activeTab === "ai" ? "text-black" : "text-amber-400")} />
+                  <span className="font-semibold">{t.about.tabs?.ai || "IA Agentic & Engenharia de Contexto"}</span>
+                  {activeTab === "ai" ? (
+                    <span className="w-1.5 h-1.5 rounded-full bg-black/80 animate-pulse ml-1" />
+                  ) : (
+                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/5 text-muted-foreground border border-white/10 hidden md:inline">Clique p/ alternar</span>
+                  )}
+                </button>
+              </div>
             </div>
 
             {/* Conteúdo Dinâmico com Transição Suave */}

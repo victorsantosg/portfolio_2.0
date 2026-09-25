@@ -195,7 +195,7 @@ ${
   }
 
   return (
-    <section id="orcamento" className="relative py-20 md:py-28 overflow-hidden">
+    <section id="orcamento" className="relative py-12 md:py-24 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-background via-secondary/10 to-background" />
 
       <div className="relative container mx-auto px-4 md:px-6">
@@ -253,7 +253,7 @@ ${
                 }}
               />
             ) : (
-              <div className="rounded-2xl bg-card border border-border/50 p-8 min-h-[440px] flex flex-col justify-between h-full">
+              <div className="rounded-2xl bg-card border border-border/50 p-4 sm:p-6 md:p-8 min-h-[440px] flex flex-col justify-between h-full">
                 <div className="flex items-center gap-2 mb-8">
                   {[1, 2, 3].map((s) => (
                     <div key={s} className="flex items-center">
@@ -657,7 +657,7 @@ ${
               whileInView="visible"
               viewport={{ once: true }}
             >
-              <div className="rounded-2xl bg-card border border-border/50 p-8">
+              <div className="rounded-2xl bg-card border border-border/50 p-5 sm:p-8">
                 <h3 className="text-xl font-semibold mb-6">{t.quote.channelsTitle}</h3>
                 <div className="space-y-4">
                   {contactLinks.map((link) => (
@@ -719,7 +719,7 @@ ${
               whileInView="visible"
               viewport={{ once: true }}
             >
-              <div className="rounded-2xl bg-gradient-to-br from-primary/15 via-primary/5 to-transparent border border-primary/25 p-8 flex flex-col">
+              <div className="rounded-2xl bg-gradient-to-br from-primary/15 via-primary/5 to-transparent border border-primary/25 p-5 sm:p-8 flex flex-col">
                 <h3 className="text-xl font-semibold mb-6">{t.quote.whyChooseMe}</h3>
                 <ul className="space-y-4">
                   {t.quote.reasons.map((item) => (

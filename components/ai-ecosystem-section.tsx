@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   Cpu,
@@ -9,11 +9,19 @@ import {
   Layers,
   Zap,
   ChevronRight,
+  ChevronLeft,
   Activity,
   CheckCircle2,
   Map,
   Shrink,
 } from "lucide-react"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog"
 import { useLanguage } from "@/hooks/use-language"
 import { jarvisVariants } from "@/lib/animations"
 
@@ -147,7 +155,7 @@ function EcosystemCard({
       onClick={onClick}
       whileHover={{ y: -4, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className={`relative glass rounded-2xl border p-5 cursor-pointer transition-all duration-300 group overflow-hidden ${
+      className={`relative glass rounded-2xl border p-4 sm:p-5 cursor-pointer transition-all duration-300 group overflow-hidden flex flex-col justify-between ${
         isActive
           ? `border-primary/60 ${node.glow}`
           : `border-border/40 ${node.borderHover}`
@@ -157,38 +165,43 @@ function EcosystemCard({
         <div className={`absolute inset-0 bg-gradient-to-br ${node.color} opacity-10 rounded-2xl pointer-events-none`} />
       )}
 
-      <div className="relative z-10">
-        <div className="flex items-start justify-between mb-3">
-          <div className={`p-2.5 rounded-xl bg-gradient-to-br ${node.color} border border-white/10`}>
-            <Icon className="h-5 w-5 text-white" />
-          </div>
-          <span className="text-[9px] font-mono font-bold tracking-widest text-primary/70 border border-primary/20 bg-primary/5 px-2 py-0.5 rounded-full">
-            {node.badge}
-          </span>
-        </div>
-
-        <h3 className="text-base font-bold text-foreground mb-0.5 group-hover:text-primary transition-colors">
-          {node.title}
-        </h3>
-        <p className="text-[11px] text-muted-foreground font-mono mb-3">{node.subtitle}</p>
-
-        <div className="flex flex-wrap gap-1">
-          {node.tags.slice(0, 3).map((tag) => (
-            <span
-              key={tag}
-              className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-secondary/60 text-foreground/70 border border-border/30"
-            >
-              {tag}
+      <div className="relative z-10 flex flex-col h-full justify-between gap-3">
+        <div>
+          <div className="flex items-start justify-between mb-2.5">
+            <div className={`p-2.5 rounded-xl bg-gradient-to-br ${node.color} border border-white/10 shadow-sm`}>
+              <Icon className="h-5 w-5 text-white" />
+            </div>
+            <span className="text-[9px] font-mono font-bold tracking-widest text-primary/80 border border-primary/25 bg-primary/8 px-2 py-0.5 rounded-full">
+              {node.badge}
             </span>
-          ))}
+          </div>
+
+          <h3 className="text-base font-bold text-foreground mb-0.5 group-hover:text-primary transition-colors">
+            {node.title}
+          </h3>
+          <p className="text-[11px] text-muted-foreground font-mono mb-2.5">{node.subtitle}</p>
+
+          <div className="flex flex-wrap gap-1">
+            {node.tags.slice(0, 3).map((tag) => (
+              <span
+                key={tag}
+                className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-secondary/60 text-foreground/70 border border-border/30"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
         </div>
 
-        <div
-          className={`absolute bottom-3 right-3 transition-all duration-300 ${
-            isActive ? "opacity-100" : "opacity-0 group-hover:opacity-50"
-          }`}
-        >
-          <ChevronRight className="h-4 w-4 text-primary" />
+        {/* Action Button Row */}
+        <div className="pt-2.5 border-t border-border/20 flex items-center justify-between">
+          <span className="text-[11px] font-mono text-primary font-medium flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+            Ver tela principal
+            <ChevronRight className="h-3.5 w-3.5" />
+          </span>
+          <span className="text-[9px] font-mono text-muted-foreground/80 sm:hidden">
+            Toque para abrir
+          </span>
         </div>
       </div>
     </motion.div>
@@ -265,7 +278,27 @@ function EcosystemDetail({ node }: { node: (typeof ecosystemNodes)[0] }) {
 export function AiEcosystemSection() {
   const { t } = useLanguage()
   const [activeNode, setActiveNode] = useState(ecosystemNodes[0].id)
+  const [isMobileModalOpen, setIsMobileModalOpen] = useState(false)
   const activeData = ecosystemNodes.find((n) => n.id === activeNode) ?? ecosystemNodes[0]
+
+  const currentIndex = ecosystemNodes.findIndex((n) => n.id === activeNode)
+
+  const handlePrev = useCallback(() => {
+    const prevIndex = (currentIndex - 1 + ecosystemNodes.length) % ecosystemNodes.length
+    setActiveNode(ecosystemNodes[prevIndex].id)
+  }, [currentIndex])
+
+  const handleNext = useCallback(() => {
+    const nextIndex = (currentIndex + 1) % ecosystemNodes.length
+    setActiveNode(ecosystemNodes[nextIndex].id)
+  }, [currentIndex])
+
+  const handleSelectNode = useCallback((id: string) => {
+    setActiveNode(id)
+    if (typeof window !== "undefined" && window.innerWidth < 1024) {
+      setIsMobileModalOpen(true)
+    }
+  }, [])
 
   const tEco = (t as any).aiEcosystem ?? {
     tagline: "<AIEcosystem />",
@@ -283,7 +316,7 @@ export function AiEcosystemSection() {
   }
 
   return (
-    <section id="ecossistema-ia" className="relative py-20 md:py-28 overflow-hidden">
+    <section id="ecossistema-ia" className="relative py-12 md:py-24 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-background via-secondary/15 to-background" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_50%,rgba(238,113,18,0.05),transparent)]" />
 
@@ -322,7 +355,7 @@ export function AiEcosystemSection() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="glass rounded-2xl border border-primary/25 p-5 mb-12 max-w-4xl mx-auto bg-gradient-to-r from-primary/8 via-transparent to-transparent"
+          className="glass rounded-2xl border border-primary/25 p-5 mb-8 md:mb-12 max-w-4xl mx-auto bg-gradient-to-r from-primary/8 via-transparent to-transparent"
         >
           <div className="flex items-center gap-2 mb-3">
             <Zap className="h-4 w-4 text-primary" />
@@ -337,6 +370,23 @@ export function AiEcosystemSection() {
             ))}
           </div>
         </motion.div>
+
+        {/* Mobile Quick Bar */}
+        <div className="lg:hidden flex items-center justify-between mb-3 px-1">
+          <span className="text-xs font-mono text-muted-foreground flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+            Módulos de IA ({ecosystemNodes.length})
+          </span>
+          <button
+            type="button"
+            onClick={() => setIsMobileModalOpen(true)}
+            className="inline-flex items-center gap-1 text-xs font-mono text-primary font-semibold border border-primary/30 bg-primary/10 hover:bg-primary/20 active:scale-95 px-2.5 py-1 rounded-lg transition-all"
+          >
+            <Activity className="h-3 w-3 animate-pulse" />
+            Ver Tela Principal
+            <ChevronRight className="h-3 w-3" />
+          </button>
+        </div>
 
         {/* Interactive Grid + Detail */}
         <div className="grid lg:grid-cols-12 gap-6 max-w-7xl mx-auto">
@@ -354,25 +404,132 @@ export function AiEcosystemSection() {
                 key={node.id}
                 node={node}
                 isActive={activeNode === node.id}
-                onClick={() => setActiveNode(node.id)}
+                onClick={() => handleSelectNode(node.id)}
               />
             ))}
           </motion.div>
 
-          {/* Detail */}
+          {/* Detail - Desktop Side-by-Side */}
           <motion.div
             variants={jarvisVariants}
             custom={{ direction: "right", delay: 0.3 }}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="lg:col-span-5"
+            className="hidden lg:block lg:col-span-5"
           >
             <AnimatePresence mode="wait">
               <EcosystemDetail key={activeNode} node={activeData} />
             </AnimatePresence>
           </motion.div>
         </div>
+
+        {/* Mobile Detail Modal ("Tela Principal") */}
+        <Dialog open={isMobileModalOpen} onOpenChange={setIsMobileModalOpen}>
+          <DialogContent className="glass-amber bg-background/95 backdrop-blur-2xl border-primary/40 p-5 max-h-[88vh] overflow-y-auto w-[92vw] max-w-lg rounded-2xl">
+            <DialogHeader className="text-left pb-1">
+              <div className="flex items-center gap-3">
+                <div className={`p-2.5 rounded-xl bg-gradient-to-br ${activeData.color} shadow-lg shrink-0`}>
+                  <activeData.icon className="h-6 w-6 text-white" />
+                </div>
+                <div className="min-w-0 flex-1 pr-6">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="text-[9px] font-mono font-bold tracking-widest text-primary/80 border border-primary/25 bg-primary/8 px-1.5 py-0.5 rounded">
+                      {activeData.badge}
+                    </span>
+                    <span className="text-[10px] font-mono text-muted-foreground">
+                      {currentIndex + 1} de {ecosystemNodes.length}
+                    </span>
+                  </div>
+                  <DialogTitle className="text-lg font-bold text-foreground truncate">
+                    {activeData.title}
+                  </DialogTitle>
+                  <DialogDescription className="text-xs text-muted-foreground font-mono truncate">
+                    {activeData.subtitle}
+                  </DialogDescription>
+                </div>
+              </div>
+            </DialogHeader>
+
+            <div className="flex flex-col gap-4 py-1">
+              {/* Description */}
+              <div className="bg-secondary/30 p-3 rounded-xl border border-border/30">
+                <div className="text-[10px] font-mono uppercase text-muted-foreground tracking-wider mb-1">
+                  Arquitetura & Operação
+                </div>
+                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                  {activeData.description}
+                </p>
+              </div>
+
+              {/* Metrics */}
+              <div>
+                <div className="text-[10px] font-mono uppercase text-muted-foreground tracking-wider mb-1.5">
+                  Métricas Operacionais
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  {activeData.metrics.map((metric) => (
+                    <div
+                      key={metric.label}
+                      className="glass rounded-xl border border-border/40 p-2 text-center bg-secondary/20"
+                    >
+                      <div className="text-sm font-bold text-primary font-mono">{metric.value}</div>
+                      <div className="text-[9px] text-muted-foreground mt-0.5 leading-tight">{metric.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tags */}
+              <div>
+                <div className="text-[10px] font-mono uppercase text-muted-foreground tracking-wider mb-1.5">
+                  Capacidades & Tecnologias
+                </div>
+                <div className="flex flex-wrap gap-1">
+                  {activeData.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-[9px] font-mono px-2 py-0.5 rounded-full border border-primary/25 bg-primary/8 text-primary/90"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Status */}
+              <div className="flex items-center justify-between pt-2 border-t border-border/20">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                  <span className="text-[11px] font-mono text-emerald-400 font-semibold">
+                    LIVE // OPERATIONAL
+                  </span>
+                </div>
+                <span className="text-[9px] font-mono text-primary/70">
+                  TELA PRINCIPAL ATIVA
+                </span>
+              </div>
+            </div>
+
+            {/* Navigation Controls */}
+            <div className="grid grid-cols-2 gap-2 pt-2 border-t border-border/30">
+              <button
+                type="button"
+                onClick={handlePrev}
+                className="flex items-center justify-center gap-1 py-2 px-3 rounded-lg border border-border/50 bg-secondary/40 text-xs font-mono text-foreground hover:bg-secondary/70 active:scale-95 transition-all cursor-pointer"
+              >
+                <ChevronLeft className="h-3.5 w-3.5" /> Anterior
+              </button>
+              <button
+                type="button"
+                onClick={handleNext}
+                className="flex items-center justify-center gap-1 py-2 px-3 rounded-lg border border-primary/40 bg-primary/10 text-xs font-mono text-primary font-semibold hover:bg-primary/20 active:scale-95 transition-all cursor-pointer"
+              >
+                Próximo <ChevronRight className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         {/* Footer CTA */}
         <motion.div
@@ -384,7 +541,7 @@ export function AiEcosystemSection() {
           className="text-center mt-10"
         >
           <p className="text-xs text-muted-foreground font-mono mb-3">
-            {"// Clique em cada card para explorar os detalhes"}
+            {"// Toque em cada card para abrir a tela principal com métricas"}
           </p>
           <div className="inline-flex items-center gap-2 text-xs text-primary/70 font-mono border border-primary/20 bg-primary/5 px-4 py-2 rounded-full">
             <Activity className="h-3.5 w-3.5 animate-pulse" />

@@ -276,7 +276,7 @@ export function ProjectsSection() {
   }
 
   return (
-    <section id="projetos" className="relative py-20 md:py-28 overflow-hidden">
+    <section id="projetos" className="relative py-12 md:py-24 overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
         <motion.div
           variants={jarvisVariants}
@@ -557,7 +557,7 @@ function HorizontalScrollRow({
 }) {
   return (
     <div className="w-full">
-      <div className="grid grid-cols-3 gap-3 sm:gap-6 lg:grid-cols-4 pt-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 pt-1">
         {projects.map((project, index) => (
           <motion.div
             key={project.id}

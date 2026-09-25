@@ -762,7 +762,7 @@ export function SandboxViewer({ className = "" }: SandboxViewerProps) {
           <Button
             size="sm"
             onClick={toggleFullscreen}
-            className={`text-xs h-7.5 sm:h-8 px-2.5 sm:px-3 gap-1 rounded-xl font-mono font-bold shadow-md transition-all shrink-0 cursor-pointer ${
+            className={`h-7 sm:h-8 px-2 sm:px-3 gap-1 rounded-lg sm:rounded-xl font-mono font-bold shadow-md transition-all shrink-0 cursor-pointer ${
               isFullscreen
                 ? "bg-red-500/20 text-red-300 border border-red-500/40 hover:bg-red-500 hover:text-white"
                 : "bg-amber-500 text-black hover:bg-amber-400 shadow-amber-500/20"
@@ -771,12 +771,12 @@ export function SandboxViewer({ className = "" }: SandboxViewerProps) {
             {isFullscreen ? (
               <>
                 <X className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Sair (ESC)</span>
+                <span className="hidden sm:inline text-xs">Sair</span>
               </>
             ) : (
               <>
                 <Maximize2 className="w-3.5 h-3.5" />
-                <span className="text-[11px] sm:text-xs">Tela Cheia</span>
+                <span className="hidden xs:inline text-[11px] sm:text-xs">Tela Cheia</span>
               </>
             )}
           </Button>
@@ -817,9 +817,9 @@ export function SandboxViewer({ className = "" }: SandboxViewerProps) {
           ))}
         </div>
 
-        {/* Right Floating Compact Slot Inspection Card */}
+        {/* Floating Compact Slot Inspection Card - Bottom on Mobile, Top-Right on Desktop */}
         {activeSlot && (
-          <div className="absolute top-3 right-3 p-2 rounded-xl bg-black/90 backdrop-blur-md border border-amber-500/40 text-[10px] font-mono space-y-1 max-w-[170px] sm:max-w-[210px] shadow-2xl z-10 animate-in fade-in duration-150 select-none">
+          <div className="absolute bottom-11 left-3 right-3 sm:bottom-auto sm:top-3 sm:left-auto sm:right-3 p-2 rounded-xl bg-black/95 backdrop-blur-md border border-amber-500/40 text-[10px] font-mono space-y-1 sm:max-w-[210px] shadow-2xl z-20 animate-in fade-in duration-150 select-none">
             <div className="flex items-center justify-between border-b border-amber-500/30 pb-0.5">
               <span className={`text-[8px] sm:text-[9px] font-bold px-1.5 py-0.2 rounded border ${
                 activeSlot.heatLevel === "A"
@@ -889,14 +889,14 @@ export function SandboxViewer({ className = "" }: SandboxViewerProps) {
         </div>
       </div>
 
-      {/* Bottom Actions Bar - Uniforme e Enxuta */}
-      <div className="p-2 sm:p-2.5 border-t border-amber-500/20 bg-gray-900/80 w-full overflow-hidden">
-        <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center justify-between gap-1.5 sm:gap-2 w-full font-mono">
+      {/* Bottom Actions Bar - Toolbar Compacta e Unificada em Linha Única */}
+      <div className="p-1.5 sm:p-2.5 border-t border-amber-500/20 bg-gray-900/80 w-full overflow-hidden">
+        <div className="flex items-center justify-between gap-1 sm:gap-2 w-full font-mono overflow-x-auto [scrollbar-width:none]">
           <Button
             size="sm"
             variant="outline"
             onClick={() => setAutoRotate(!autoRotate)}
-            className="text-[10px] sm:text-xs h-7.5 px-2.5 justify-center gap-1.5 border-gray-700 hover:border-amber-400 text-foreground w-full sm:w-auto cursor-pointer"
+            className="text-[10px] sm:text-xs h-7 sm:h-7.5 px-2 sm:px-2.5 justify-center gap-1 border-gray-700 hover:border-amber-400 text-foreground flex-1 sm:flex-initial shrink-0 cursor-pointer"
           >
             <RotateCw className="w-3 h-3" />
             <span>{autoRotate ? "Pausar" : "Girar 360°"}</span>
@@ -906,29 +906,29 @@ export function SandboxViewer({ className = "" }: SandboxViewerProps) {
             size="sm"
             variant="outline"
             onClick={() => setWireframe(!wireframe)}
-            className="text-[10px] sm:text-xs h-7.5 px-2.5 justify-center gap-1.5 border-gray-700 hover:border-amber-400 text-foreground w-full sm:w-auto cursor-pointer"
+            className="text-[10px] sm:text-xs h-7 sm:h-7.5 px-2 sm:px-2.5 justify-center gap-1 border-gray-700 hover:border-amber-400 text-foreground flex-1 sm:flex-initial shrink-0 cursor-pointer"
           >
             <Eye className="w-3 h-3" />
-            <span>Wireframe CAD</span>
+            <span className="truncate">Wireframe</span>
           </Button>
 
           <Button
             size="sm"
             variant="outline"
-            className="text-[10px] sm:text-xs h-7.5 px-2.5 justify-center gap-1.5 border-gray-700 hover:border-amber-400 text-foreground w-full sm:w-auto cursor-pointer"
+            className="text-[10px] sm:text-xs h-7 sm:h-7.5 px-2 sm:px-2.5 justify-center gap-1 border-gray-700 hover:border-amber-400 text-foreground flex-1 sm:flex-initial shrink-0 cursor-pointer"
             onClick={() => alert("Exportação do modelo 3D GLB do Armazém Cometa concluída!")}
           >
             <Download className="w-3 h-3" />
-            <span>Exportar .GLB</span>
+            <span>.GLB</span>
           </Button>
 
           <Button
             size="sm"
-            className="text-[10px] sm:text-xs h-7.5 px-2.5 justify-center gap-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold shadow-md w-full sm:w-auto cursor-pointer"
+            className="text-[10px] sm:text-xs h-7 sm:h-7.5 px-2.5 sm:px-3 justify-center gap-1 bg-amber-500 hover:bg-amber-400 text-black font-bold shadow-md flex-1 sm:flex-initial shrink-0 cursor-pointer"
             onClick={() => alert("Download do pacote .3MF para fatiamento industrial iniciado!")}
           >
             <Download className="w-3 h-3" />
-            <span>Baixar .3MF</span>
+            <span>.3MF</span>
           </Button>
         </div>
       </div>

@@ -60,7 +60,7 @@ export function MakerLabSection() {
   ]
 
   return (
-    <section id="maker-lab" className="relative py-28 overflow-hidden bg-black/40 border-t border-border/40">
+    <section id="maker-lab" className="relative py-12 md:py-24 overflow-hidden bg-black/40 border-t border-border/40">
       {/* Background Glows */}
       <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -81,30 +81,30 @@ export function MakerLabSection() {
             Aplicação prática de visualização 3D de alta performance e manufatura aditiva. Desenvolvi o <strong>Digital Twin do Armazém com Heatmap Interativo</strong> para transformar dados brutos de estoque em decisões visuais instantâneas e protótipos físicos de engenharia.
           </p>
 
-          {/* Switcher Tabs: 3D Interativo vs Aplicação Real em Produção */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1.5 sm:gap-2 p-1.5 bg-gray-950/80 border border-amber-500/30 rounded-2xl mt-6 sm:mt-8 shadow-xl w-full sm:w-auto">
+          {/* Switcher Tabs: 3D Interativo vs Aplicação Real em Produção - Segmented Control Compacto */}
+          <div className="grid grid-cols-2 items-center gap-1 p-1 bg-gray-950/90 border border-amber-500/30 rounded-xl mt-5 sm:mt-6 shadow-xl w-full max-w-md">
             <button
               onClick={() => setActiveTab("3d_demo")}
-              className={`flex items-center justify-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-mono font-bold transition-all cursor-pointer text-center ${
+              className={`flex items-center justify-center gap-1.5 px-2.5 py-2 sm:px-3 sm:py-2 rounded-lg text-[11px] sm:text-xs font-mono font-bold transition-all cursor-pointer text-center truncate ${
                 activeTab === "3d_demo"
-                  ? "bg-amber-500 text-black shadow-lg shadow-amber-500/20"
+                  ? "bg-amber-500 text-black shadow-md shadow-amber-500/20"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Cpu className="w-4 h-4 shrink-0" />
-              <span>🎮 Visualizador 3D Interativo</span>
+              <Cpu className="w-3.5 h-3.5 shrink-0" />
+              <span className="truncate">3D Interativo</span>
             </button>
 
             <button
               onClick={() => setActiveTab("real_app")}
-              className={`flex items-center justify-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-mono font-bold transition-all cursor-pointer text-center ${
+              className={`flex items-center justify-center gap-1.5 px-2.5 py-2 sm:px-3 sm:py-2 rounded-lg text-[11px] sm:text-xs font-mono font-bold transition-all cursor-pointer text-center truncate ${
                 activeTab === "real_app"
-                  ? "bg-amber-500 text-black shadow-lg shadow-amber-500/20"
+                  ? "bg-amber-500 text-black shadow-md shadow-amber-500/20"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <ImageIcon className="w-4 h-4 shrink-0" />
-              <span>📸 Aplicação Real em Produção (WMS)</span>
+              <ImageIcon className="w-3.5 h-3.5 shrink-0" />
+              <span className="truncate">Produção (WMS)</span>
             </button>
           </div>
         </div>

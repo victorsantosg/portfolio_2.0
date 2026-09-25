@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { useLanguage } from "@/hooks/use-language"
 
-// Kinetic 3D Letter Zoom on Hover Component
+// Kinetic 3D Letter Zoom on Hover Component (Desativa em touch para evitar letras presas no mobile)
 function KineticLetters({
   text,
   isGradient = false,
@@ -17,6 +17,18 @@ function KineticLetters({
   isGradient?: boolean
   className?: string
 }) {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      // Desativa o hover individual de letras APENAS no mobile (< 768px), mantendo 100% ativo no desktop
+      setIsMobile(typeof window !== "undefined" && window.innerWidth < 768)
+    }
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+    return () => window.removeEventListener("resize", checkMobile)
+  }, [])
+
   return (
     <span className={`inline-flex flex-wrap gap-x-2 sm:gap-x-3 gap-y-1 ${className}`}>
       {text.split(" ").map((word, wIdx) => (
@@ -24,13 +36,17 @@ function KineticLetters({
           {word.split("").map((char, cIdx) => (
             <motion.span
               key={cIdx}
-              whileHover={{
-                scale: 1.35,
-                y: -6,
-                rotate: cIdx % 2 === 0 ? 5 : -5,
-                color: isGradient ? "#fbbf24" : "#ee7112",
-                textShadow: "0 0 16px rgba(238, 113, 18, 0.9), 0 0 32px rgba(238, 113, 18, 0.5)",
-              }}
+              whileHover={
+                isMobile
+                  ? undefined
+                  : {
+                      scale: 1.35,
+                      y: -6,
+                      rotate: cIdx % 2 === 0 ? 5 : -5,
+                      color: isGradient ? "#fbbf24" : "#ee7112",
+                      textShadow: "0 0 16px rgba(238, 113, 18, 0.9), 0 0 32px rgba(238, 113, 18, 0.5)",
+                    }
+              }
               transition={{ type: "spring", stiffness: 450, damping: 10 }}
               className={`inline-block cursor-default select-none transition-colors duration-150 ${
                 isGradient ? "text-gradient animate-gradient bg-[length:200%_200%]" : "text-foreground"
@@ -326,7 +342,7 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
             </motion.div>
 
             {/* Flying Titles with Per-Word Armor Assembly Physics & Kinetic Zoom on Hover */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4 sm:mb-5 text-balance">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight mb-4 sm:mb-5 text-balance">
               <div className="flex flex-wrap justify-center lg:justify-start gap-x-3 gap-y-1">
                 {title1.split(" ").map((word, i) => (
                   <motion.span
@@ -386,7 +402,7 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
               {t.hero.subtitle}
             </motion.p>
 
-            {/* CTA Buttons with Armor Assembly Flight */}
+            {/* CTA Buttons with Armor Assembly Flight - Empilhados um embaixo do outro no mobile */}
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-2.5 sm:gap-3 w-full sm:w-auto">
               <motion.div
                 initial={{ x: -200, opacity: 0 }}
@@ -397,9 +413,9 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
                 className="w-full sm:w-auto flex justify-center"
               >
                 <Button
-                  size="lg"
+                  size="default"
                   onClick={(e) => handleWarpToSection("#orcamento", e)}
-                  className="w-full sm:w-auto min-w-[220px] sm:min-w-0 h-11 sm:h-12 relative overflow-hidden bg-primary text-primary-foreground font-semibold px-5 sm:px-6 text-xs sm:text-sm glow-border animate-pulse-glow hover:bg-[#ee7112] hover:shadow-[0_0_30px_rgba(238,113,18,0.8)] cursor-pointer transition-all duration-300 rounded-xl flex items-center justify-center gap-2"
+                  className="w-[230px] sm:w-auto h-10 sm:h-11 relative overflow-hidden bg-primary text-primary-foreground font-semibold px-5 sm:px-6 text-xs sm:text-sm glow-border animate-pulse-glow hover:bg-[#ee7112] hover:shadow-[0_0_25px_rgba(238,113,18,0.7)] cursor-pointer transition-all duration-300 rounded-xl flex items-center justify-center gap-2"
                 >
                   <span>{t.hero.ctaPrimary}</span>
                   <ArrowRight className="h-4 w-4" />
@@ -415,15 +431,15 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
                 className="w-full sm:w-auto flex justify-center"
               >
                 <Button
-                  size="lg"
+                  size="default"
                   onClick={() => {
                     if (typeof window !== "undefined") {
                       window.dispatchEvent(new CustomEvent("start-jarvis-tour"))
                     }
                   }}
-                  className="w-full sm:w-auto min-w-[220px] sm:min-w-0 h-11 sm:h-12 relative overflow-hidden bg-black/85 border border-amber-500/50 text-amber-300 hover:text-black hover:bg-amber-400 font-semibold px-5 sm:px-6 text-xs sm:text-sm font-mono shadow-[0_0_20px_rgba(245,158,11,0.25)] hover:shadow-[0_0_30px_rgba(245,158,11,0.6)] cursor-pointer transition-all duration-300 rounded-xl flex items-center justify-center gap-2"
+                  className="w-[230px] sm:w-auto h-10 sm:h-11 relative overflow-hidden bg-black/85 border border-amber-500/50 text-amber-300 hover:text-black hover:bg-amber-400 font-semibold px-4 sm:px-5 text-xs font-mono shadow-[0_0_15px_rgba(245,158,11,0.2)] hover:shadow-[0_0_25px_rgba(245,158,11,0.5)] cursor-pointer transition-all duration-300 rounded-xl flex items-center justify-center gap-2"
                 >
-                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse shrink-0" />
                   <span>🎙️ Tour com J.A.R.V.I.S.</span>
                 </Button>
               </motion.div>
@@ -437,13 +453,13 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
                 className="w-full sm:w-auto flex justify-center"
               >
                 <Button
-                  size="lg"
+                  size="default"
                   variant="outline"
                   onClick={(e) => handleWarpToSection("#projetos", e)}
-                  className="w-full sm:w-auto min-w-[220px] sm:min-w-0 h-11 sm:h-12 relative overflow-hidden border-border bg-black/40 hover:bg-secondary font-semibold px-5 sm:px-6 text-xs sm:text-sm hover:border-[#ee7112] hover:text-amber-300 hover:shadow-[0_0_20px_rgba(238,113,18,0.4)] cursor-pointer transition-all duration-300 rounded-xl flex items-center justify-center gap-2"
+                  className="w-[230px] sm:w-auto h-10 sm:h-11 relative overflow-hidden border-border bg-black/40 hover:bg-secondary font-semibold px-4 sm:px-5 text-xs hover:border-[#ee7112] hover:text-amber-300 hover:shadow-[0_0_15px_rgba(238,113,18,0.3)] cursor-pointer transition-all duration-300 rounded-xl flex items-center justify-center gap-2"
                 >
                   <span>{t.hero.ctaSecondary}</span>
-                  <ExternalLink className="h-4 w-4" />
+                  <ExternalLink className="h-3.5 w-3.5" />
                 </Button>
               </motion.div>
             </div>

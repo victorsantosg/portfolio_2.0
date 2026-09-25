@@ -104,7 +104,7 @@ export function TechStackSection() {
   ]
 
   return (
-    <section id="stack" className="relative py-20 md:py-28 overflow-hidden">
+    <section id="stack" className="relative py-12 md:py-24 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-background via-secondary/20 to-background" />
 
       <div className="relative container mx-auto px-4 md:px-6">
@@ -114,7 +114,7 @@ export function TechStackSection() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-10 md:mb-16"
         >
           <motion.span
             variants={jarvisVariants}
@@ -135,7 +135,7 @@ export function TechStackSection() {
         </motion.div>
 
         {/* Painel Dashboard 3x2 em Desktop, 2x3 em Tablet, 1 col em Mobile */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto mb-8 sm:mb-12">
           {categories.map((category, catIndex) => (
             <motion.div
               key={category.title}
@@ -217,30 +217,39 @@ export function TechStackSection() {
           ))}
         </div>
 
-        {/* Badges de Ferramentas Emblemáticas no Rodapé */}
+        {/* Dock Integrado de Ferramentas & Protocolos Complementares */}
         <motion.div
           variants={jarvisVariants}
           custom={{ direction: "bottom", delay: 0.3 }}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5"
+          className="glass rounded-2xl border border-border/40 p-4 sm:p-5 max-w-4xl mx-auto shadow-lg"
         >
-          {additionalTools.map((tool, index) => (
-            <motion.div
-              key={tool.name}
-              variants={jarvisVariants}
-              custom={{ direction: "scale", delay: 0.35 + index * 0.04 }}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              whileHover={{ scale: 1.05, y: -2 }}
-              className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-secondary/90 border border-border/50 hover:border-primary/60 hover:bg-secondary transition-all shadow-sm cursor-default"
-            >
-              <tool.icon className="h-3.5 w-3.5 text-primary shrink-0" />
-              <span className="text-xs font-mono font-medium text-foreground/90">{tool.name}</span>
-            </motion.div>
-          ))}
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+            <span className="text-[11px] sm:text-xs font-mono font-semibold tracking-wider text-muted-foreground uppercase">
+              {"// Ferramentas & Protocolos Complementares"}
+            </span>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5">
+            {additionalTools.map((tool, index) => (
+              <motion.div
+                key={tool.name}
+                variants={jarvisVariants}
+                custom={{ direction: "scale", delay: 0.35 + index * 0.03 }}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                whileHover={{ scale: 1.05, y: -2 }}
+                className="flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 rounded-full bg-secondary/80 border border-border/50 hover:border-primary/60 hover:bg-secondary transition-all shadow-sm cursor-default"
+              >
+                <tool.icon className="h-3.5 w-3.5 text-primary shrink-0" />
+                <span className="text-[11px] sm:text-xs font-mono font-medium text-foreground/90">{tool.name}</span>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>

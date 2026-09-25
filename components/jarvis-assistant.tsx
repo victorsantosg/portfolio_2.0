@@ -445,7 +445,7 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
       {/* ========================================================= */}
       {/* FLOATING ORANGE HOLOGRAPHIC SPHERE WIDGET (BOTTOM-RIGHT) */}
       {/* ========================================================= */}
-      <div className="fixed bottom-5 right-5 z-[9990] flex items-center gap-2.5">
+      <div className="fixed bottom-3.5 right-3.5 sm:bottom-5 sm:right-5 z-[9990] flex items-center gap-2">
         {/* Helper Pulse Tag - Discreto e apenas Desktop */}
         {!isOpen && (
           <motion.div
@@ -469,12 +469,12 @@ export function JarvisAssistant({ isReady = false }: JarvisAssistantProps) {
           }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="relative w-13 h-13 sm:w-14 sm:h-14 rounded-full flex items-center justify-center cursor-pointer group shadow-[0_0_20px_rgba(245,158,11,0.35)]"
+          className="relative w-11 h-11 sm:w-14 sm:h-14 rounded-full flex items-center justify-center cursor-pointer group shadow-[0_0_15px_rgba(245,158,11,0.35)]"
           aria-label="Abrir Assistente J.A.R.V.I.S."
         >
           <div className="absolute -inset-1 rounded-full border border-amber-500/30 border-dashed animate-spin [animation-duration:18s] pointer-events-none group-hover:border-amber-400/60 transition-colors" />
           <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-amber-600/40 via-orange-500/40 to-amber-300/40 opacity-70 blur-[1px] group-hover:opacity-100 transition-opacity" />
-          <div className="relative w-[44px] h-[44px] sm:w-[48px] sm:h-[48px] rounded-full overflow-hidden border border-amber-400/80 bg-black flex items-center justify-center shadow-inner">
+          <div className="relative w-[36px] h-[36px] sm:w-[48px] sm:h-[48px] rounded-full overflow-hidden border border-amber-400/80 bg-black flex items-center justify-center shadow-inner">
             <img
               src="/jarvis/jarvis3.webp"
               alt="J.A.R.V.I.S. Arc Reactor Core"

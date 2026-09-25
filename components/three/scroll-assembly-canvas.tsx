@@ -9,6 +9,7 @@ export function ScrollAssemblyCanvas() {
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
+    if (window.innerWidth < 768) return
 
     // Scene, Camera, Renderer
     const scene = new THREE.Scene()
@@ -421,7 +422,7 @@ export function ScrollAssemblyCanvas() {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-85"
+      className="hidden md:block fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-85"
       aria-hidden="true"
     />
   )
