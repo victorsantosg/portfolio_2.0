@@ -35,52 +35,16 @@ const ecosystemNodes = [
     glow: "shadow-[0_0_30px_rgba(56,189,248,0.35)]",
     borderHover: "hover:border-sky-400/60",
     badge: "CORE GATEWAY",
-    title: "OmniRoute",
-    subtitle: "Open Source AI Gateway",
+    title: "OmniRoute AI Gateway",
+    subtitle: "Gateway Multi-Model Agnóstico",
     description:
-      "Gateway de IA open source rodando localmente — roteamento inteligente entre Claude, GPT-5.6 Sol/Terra/Luna, Gemini e DeepSeek em uma única API universal com fallback automático e Circuit Breaker.",
+      "Gateway de IA open source rodando localmente — roteamento inteligente entre Anthropic Claude, OpenAI, Google Gemini e DeepSeek em uma única API universal com fallback automático contra rate-limits (HTTP 429) e Circuit Breaker.",
     metrics: [
-      { label: "Provedores Orquestrados", value: "5+" },
+      { label: "Provedores Orquestrados", value: "4+" },
       { label: "Endpoint Local", value: ":20128" },
-      { label: "Uptime Strategy", value: "Circuit Breaker" },
+      { label: "Estratégia de Uptime", value: "Circuit Breaker" },
     ],
-    tags: ["Claude Sonnet", "GPT-5.6 Sol", "Gemini Flash", "DeepSeek R1", "Fallback 429"],
-  },
-  {
-    id: "fusion",
-    icon: GitMerge,
-    color: "from-violet-500 to-purple-600",
-    glow: "shadow-[0_0_30px_rgba(167,139,250,0.35)]",
-    borderHover: "hover:border-violet-400/60",
-    badge: "COMBO MODE",
-    title: "Fusion Mode",
-    subtitle: "Execução Paralela Multi-LLM",
-    description:
-      "Executa múltiplos modelos em paralelo e sintetiza as respostas com uma IA Juíz de consenso — eliminando vieses de um único modelo e extraindo o raciocínio ótimo de cada especialista.",
-    metrics: [
-      { label: "Modelos em Paralelo", value: "3–5x" },
-      { label: "Consensus Engine", value: "IA Juíz" },
-      { label: "Qualidade vs Custo", value: "Otimizado" },
-    ],
-    tags: ["Parallel Execution", "IA Judge", "Consensus", "Best-of-N"],
-  },
-  {
-    id: "pipeline",
-    icon: Layers,
-    color: "from-emerald-500 to-teal-600",
-    glow: "shadow-[0_0_30px_rgba(52,211,153,0.35)]",
-    borderHover: "hover:border-emerald-400/60",
-    badge: "CHAIN MODE",
-    title: "Pipeline Chains",
-    subtitle: "Raciocínio Encadeado Multi-Etapa",
-    description:
-      "Encadeia 3+ etapas de raciocínio especializado entre modelos distintos — cada modelo recebe o output refinado do anterior, construindo soluções de complexidade crescente.",
-    metrics: [
-      { label: "Etapas Encadeadas", value: "3–5" },
-      { label: "Padrão", value: "Think → Code → Review" },
-      { label: "Output", value: "Produção-Ready" },
-    ],
-    tags: ["Step Chaining", "Refinement Loop", "Multi-Model", "Structured Output"],
+    tags: ["Anthropic Claude", "OpenAI", "Google Gemini", "DeepSeek", "Circuit Breaker"],
   },
   {
     id: "skills",
@@ -88,17 +52,53 @@ const ecosystemNodes = [
     color: "from-amber-500 to-orange-600",
     glow: "shadow-[0_0_30px_rgba(251,191,36,0.35)]",
     borderHover: "hover:border-amber-400/60",
-    badge: "MCP SERVER",
-    title: "Central Skills Server",
-    subtitle: "Servidor MCP Próprio com +30 Skills",
+    badge: "MCP PROTOCOL",
+    title: "Model Context Protocol (MCP)",
+    subtitle: "Integração de Agentes com APIs & Bancos",
     description:
-      "Servidor MCP próprio com mais de 30 skills modulares e especializadas — de RAG avançado a multi-agent orchestration, database design e frontend architecture — conectados ao Antigravity IDE.",
+      "Servidores MCP conectando agentes autônomos de IA diretamente a bancos de dados PostgreSQL, sistemas de arquivos, ferramentas e APIs externas com tipagem rígida e execução segura.",
     metrics: [
-      { label: "Skills Modulares", value: "30+" },
-      { label: "Protocolo", value: "MCP" },
-      { label: "Integração", value: "Antigravity IDE" },
+      { label: "Protocolo", value: "Anthropic MCP" },
+      { label: "Conexões", value: "Bancos, APIs & CLI" },
+      { label: "Segurança", value: "Isolamento Estrito" },
     ],
-    tags: ["RAG Patterns", "Multi-Agent", "MCP Protocol", "On-Demand Tools"],
+    tags: ["MCP Protocol", "PostgreSQL", "Tool Calling", "Extensibilidade"],
+  },
+  {
+    id: "caveman",
+    icon: Shrink,
+    color: "from-cyan-500 to-sky-600",
+    glow: "shadow-[0_0_30px_rgba(6,182,212,0.35)]",
+    borderHover: "hover:border-cyan-400/60",
+    badge: "CONTEXT ENGINEERING",
+    title: "Context Engineering",
+    subtitle: "Otimização de Contexto e Redução de Tokens (−70%)",
+    description:
+      "Técnicas cirúrgicas de empacotamento de contexto que eliminam até 70% dos tokens desnecessários com 100% de preservação semântica — acelerando respostas e reduzindo custos operacionais.",
+    metrics: [
+      { label: "Redução de Tokens", value: "65–75%" },
+      { label: "Fidelidade Semântica", value: "100%" },
+      { label: "Eficiência", value: "Alta Densidade" },
+    ],
+    tags: ["Token Reduction", "Context Packaging", "Semantic Compression", "Cost Efficiency"],
+  },
+  {
+    id: "pipeline",
+    icon: Layers,
+    color: "from-emerald-500 to-teal-600",
+    glow: "shadow-[0_0_30px_rgba(52,211,153,0.35)]",
+    borderHover: "hover:border-emerald-400/60",
+    badge: "MULTI-AGENT",
+    title: "Multi-Agent Pipelines",
+    subtitle: "Execução Paralela & Síntese por Consenso",
+    description:
+      "Execução encadeada e paralela entre múltiplos modelos especialistas — cada modelo refinando o raciocínio do anterior com síntese por consenso para validação de lógica crítica.",
+    metrics: [
+      { label: "Padrão", value: "Think → Code → Validate" },
+      { label: "Síntese", value: "Consenso Multi-LLM" },
+      { label: "Confiabilidade", value: "Alta Precisão" },
+    ],
+    tags: ["Step Chaining", "Multi-Agent", "Consensus", "Pipeline Resiliente"],
   },
   {
     id: "graphify",
@@ -107,34 +107,16 @@ const ecosystemNodes = [
     glow: "shadow-[0_0_30px_rgba(251,113,133,0.35)]",
     borderHover: "hover:border-rose-400/60",
     badge: "KNOWLEDGE GRAPH",
-    title: "Graphify",
-    subtitle: "Mapeamento Semântico de Código",
+    title: "Knowledge Graphs & GraphRAG",
+    subtitle: "Mapeamento Semântico de Bases de Código",
     description:
-      "Transforma qualquer base de código em um knowledge graph persistente no Obsidian — detecta God Nodes, comunidades lógicas, fluxos críticos e dependências AST para entendimento profundo instantâneo.",
+      "Transformação de repositórios em grafos de conhecimento navegáveis — detectando nós centrais, acoplamentos e fluxos críticos para análise e refatorações complexas sem perda de contexto.",
     metrics: [
-      { label: "Output", value: "Obsidian Vault" },
-      { label: "Análise", value: "AST + Semântica" },
-      { label: "Padrão", value: "God Nodes + Communities" },
+      { label: "Mapeamento", value: "AST + Grafo Semântico" },
+      { label: "Detecção", value: "Dependências Críticas" },
+      { label: "Aplicação", value: "Auditoria & Refatoração" },
     ],
-    tags: ["Knowledge Graph", "God Nodes", "AST", "Obsidian", "GraphRAG"],
-  },
-  {
-    id: "caveman",
-    icon: Shrink,
-    color: "from-cyan-500 to-sky-600",
-    glow: "shadow-[0_0_30px_rgba(6,182,212,0.35)]",
-    borderHover: "hover:border-cyan-400/60",
-    badge: "TOKEN PROTOCOL",
-    title: "Caveman Protocol",
-    subtitle: "Compressão de Contexto −70%",
-    description:
-      "Técnica de engenharia de contexto que elimina até 70% dos tokens desnecessários com preservação semântica total — comprimindo logs ruidosos, outputs verbosos e empacotando contexto cirurgicamente.",
-    metrics: [
-      { label: "Redução de Tokens", value: "65–75%" },
-      { label: "Fidelidade Semântica", value: "100%" },
-      { label: "Economia por 1M tok", value: "~$21" },
-    ],
-    tags: ["Token Reduction", "Log Compression", "Context Packaging", "Cost Efficiency"],
+    tags: ["Knowledge Graph", "AST", "GraphRAG", "Análise de Código"],
   },
 ]
 
@@ -266,7 +248,7 @@ function EcosystemDetail({ node }: { node: (typeof ecosystemNodes)[0] }) {
         {/* Status */}
         <div className="flex items-center gap-2 mt-auto pt-2 border-t border-border/20">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-          <span className="text-xs font-mono text-emerald-400 font-semibold">LIVE // OPERATIONAL</span>
+          <span className="text-xs font-mono text-emerald-400 font-semibold">STATUS: OPERATIONAL // ONLINE</span>
         </div>
       </div>
     </motion.div>
@@ -302,16 +284,16 @@ export function AiEcosystemSection() {
 
   const tEco = (t as any).aiEcosystem ?? {
     tagline: "<AIEcosystem />",
-    title: "Meu",
-    titleGradient: "Ecossistema de IA",
+    title: "IA &",
+    titleGradient: "Agentic Systems",
     subtitle:
-      "Não uso IA como copiloto — opero meu próprio gateway open source, orquestro 5+ modelos em paralelo e aplico técnicas de engenharia de contexto que poucos engenheiros conhecem.",
-    proofTitle: "O que isso significa na prática:",
+      "Arquitetura de gateways multi-model agnósticos, conexão de agentes via MCP e engenharia de contexto para altíssima densidade de raciocínio com governança e controle de custos.",
+    proofTitle: "Pilares de Engenharia de IA:",
     proofs: [
-      "OmniRoute local rodando em :20128 — zero dependência de um único provedor, fallback automático em rate-limit HTTP 429",
-      "Fusion Mode: 3+ modelos raciocinam em paralelo, IA Juíz sintetiza o melhor — vai além do que qualquer chatbot oferece",
-      "Context Engineering: 65–75% menos tokens, mesma precisão — projetos mais rápidos e econômicos",
-      "Central Skills Server com +30 tools MCP prontas para qualquer stack, banco ou problema",
+      "OmniRoute Gateway: Zero dependência de provedor único e fallback automático contra HTTP 429.",
+      "Model Context Protocol (MCP): Integração padronizada de agentes com APIs, bancos PostgreSQL e ferramentas.",
+      "Context Engineering: Redução cirúrgica de até 70% de tokens desnecessários com fidelidade semântica total.",
+      "Multi-Agent Pipelines: Execução paralela e validação por consenso entre múltiplos modelos especialistas.",
     ],
   }
 

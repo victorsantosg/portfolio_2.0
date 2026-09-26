@@ -20,15 +20,15 @@ import { useLanguage } from "@/hooks/use-language"
 import { jarvisVariants } from "@/lib/animations"
 
 const additionalTools = [
-  { name: "Claude 3.7 Thinking", icon: Brain },
-  { name: "OpenAI o-series & Codex", icon: Sparkles },
-  { name: "OmniRoute AI Gateway", icon: Cpu },
-  { name: "MCP Protocol & Tools", icon: Network },
-  { name: "Next.js 16 / PWA", icon: Code2 },
+  { name: "Next.js & React 19", icon: Code2 },
+  { name: "TypeScript & Node.js", icon: Code2 },
+  { name: "Fastify (High Concurrency)", icon: Server },
+  { name: "PostgreSQL & Prisma ORM", icon: Database },
   { name: "Docker & Coolify", icon: Server },
-  { name: "Python (RPA & IA)", icon: Terminal },
-  { name: "PostgreSQL & Prisma", icon: Database },
-  { name: "TypeScript", icon: Code2 },
+  { name: "Python (ETL & RPA)", icon: Terminal },
+  { name: "OmniRoute AI Gateway", icon: Cpu },
+  { name: "Model Context Protocol (MCP)", icon: Network },
+  { name: "Tailwind CSS & Three.js", icon: Palette },
 ]
 
 export function TechStackSection() {
@@ -36,36 +36,14 @@ export function TechStackSection() {
 
   const categories = [
     {
-      title: t.stack.categories.aiModels,
-      systemId: "SYSTEM.AI_MODELS // INFERENCE",
-      icon: Brain,
-      techs: [
-        { name: "Claude Sonnet & Opus (Thinking)", level: 98 },
-        { name: "OpenAI GPT (Codex, Sol/Terra, o-series)", level: 96 },
-        { name: "Google Gemini (Ultra Context & Flash)", level: 95 },
-        { name: "DeepSeek R1 & Qwen 2.5 Coder", level: 93 },
-      ],
-    },
-    {
-      title: t.stack.categories.aiTools,
-      systemId: "SYSTEM.AI_GATEWAY // ORCHESTRATION",
-      icon: Cpu,
-      techs: [
-        { name: "OmniRoute (AI Gateway & Resiliência)", level: 98 },
-        { name: "MCP (Model Context Protocol & Tools)", level: 96 },
-        { name: "Combos de IA (Fusion, Think & Pipelines)", level: 95 },
-        { name: "Token Compression (Caveman, RTK -70%)", level: 94 },
-      ],
-    },
-    {
       title: t.stack.categories.web,
       systemId: "SYSTEM.WEB_UI // ACTIVE",
       icon: Code2,
       techs: [
-        { name: "Next.js (App Router & SSR)", level: 98 },
-        { name: "PWA (Mobile/Web Offline-First)", level: 95 },
-        { name: "React & TypeScript", level: 94 },
-        { name: "Tailwind CSS v4 & Motion", level: 92 },
+        { name: "Next.js", highlight: "App Router / SSR" },
+        { name: "React 19 & TypeScript", highlight: "Interfaces Reativas" },
+        { name: "Tailwind CSS v4 & Motion", highlight: "Design System Fluido" },
+        { name: "PWA (Mobile & Desktop)", highlight: "Offline-First" },
       ],
     },
     {
@@ -73,21 +51,21 @@ export function TechStackSection() {
       systemId: "SYSTEM.BACKEND // RUNNING",
       icon: Server,
       techs: [
-        { name: "Node.js & Fastify (28ms Latency)", level: 94 },
-        { name: "Prisma ORM & PostgreSQL", level: 92 },
-        { name: "REST APIs & Integrações LDAP/ERP", level: 90 },
-        { name: "Supabase & Firebase", level: 85 },
+        { name: "Node.js & Fastify", highlight: "28ms Latência / Microserviços" },
+        { name: "PostgreSQL & Prisma ORM", highlight: "Modelagem ACID & Partições" },
+        { name: "REST APIs & Webhooks", highlight: "Integrações ERP / Auth JWT" },
+        { name: "Supabase & Firebase", highlight: "BaaS & Realtime Data" },
       ],
     },
     {
-      title: t.stack.categories.infra,
-      systemId: "SYSTEM.INFRA // READY",
-      icon: Database,
+      title: t.stack.categories.aiGateway,
+      systemId: "SYSTEM.AI_GATEWAY // ORCHESTRATION",
+      icon: Cpu,
       techs: [
-        { name: "Docker & Docker Compose", level: 95 },
-        { name: "Coolify (Self-hosting & CI/CD)", level: 92 },
-        { name: "GCP BigQuery & Cloud Storage", level: 88 },
-        { name: "Vitest (E2E & Testes Unitários)", level: 82 },
+        { name: "OmniRoute Gateway", highlight: "Multi-Model / Circuit Breaker" },
+        { name: "Model Context Protocol (MCP)", highlight: "Conexão de Tools & DBs" },
+        { name: "Context Engineering", highlight: "Token Compression (-70%)" },
+        { name: "Multi-Agent Pipelines", highlight: "Orquestração & Avaliação" },
       ],
     },
     {
@@ -95,10 +73,32 @@ export function TechStackSection() {
       systemId: "SYSTEM.AUTO // COMPLETED",
       icon: Cog,
       techs: [
-        { name: "Python (Pandas & NumPy)", level: 96 },
-        { name: "PyAutoGUI & Selenium (RPA)", level: 95 },
-        { name: "Agentes Autônomos & Tool Calling", level: 93 },
-        { name: "Pipelines ETL & Scripting", level: 90 },
+        { name: "Python (Pandas & NumPy)", highlight: "Processamento de Dados & ETL" },
+        { name: "PyAutoGUI & Selenium", highlight: "RPA & Automação de Tarefas" },
+        { name: "Scripts & Cron Jobs", highlight: "Alertas Telegram & Rotinas" },
+        { name: "Auditoria & Conciliação", highlight: "Validação Cruzada de ERP" },
+      ],
+    },
+    {
+      title: t.stack.categories.infra,
+      systemId: "SYSTEM.INFRA // READY",
+      icon: Database,
+      techs: [
+        { name: "Docker & Docker Compose", highlight: "Containerização Isolada" },
+        { name: "Coolify (Self-Hosting)", highlight: "CI/CD & Deploy Contínuo" },
+        { name: "Linux & Bash / Shell", highlight: "Infraestrutura & Servidores" },
+        { name: "Git & Versionamento", highlight: "Git Flow & Governança" },
+      ],
+    },
+    {
+      title: t.stack.categories.models,
+      systemId: "SYSTEM.MODELS // ECOSYSTEM",
+      icon: Brain,
+      techs: [
+        { name: "Anthropic Claude", highlight: "Thinking Mode & Refatoração" },
+        { name: "OpenAI GPT", highlight: "Raciocínio Lógico & APIs" },
+        { name: "Google Gemini", highlight: "Janelas Longas & Multimodal" },
+        { name: "DeepSeek & Open Models", highlight: "Inferência de Alta Eficiência" },
       ],
     },
   ]
@@ -165,52 +165,24 @@ export function TechStackSection() {
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)] shrink-0 ml-2" />
                 </div>
 
-                {/* Lista de Tecnologias sem truncamento */}
-                <div className="space-y-3 sm:space-y-3.5">
-                  {category.techs.map((tech) => {
-                    let mastery = "INTERMEDIATE"
-                    let ledColor = "bg-purple-500 shadow-[0_0_6px_#c084fc]"
-                    if (tech.level >= 95) {
-                      mastery = "EXPERT"
-                      ledColor = "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)]"
-                    } else if (tech.level >= 90) {
-                      mastery = "ADVANCED"
-                      ledColor = "bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.7)]"
-                    } else if (tech.level >= 80) {
-                      mastery = "FLUENT"
-                      ledColor = "bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.7)]"
-                    }
-
-                    return (
-                      <div key={tech.name} className="space-y-1 group/row">
-                        <div className="flex items-center justify-between text-xs sm:text-sm gap-2">
-                          <div className="flex items-center gap-2 min-w-0">
-                            <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${ledColor}`} />
-                            <span className="font-semibold text-foreground/90 group-hover/row:text-primary transition-colors text-xs leading-tight">
-                              {tech.name}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-1.5 shrink-0 text-xs">
-                            <span className="font-mono text-muted-foreground text-[10px] hidden sm:inline">
-                              {mastery}
-                            </span>
-                            <span className="font-mono text-primary font-bold text-xs">
-                              {tech.level}%
-                            </span>
-                          </div>
-                        </div>
-                        <div className="h-[3px] bg-secondary/80 rounded-full overflow-hidden">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            whileInView={{ width: `${tech.level}%` }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8, ease: "easeOut" }}
-                            className="h-full bg-gradient-to-r from-primary via-amber-400 to-primary/50 rounded-full"
-                          />
-                        </div>
+                {/* Lista de Tecnologias com foco prático (Sem porcentagens arbitrárias) */}
+                <div className="space-y-2.5">
+                  {category.techs.map((tech) => (
+                    <div
+                      key={tech.name}
+                      className="group/row flex items-center justify-between py-2 px-3 rounded-xl bg-secondary/20 border border-border/30 hover:border-primary/40 hover:bg-secondary/35 transition-all duration-200"
+                    >
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0 shadow-[0_0_8px_rgba(238,113,18,0.7)] group-hover/row:scale-125 transition-transform" />
+                        <span className="font-semibold text-foreground/90 group-hover/row:text-primary transition-colors text-xs leading-tight truncate">
+                          {tech.name}
+                        </span>
                       </div>
-                    )
-                  })}
+                      <span className="font-mono text-[10px] text-primary/90 font-medium bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-full shrink-0 ml-2">
+                        {tech.highlight}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </motion.div>
@@ -229,7 +201,7 @@ export function TechStackSection() {
           <div className="flex items-center justify-center gap-2 mb-3">
             <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
             <span className="text-[11px] sm:text-xs font-mono font-semibold tracking-wider text-muted-foreground uppercase">
-              {"// Ferramentas & Protocolos Complementares"}
+              {"// Tecnologias & Frameworks em Destaque"}
             </span>
           </div>
 

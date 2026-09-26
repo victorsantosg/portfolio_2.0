@@ -14,31 +14,31 @@ export interface TourStep {
 export const TOUR_STEPS: TourStep[] = [
   {
     id: "hero",
-    title: "PROTOCOLO 01 // SERVIDOR CENTRAL",
-    subtitle: "Armadura Tecnológica de Victor Santos",
+    title: "PROTOCOLO 01 // SISTEMAS DE ALTA CONCORRÊNCIA",
+    subtitle: "Arquitetura Full Stack & Sistemas de IA",
     targetSection: "#inicio",
     narration:
-      "Iniciando protocolo de telemetria e voo guiado. Bem-vindo ao quartel-general de Victor Santos, Arquiteto Full Stack e Engenheiro de Inteligência Artificial. Ele projeta cada sistema como quem constrói uma armadura de combate: código blindado, microsserviços ultrarrápidos e alta resiliência para suportar tráfego extremo.",
+      "Iniciando telemetria e navegação guiada. Bem-vindo ao portfólio de Victor Santos, Software Engineer focado em Full Stack e Sistemas de IA. Ele projeta aplicações modernas de ponta a ponta: interfaces em Next.js, microsserviços em Fastify operando a 28 milissegundos, clusters PostgreSQL e gateways agnósticos de IA.",
     duration: 10500,
     threePreset: "geral",
   },
   {
     id: "about_corporate",
-    title: "PROTOCOLO 02 // HISTÓRICO DE MISSÕES",
-    subtitle: "Escaneando Credenciais Biométricas",
+    title: "PROTOCOLO 02 // TRAJETÓRIA CORPORATIVA",
+    subtitle: "Formação Técnica & Cases de Produção",
     targetSection: "#sobre",
     narration:
-      "Escaneando credenciais biométricas de Victor Santos. Acesso Nível 4 confirmado: graduado em Análise de Sistemas pela UNIFOR e pós-graduado em Full Stack pela INFNET. Observe o crachá holográfico abrindo com o histórico de missões corporativas e arquiteturas de alta concorrência entregues no Cometa Supermercados.",
+      "Credenciais profissionais de Victor Santos: graduado em Análise e Desenvolvimento de Sistemas pela UNIFOR e pós-graduando em Full Stack Web pela INFNET. Trajetória com cases corporativos de alta relevância no Cometa Supermercados: painéis de inventário, portais B2B e APIs analíticas para bancos de alta concorrência.",
     duration: 12500,
   },
   {
     id: "about_ai",
-    title: "PROTOCOLO 03 // ECOSSISTEMA DE IA AGENTIC",
-    subtitle: "Modelos de Fronteira & Engenharia de Contexto",
-    targetSection: "#sobre",
+    title: "PROTOCOLO 03 // IA & AGENTIC SYSTEMS",
+    subtitle: "Gateways Multi-Model & Engenharia de Contexto",
+    targetSection: "#ecossistema-ia",
     narration:
-      "Ativando matriz de Inteligência Artificial. Victor orquestra os modelos mais potentes do mercado mundial: GPT-6 Astra, GPT-5.6 Sol e Terra, Claude Sonnet 4.6 e Claude Opus 4.6 com modo Thinking deliberativo, e Gemini 3.8 Flash com contexto ultra-longo. Isso se soma a servidores MCP ao vivo, roteamento OmniRoute, economia cirúrgica de 70% de tokens com o padrão Caveman e grafos Graphify para análise profunda de software.",
-    duration: 15500,
+      "Avançando para a arquitetura de IA. Victor projeta gateways agnósticos e resilientes com OmniRoute, orquestrando OpenAI, Anthropic Claude, Google Gemini e DeepSeek com fallback automático e Circuit Breaker, além de agentes conectados via protocolo MCP e redução de 70% de tokens com engenharia de contexto.",
+    duration: 13500,
   },
   {
     id: "wms_3d",

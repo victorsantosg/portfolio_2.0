@@ -203,10 +203,10 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
   // J.A.R.V.I.S. Iron Man Armor Assembly System
   const [assemblyState, setAssemblyState] = useState<"disassembled" | "assembling" | "assembled">("disassembled")
 
-  // Stats Counters
-  const [reposCount, setReposCount] = useState(0)
-  const [yearsCount, setYearsCount] = useState(0)
-  const [autoCount, setAutoCount] = useState(0)
+  // Stats Counters - Inicializados com valores reais para evitar 0+ em SSR / crawlers
+  const [reposCount, setReposCount] = useState(60)
+  const [yearsCount, setYearsCount] = useState(2)
+  const [autoCount, setAutoCount] = useState(100)
 
   useEffect(() => {
     if (!isLoaded) return
@@ -214,6 +214,9 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
     // Small delay (150ms) after loading screen ends to let the user see the pieces fly in!
     const timerStart = setTimeout(() => {
       setAssemblyState("assembling")
+      setReposCount(0)
+      setYearsCount(0)
+      setAutoCount(0)
 
       const duration = 1800
       const steps = 30

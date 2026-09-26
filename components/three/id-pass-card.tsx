@@ -163,11 +163,11 @@ export function IdPassCard() {
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-primary animate-pulse" />
                   <span className="text-[11px] font-mono font-bold tracking-wider text-primary">
-                    J.A.R.V.I.S. SECURITY ACCESS
+                    ENGINEERING CREDENTIAL
                   </span>
                 </div>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-primary/20 text-primary border border-primary/40 font-semibold">
-                  CLEARANCE LVL 4
+                  VERIFIED ID
                 </span>
               </div>
 
@@ -204,9 +204,9 @@ export function IdPassCard() {
                     <div className="text-xs font-mono font-bold text-foreground">VS-2026-X09</div>
                   </div>
 
-                  <div className="flex items-center gap-1 text-[10px] font-mono text-amber-400 font-semibold">
+                  <div className="flex items-center gap-1 text-[10px] font-mono text-emerald-400 font-semibold">
                     <Zap className="w-3 h-3" />
-                    <span>BIOMETRIC ACTIVE</span>
+                    <span>STATUS: ACTIVE // PROD</span>
                   </div>
                 </div>
               </div>
@@ -217,7 +217,7 @@ export function IdPassCard() {
                   Victor Santos
                 </h3>
                 <p className="text-xs font-mono text-primary font-medium">
-                  Full Stack & Automation Engineer
+                  Software Engineer | Full Stack & AI Systems
                 </p>
               </div>
 

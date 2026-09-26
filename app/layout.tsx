@@ -7,13 +7,13 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Victor Santos | Next.js Developer & Data Specialist',
-  description: 'Portfólio de Victor Santos. Especialista em desenvolvimento Next.js (Web/Mobile/PWA), automações de processos (RPA) com Python, e infraestrutura ágil com Docker e Coolify.',
-  keywords: ['next.js', 'pwa', 'docker', 'coolify', 'python', 'rpa', 'automação', 'data analyst', 'react', 'desenvolvedor full-stack'],
+  title: 'Victor Santos | Software Engineer • Full Stack & AI Systems',
+  description: 'Portfólio de Victor Santos. Software Engineer especializado em arquitetura Full Stack (Next.js, Fastify, Python, PostgreSQL) e Sistemas de IA (OmniRoute, Agentes Autônomos, MCP Protocol).',
+  keywords: ['software engineer', 'full stack', 'next.js', 'fastify', 'python', 'ai systems', 'ai agents', 'mcp protocol', 'docker', 'postgresql'],
   authors: [{ name: 'Victor Santos' }],
   openGraph: {
-    title: 'Victor Santos | Next.js Developer & Data Specialist',
-    description: 'Desenvolvedor Full-Stack focado em aplicações web modernas com Next.js, automações inteligentes em Python e sistemas de alta performance.',
+    title: 'Victor Santos | Software Engineer • Full Stack & AI Systems',
+    description: 'Engenheiro de Software focado em sistemas web de alta concorrência com Next.js & Fastify, gateways de IA resilientes (OmniRoute) e agentes autônomos.',
     url: 'https://victorsantos.dev',
     siteName: 'Victor Santos Portfolio',
     images: [
@@ -29,8 +29,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Victor Santos | Next.js Developer & Data Specialist',
-    description: 'Especialista em Next.js, automações com Python e arquitetura web escalável.',
+    title: 'Victor Santos | Software Engineer • Full Stack & AI Systems',
+    description: 'Software Engineer focado em Next.js, Fastify, Python, PostgreSQL e Arquitetura de Sistemas de IA.',
     images: ['/chatbot_ia_cover.png'],
   },
   icons: {
@@ -56,13 +56,13 @@ export default function RootLayout({
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: 'Victor Santos',
-    jobTitle: 'Next.js Developer & Data Specialist',
+    jobTitle: 'Software Engineer | Full Stack & AI Systems',
     url: 'https://victorsantos.dev',
     sameAs: [
       'https://github.com/victorsantosg',
       'https://www.linkedin.com/in/victor-santos-0a86021b7/',
     ],
-    knowsAbout: ['Next.js', 'React', 'Python', 'RPA', 'Docker', 'PostgreSQL', 'Tailwind CSS'],
+    knowsAbout: ['Next.js', 'Fastify', 'TypeScript', 'Python', 'PostgreSQL', 'Docker', 'AI Agents', 'MCP Protocol'],
   }
 
   return (

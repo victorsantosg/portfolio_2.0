@@ -140,126 +140,9 @@ export function ProjectsSection() {
         techStack: ["Next.js 16", "React 19", "pg (PostgreSQL)", "Tailwind CSS v4", "Recharts", "SWR", "Docker"],
       },
     },
-    {
-      id: 6,
-      title: t.projects.list.barber.title,
-      description: t.projects.list.barber.description,
-      category: "personal",
-      image: "/barbearia.png",
-      tags: ["React", "Node.js", "Express", "Vercel"],
-      github: "https://github.com/victorsantosg/domBarbeiro",
-      demo: "https://dombarbeiro.vercel.app",
-      details: {
-        challenge: t.projects.list.barber.challenge,
-        solution: t.projects.list.barber.solution,
-        techStack: ["React (Vite)", "Express", "Prisma ORM", "PostgreSQL", "Supabase", "React-Bootstrap"],
-      },
-    },
-    {
-      id: 7,
-      title: t.projects.list.ecu.title,
-      description: t.projects.list.ecu.description,
-      category: "corporate",
-      image: "https://w7.pngwing.com/pngs/815/780/png-transparent-workshop-mechanic-logo-automobile-repair-shop-graphic-design-tokheim-white-text-hand.png",
-      tags: ["Python", "CustomTkinter", "SQLite3", "Bcrypt"],
-      github: "https://github.com/victorsantosg/cat-logo_bosch",
-      demo: "https://github.com/victorsantosg/cat-logo_bosch",
-      details: {
-        challenge: t.projects.list.ecu.challenge,
-        solution: t.projects.list.ecu.solution,
-        techStack: ["Python 3.12", "CustomTkinter", "SQLite3", "Bcrypt (Password Hashing)"],
-      },
-    },
-    {
-      id: 8,
-      title: t.projects.list.drum.title,
-      description: t.projects.list.drum.description,
-      category: "personal",
-      image: "https://i.ibb.co/cKHSvNL5/Drum-Machine-Victor-S.jpg",
-      tags: ["Python", "Tkinter", "Pygame", "Sounddevice"],
-      github: "https://github.com/victorsantosg/app_drum_3.0",
-      demo: "https://github.com/victorsantosg/app_drum_3.0",
-      details: {
-        challenge: t.projects.list.drum.challenge,
-        solution: t.projects.list.drum.solution,
-        techStack: ["Python 3.12", "Tkinter (GUI)", "Pygame (Audio Sequencing)", "Sounddevice (Loop Capture)", "SQLite3"],
-      },
-    },
-    {
-      id: 11,
-      title: t.projects.list.score_ia.title,
-      description: t.projects.list.score_ia.description,
-      category: "personal",
-      image: "https://media.licdn.com/dms/image/v2/D4D12AQE0V7D6BeOEIg/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1732218680808?e=2147483647&v=beta&t=9m5htXuwixDTwtigui04ZDQU_4pN8fN9Byw9qeI_PVM",
-      tags: ["Python", "Scikit-Learn", "Machine Learning", "Pandas"],
-      github: "https://github.com/victorsantosg/Projeto_Python_IA_Intelig-ncia_Artificial_e_Previs-es",
-      demo: "https://github.com/victorsantosg/Projeto_Python_IA_Intelig-ncia_Artificial_e_Previs-es",
-      details: {
-        challenge: t.projects.list.score_ia.challenge,
-        solution: t.projects.list.score_ia.solution,
-        techStack: ["Python", "Pandas", "Scikit-Learn", "Machine Learning (Random Forest / KNN)"],
-      },
-    },
-    {
-      id: 12,
-      title: t.projects.list.chatbot_ia.title,
-      description: t.projects.list.chatbot_ia.description,
-      category: "personal",
-      image: "/chatbot_ia_cover.png",
-      tags: ["Python", "Streamlit", "OpenAI API", "GPT-4o"],
-      github: "https://github.com/victorsantosg/CHAT_BOT_COM_IA",
-      demo: "https://github.com/victorsantosg/CHAT_BOT_COM_IA",
-      details: {
-        challenge: t.projects.list.chatbot_ia.challenge,
-        solution: t.projects.list.chatbot_ia.solution,
-        techStack: ["Python 3.12", "Streamlit", "OpenAI SDK", "GPT-4o API", "Session State"],
-      },
-    },
-    {
-      id: 13,
-      title: t.projects.list.pyautogui_opencv.title,
-      description: t.projects.list.pyautogui_opencv.description,
-      category: "personal",
-      image: "https://programadorviking.com.br/wp-content/uploads/2021/05/pyautogui-teclado.jpg",
-      tags: ["Python", "PyAutoGUI", "OpenCV", "Computer Vision"],
-      github: "https://github.com/victorsantosg/Automatizado_no_meu_trabalho",
-      demo: "https://github.com/victorsantosg/Automatizado_no_meu_trabalho",
-      details: {
-        challenge: t.projects.list.pyautogui_opencv.challenge,
-        solution: t.projects.list.pyautogui_opencv.solution,
-        techStack: ["Python", "PyAutoGUI", "OpenCV", "Computer Vision"],
-      },
-    },
-    {
-      id: 18,
-      isPrivate: true,
-      title: t.projects.list.cupons.title,
-      description: t.projects.list.cupons.description,
-      category: "corporate",
-      image: "/cancelamentos.png",
-      tags: ["Next.js 16", "PostgreSQL", "jsPDF", "Tailwind CSS v4"],
-      github: "https://github.com/victorsantosg/cuponsCancelados",
-      demo: "https://github.com/victorsantosg/cuponsCancelados",
-      details: {
-        challenge: t.projects.list.cupons.challenge,
-        solution: t.projects.list.cupons.solution,
-        techStack: ["Next.js 16", "React 19", "pg (PostgreSQL)", "Tailwind CSS v4", "jsPDF", "jsPDF-AutoTable", "Docker"],
-      },
-    },
   ]
 
   const selectedProject = projects.find((p) => p.id === selectedProjectId)
-
-  const filters = [
-    { id: "all", label: t.projects.filters.all },
-    { id: "corporate", label: t.projects.filters.corporate },
-    { id: "personal", label: t.projects.filters.personal },
-  ]
-
-  const filteredProjects =
-    activeFilter === "all"
-      ? projects
-      : projects.filter((p) => p.category === activeFilter)
 
   const openProjectDetails = (project: any) => {
     setSelectedProjectId(project.id)
@@ -284,7 +167,7 @@ export function ProjectsSection() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-12 sm:mb-16"
         >
           <motion.span
             variants={jarvisVariants}
@@ -304,82 +187,61 @@ export function ProjectsSection() {
           </p>
         </motion.div>
 
-        <motion.div
-          variants={jarvisVariants}
-          custom={{ direction: "bottom", delay: 0.2 }}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="flex flex-wrap items-center justify-center gap-2 mb-12"
-        >
-          {filters.map((filter) => (
-            <button
-              key={filter.id}
-              onClick={() => setActiveFilter(filter.id)}
-              className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                activeFilter === filter.id
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-secondary text-muted-foreground hover:text-foreground"
-              }`}
+        {/* Grid dos 6 Principais Cases de Engenharia */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+          {projects.map((project, index) => (
+            <motion.div
+              key={project.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.08, duration: 0.5, ease: "easeOut" }}
             >
-              {filter.label}
-            </button>
+              <ProjectCard
+                project={project}
+                onViewDetails={() => openProjectDetails(project)}
+                onHolodeckClick={() => openInHolodeck(project)}
+                onImageClick={setZoomImage}
+              />
+            </motion.div>
           ))}
-        </motion.div>
-
-        <div className="space-y-12">
-          {/* Row 1: Corporativos */}
-          {(activeFilter === "all" || activeFilter === "corporate") && (
-            <motion.div
-              layout
-              variants={jarvisVariants}
-              custom={{ direction: "left", delay: 0.3 }}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              exit={{ opacity: 0, y: 20 }}
-              className="space-y-4"
-            >
-              <div className="flex items-center justify-between border-b border-border/20 pb-2">
-                <h3 className="text-lg font-semibold flex items-center gap-2 border-l-4 border-primary pl-3">
-                  {t.projects.filters.corporate}
-                </h3>
-              </div>
-              <HorizontalScrollRow
-                projects={projects.filter((p) => p.category === "corporate")}
-                openProjectDetails={openProjectDetails}
-                openInHolodeck={openInHolodeck}
-                setZoomImage={setZoomImage}
-              />
-            </motion.div>
-          )}
-
-          {/* Row 2: Pessoais */}
-          {(activeFilter === "all" || activeFilter === "personal") && (
-            <motion.div
-              layout
-              variants={jarvisVariants}
-              custom={{ direction: "right", delay: 0.4 }}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              exit={{ opacity: 0, y: 20 }}
-              className="space-y-4"
-            >
-              <div className="flex items-center justify-between border-b border-border/20 pb-2">
-                <h3 className="text-lg font-semibold flex items-center gap-2 border-l-4 border-primary pl-3">
-                  {t.projects.filters.personal}
-                </h3>
-              </div>
-              <HorizontalScrollRow
-                projects={projects.filter((p) => p.category === "personal")}
-                openProjectDetails={openProjectDetails}
-                openInHolodeck={openInHolodeck}
-                setZoomImage={setZoomImage}
-              />
-            </motion.div>
-          )}
         </div>
+
+        {/* Banner para Explorar Mais Repositórios no GitHub */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-12 sm:mt-16 text-center p-6 sm:p-8 rounded-2xl glass border border-primary/30 max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-5 shadow-2xl"
+        >
+          <div className="text-center sm:text-left">
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-mono mb-2">
+              <Github className="w-3.5 h-3.5" />
+              <span>ECOSSISTEMA OPEN SOURCE</span>
+            </div>
+            <h4 className="font-bold text-foreground text-lg sm:text-xl">
+              Deseja explorar outros projetos, scripts e protótipos?
+            </h4>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-xl">
+              Possuo mais de 60 repositórios públicos no GitHub com automações Python (RPA/ETL), microsserviços em Fastify, ferramentas de IA e testes de engenharia.
+            </p>
+          </div>
+          <Button
+            asChild
+            className="bg-primary hover:bg-[#ee7112] text-white font-mono text-xs sm:text-sm px-6 py-3 rounded-xl shrink-0 shadow-lg shadow-primary/25 cursor-pointer transition-all hover:scale-105"
+          >
+            <a
+              href="https://github.com/victorsantosg?tab=repositories"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2"
+            >
+              <Github className="w-4 h-4" />
+              <span>Explorar GitHub (+60 Repos)</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          </Button>
+        </motion.div>
       </div>
 
       <Dialog open={!!selectedProject} onOpenChange={(open) => !open && setSelectedProjectId(null)}>
@@ -544,41 +406,6 @@ export function ProjectsSection() {
   )
 }
 
-function HorizontalScrollRow({
-  projects,
-  openProjectDetails,
-  openInHolodeck,
-  setZoomImage,
-}: {
-  projects: any[]
-  openProjectDetails: (project: any) => void
-  openInHolodeck: (project: any) => void
-  setZoomImage: (img: string) => void
-}) {
-  return (
-    <div className="w-full">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 pt-1">
-        {projects.map((project, index) => (
-          <motion.div
-            key={project.id}
-            className="w-full flex-shrink-0"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.05, duration: 0.5, ease: "easeOut" }}
-          >
-            <ProjectCard
-              project={project}
-              onViewDetails={() => openProjectDetails(project)}
-              onHolodeckClick={() => openInHolodeck(project)}
-              onImageClick={setZoomImage}
-            />
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  )
-}
 
 function ProjectCard({
   project,
