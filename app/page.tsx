@@ -22,6 +22,16 @@ import { AiEcosystemSection } from "@/components/ai-ecosystem-section"
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true)
 
+  // Safety net: if the loading screen onComplete never fires (e.g. hot-reload, WebGL error),
+  // force-unlock scroll after 5s so the page is never permanently frozen.
+  useEffect(() => {
+    const fallback = setTimeout(() => {
+      setIsLoading(false)
+      document.body.style.overflow = ""
+    }, 5000)
+    return () => clearTimeout(fallback)
+  }, [])
+
   return (
     <LanguageProvider>
       <AnimatePresence>

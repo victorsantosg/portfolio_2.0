@@ -16,11 +16,13 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const [isSpinComplete, setIsSpinComplete] = useState(false)
   const [isActivating, setIsActivating] = useState(false)
 
-  // Prevent background scrolling during intro
+  // Prevent background scrolling during intro — always restore on unmount
   useEffect(() => {
     document.body.style.overflow = "hidden"
     return () => {
       document.body.style.overflow = ""
+      document.body.style.overflowX = ""
+      document.body.style.overflowY = ""
     }
   }, [])
 
