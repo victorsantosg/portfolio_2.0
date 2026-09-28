@@ -98,9 +98,34 @@ export function Navbar() {
               <motionFramer.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                 <Button
                   onClick={() => scrollToSection("#orcamento")}
-                  className="relative overflow-hidden bg-primary text-primary-foreground font-semibold px-5 animate-pulse-glow text-sm"
+                  onMouseEnter={(e) => {
+                    const btn = e.currentTarget
+                    const blob = btn.querySelector('.btn-ripple-blob') as HTMLElement | null
+                    if (!blob) return
+                    const rect = btn.getBoundingClientRect()
+                    blob.style.left = `${e.clientX - rect.left}px`
+                    blob.style.top = `${e.clientY - rect.top}px`
+                  }}
+                  onMouseMove={(e) => {
+                    const btn = e.currentTarget
+                    const blob = btn.querySelector('.btn-ripple-blob') as HTMLElement | null
+                    if (!blob) return
+                    const rect = btn.getBoundingClientRect()
+                    blob.style.left = `${e.clientX - rect.left}px`
+                    blob.style.top = `${e.clientY - rect.top}px`
+                  }}
+                  onMouseLeave={(e) => {
+                    const btn = e.currentTarget
+                    const blob = btn.querySelector('.btn-ripple-blob') as HTMLElement | null
+                    if (!blob) return
+                    const rect = btn.getBoundingClientRect()
+                    blob.style.left = `${e.clientX - rect.left}px`
+                    blob.style.top = `${e.clientY - rect.top}px`
+                  }}
+                  className="btn-fx-ripple relative overflow-hidden bg-primary text-primary-foreground font-semibold px-5 animate-pulse-glow text-sm"
                 >
-                  {t.nav.cta}
+                  <span className="btn-ripple-blob" />
+                  <span className="relative z-10">{t.nav.cta}</span>
                 </Button>
               </motionFramer.div>
             </div>

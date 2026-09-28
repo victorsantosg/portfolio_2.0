@@ -278,3 +278,138 @@ body {
     --tw-shadow: none;
   }
 }
+
+/* ─── Button Hover FX (Kyle Brumm style — adapted for portfolio) ─── */
+
+/* Base: todos os botões com efeito precisam de overflow hidden e position relative */
+[class*="btn-fx"] {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── btn-fx-swipe: Horizontal swipe da esquerda (btn-0) ──
+   Usado em: "Iniciar Projeto" (hero primary CTA)          */
+.btn-fx-swipe::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: oklch(0.55 0.20 45); /* laranja escuro */
+  transform: translateX(-101%);
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0;
+  pointer-events: none;
+}
+.btn-fx-swipe:hover::before {
+  transform: translateX(0);
+}
+.btn-fx-swipe > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── btn-fx-diagonal: Diagonal swipe bottom-left (btn-1) ──
+   Usado em: "Ver Projetos" (hero secondary outline)         */
+.btn-fx-diagonal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -60px;
+  bottom: 0;
+  left: 0;
+  border-right: 60px solid transparent;
+  border-bottom: 60px solid oklch(0.72 0.20 52 / 0.25);
+  transform: translateX(-101%);
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0;
+  pointer-events: none;
+}
+.btn-fx-diagonal:hover::before {
+  transform: translateX(0);
+}
+.btn-fx-diagonal > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── btn-fx-collision: Círculos colidindo do centro (btn-11) ──
+   Usado em: "Tour com J.A.R.V.I.S." (hero amber)              */
+@keyframes criss-cross-left {
+  0%   { left: -24px; }
+  50%  { left: 50%; width: 24px; height: 24px; }
+  100% { left: 50%; width: 200%; height: 200%; }
+}
+@keyframes criss-cross-right {
+  0%   { right: -24px; }
+  50%  { right: 50%; width: 24px; height: 24px; }
+  100% { right: 50%; width: 200%; height: 200%; }
+}
+
+.btn-fx-collision::before,
+.btn-fx-collision::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: oklch(0.78 0.18 68 / 0.35); /* amber translucido */
+  transform: translateY(-50%);
+  z-index: 0;
+  pointer-events: none;
+}
+.btn-fx-collision::before { left: -24px; }
+.btn-fx-collision::after  { right: -24px; }
+
+.btn-fx-collision:hover::before {
+  animation: criss-cross-left 0.75s both;
+}
+.btn-fx-collision:hover::after {
+  animation: criss-cross-right 0.75s both;
+}
+.btn-fx-collision > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── btn-fx-ripple: Position-aware ripple (btn-6) ──
+   Usado em: "Fazer Orçamento" (navbar CTA)
+   Requer: <span data-ripple> dentro do botão + JS para setar --rx/--ry  */
+.btn-fx-ripple {
+  --rx: 50%;
+  --ry: 50%;
+}
+.btn-fx-ripple .btn-ripple-blob {
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background-color: oklch(0.55 0.20 45 / 0.85);
+  transition: width 0.5s ease-in-out, height 0.5s ease-in-out, opacity 0.3s;
+  transform: translate(-50%, -50%);
+  left: var(--rx);
+  top: var(--ry);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+}
+.btn-fx-ripple:hover .btn-ripple-blob {
+  width: 400px;
+  height: 400px;
+  opacity: 1;
+}
+.btn-fx-ripple > *:not(.btn-ripple-blob) {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Desativa animações pesadas no mobile ── */
+@media (max-width: 767px) {
+  .btn-fx-collision::before,
+  .btn-fx-collision::after,
+  .btn-fx-swipe::before,
+  .btn-fx-diagonal::before {
+    display: none;
+  }
+}
+

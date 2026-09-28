@@ -387,7 +387,7 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
                 <Button
                   size="default"
                   onClick={(e) => handleWarpToSection("#orcamento", e)}
-                  className="w-[230px] sm:w-auto h-10 sm:h-11 relative overflow-hidden bg-primary text-primary-foreground font-semibold px-5 sm:px-6 text-xs sm:text-sm glow-border animate-pulse-glow hover:bg-[#ee7112] hover:shadow-[0_0_25px_rgba(238,113,18,0.7)] cursor-pointer transition-all duration-300 rounded-xl flex items-center justify-center gap-2"
+                  className="btn-fx-swipe w-[230px] sm:w-auto h-10 sm:h-11 relative overflow-hidden bg-primary text-primary-foreground font-semibold px-5 sm:px-6 text-xs sm:text-sm glow-border animate-pulse-glow hover:shadow-[0_0_25px_rgba(238,113,18,0.7)] cursor-pointer transition-all duration-300 rounded-xl flex items-center justify-center gap-2"
                 >
                   <span>{t.hero.ctaPrimary}</span>
                   <ArrowRight className="h-4 w-4" />
@@ -409,7 +409,7 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
                       window.dispatchEvent(new CustomEvent("start-jarvis-tour"))
                     }
                   }}
-                  className="w-[230px] sm:w-auto h-10 sm:h-11 relative overflow-hidden bg-black/85 border border-amber-500/50 text-amber-300 hover:text-black hover:bg-amber-400 font-semibold px-4 sm:px-5 text-xs font-mono shadow-[0_0_15px_rgba(245,158,11,0.2)] hover:shadow-[0_0_25px_rgba(245,158,11,0.5)] cursor-pointer transition-all duration-300 rounded-xl flex items-center justify-center gap-2"
+                  className="btn-fx-collision w-[230px] sm:w-auto h-10 sm:h-11 relative overflow-hidden bg-black/85 border border-amber-500/50 text-amber-300 hover:text-black hover:bg-amber-400 font-semibold px-4 sm:px-5 text-xs font-mono shadow-[0_0_15px_rgba(245,158,11,0.2)] hover:shadow-[0_0_25px_rgba(245,158,11,0.5)] cursor-pointer transition-all duration-300 rounded-xl flex items-center justify-center gap-2"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse shrink-0" />
                   <span>🎙️ Tour com J.A.R.V.I.S.</span>
@@ -428,7 +428,7 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
                   size="default"
                   variant="outline"
                   onClick={(e) => handleWarpToSection("#projetos", e)}
-                  className="w-[230px] sm:w-auto h-10 sm:h-11 relative overflow-hidden border-border bg-black/40 hover:bg-secondary font-semibold px-4 sm:px-5 text-xs hover:border-[#ee7112] hover:text-amber-300 hover:shadow-[0_0_15px_rgba(238,113,18,0.3)] cursor-pointer transition-all duration-300 rounded-xl flex items-center justify-center gap-2"
+                  className="btn-fx-diagonal w-[230px] sm:w-auto h-10 sm:h-11 relative overflow-hidden border-border bg-black/40 font-semibold px-4 sm:px-5 text-xs hover:border-[#ee7112] hover:text-amber-300 hover:shadow-[0_0_15px_rgba(238,113,18,0.3)] cursor-pointer transition-all duration-300 rounded-xl flex items-center justify-center gap-2"
                 >
                   <span>{t.hero.ctaSecondary}</span>
                   <ExternalLink className="h-3.5 w-3.5" />
