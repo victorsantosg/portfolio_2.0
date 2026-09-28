@@ -135,7 +135,7 @@ export function TechStackSection() {
         </motion.div>
 
         {/* Painel Dashboard 3x2 em Desktop, 2x3 em Tablet, 1 col em Mobile */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto mb-8 sm:mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
           {categories.map((category, catIndex) => (
             <motion.div
               key={category.title}

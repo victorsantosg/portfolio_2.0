@@ -45,8 +45,8 @@ export function Navbar() {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className={`fixed left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ease-in-out ${
           isScrolled 
-            ? "top-2 w-[90%] md:w-[95%] max-w-5xl" 
-            : "top-4 w-[95%] max-w-6xl"
+            ? "top-2 w-[90%] md:w-[95%] max-w-6xl" 
+            : "top-4 w-[95%] max-w-7xl"
         }`}
       >
         <nav

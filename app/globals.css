@@ -129,9 +129,9 @@
     @apply bg-background text-foreground;
   }
 
-  /* Container max-width para evitar layout muito largo em ultrawide */
+  /* Container — aproveita tela larga no desktop, limita no ultrawide extremo */
   .container {
-    max-width: 1280px;
+    max-width: 1400px;
     width: 100%;
     margin-left: auto;
     margin-right: auto;
@@ -150,6 +150,13 @@
     .container {
       padding-left: 2.5rem;
       padding-right: 2.5rem;
+    }
+  }
+
+  @media (min-width: 1400px) {
+    .container {
+      padding-left: 3.5rem;
+      padding-right: 3.5rem;
     }
   }
 }

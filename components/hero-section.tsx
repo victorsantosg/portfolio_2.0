@@ -115,7 +115,7 @@ function InteractiveHeroAvatar({
   }
 
   const sizeClasses = isDesktop
-    ? "w-64 h-64 xl:w-84 xl:h-84"
+    ? "w-72 h-72 xl:w-96 xl:h-96 2xl:w-[28rem] 2xl:h-[28rem]"
     : "w-36 h-36 sm:w-44 sm:h-44"
 
   return (
@@ -286,7 +286,7 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background z-0" />
 
       <div className="relative z-20 container mx-auto px-4 md:px-6 py-12 md:py-20">
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center max-w-6xl mx-auto">
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 xl:gap-28 items-center">
           {/* Left Column: Info & CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}

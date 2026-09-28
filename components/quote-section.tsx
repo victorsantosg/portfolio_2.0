@@ -227,7 +227,7 @@ ${
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
           <motion.div
             variants={jarvisVariants}
             custom={{ direction: "left", delay: 0.2 }}
