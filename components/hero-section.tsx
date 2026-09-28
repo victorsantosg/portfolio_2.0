@@ -464,8 +464,9 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
               </a>
               <span className="text-border">·</span>
               <a
-                href="/Victor_Santos_CV.pdf"
-                download
+                href="https://drive.google.com/file/d/1jfBDFYGxOqpE_hPOBPUrZe26YhuR6BlF/view?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors group"
               >
                 <Download className="h-3.5 w-3.5 group-hover:scale-110 transition-transform" />
