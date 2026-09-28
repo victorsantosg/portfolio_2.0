@@ -50,7 +50,7 @@ export const HOLODECK_REGISTRY: Record<string, HoloProjectData> = {
     metrics: [
       { label: "Economia de Tokens", value: "-68% a -75%", color: "text-emerald-400" },
       { label: "Estratégias de Combo", value: "Fusion, Pipe & Think", color: "text-sky-400" },
-      { label: "Tolerância a Falhas", value: "Zero Downtime (429)", color: "text-amber-400" },
+      { label: "Resiliência", value: "Fallback Automático", color: "text-amber-400" },
     ],
     architecture:
       "Gateway open source OmniRoute com normalização de formatos (OpenAI, Claude, Gemini), motor de combos paralelos com síntese por modelo coordenador, pipeline sequencial e compressão de tokens via RTK e Caveman.",

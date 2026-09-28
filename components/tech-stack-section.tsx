@@ -95,10 +95,10 @@ export function TechStackSection() {
       systemId: "SYSTEM.MODELS // ECOSYSTEM",
       icon: Brain,
       techs: [
-        { name: "Anthropic Claude", highlight: "Thinking Mode & Refatoração" },
-        { name: "OpenAI GPT", highlight: "Raciocínio Lógico & APIs" },
-        { name: "Google Gemini", highlight: "Janelas Longas & Multimodal" },
-        { name: "DeepSeek & Open Models", highlight: "Inferência de Alta Eficiência" },
+        { name: "Multi-provider AI", highlight: "OpenAI · Anthropic · Google · Open Models" },
+        { name: "OmniRoute (Orquestração)", highlight: "Roteamento entre provedores" },
+        { name: "Thinking & Reasoning", highlight: "Claude Thinking / GPT / Gemini" },
+        { name: "Open Models (Local)", highlight: "DeepSeek & Inference Eficiente" },
       ],
     },
   ]

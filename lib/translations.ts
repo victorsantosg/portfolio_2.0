@@ -52,7 +52,7 @@ export const translations = {
       titleGradient: "Trajetória",
       paragraph1: "Olá, eu sou o Victor! Sou formado em Análise e Desenvolvimento de Sistemas pela UNIFOR e tenho uma Pós-Graduação em Desenvolvimento Web Full Stack pela Faculdade INFNET, referência em tecnologia.",
       paragraph2: "Minha paixão por tecnologia começou cedo, aos 10 anos, quando comecei a desmontar um computador que eu tinha em casa para ver como funcionava. Hoje, atuo no desenvolvimento de soluções robustas utilizando Next.js, Flutter, Fastify, Prisma, PostgreSQL, Docker e Coolify, além de automação de processos e análise de dados com Python. Meu foco atual é buscar novos parceiros e clientes dispostos a avançar tecnologicamente, escalando e melhorando a eficiência de suas empresas.",
-      paragraph3: "Durante minha atuação como Desenvolvedor Web e Mobile Full Stack no Cometa Supermercados, desenvolvi do zero soluções e sistemas de missão crítica para a rede:",
+      paragraph3: "Durante minha atuação como Desenvolvedor Web e Mobile Full Stack no Cometa Supermercados, desenvolvi do zero sistemas corporativos em produção para a rede:",
       cometaProjects: [
         {
           title: "Inventário Corporativo (Cometa) 📦",
@@ -254,7 +254,7 @@ export const translations = {
       ],
     },
     footer: {
-      description: "Construindo sistemas que pensam — Full Stack + IA Agentic com OmniRoute, MCP e agentes autônomos.",
+      description: "Construindo sistemas digitais para operações mais eficientes — Full Stack, Dados e IA Aplicada.",
       rights: "Todos os direitos reservados.",
     },
     aiEcosystem: {
@@ -264,7 +264,7 @@ export const translations = {
       subtitle: "Opero meu próprio gateway de IA open source, orquestro múltiplos modelos em paralelo e aplico Context Engineering para reduzir custo e latência em produção.",
       proofTitle: "Na prática:",
       proofs: [
-        "OmniRoute Gateway — fallback automático entre provedores, zero downtime em rate-limits HTTP 429",
+        "OmniRoute Gateway — fallback automático entre provedores para reduzir indisponibilidade causada por rate-limits HTTP 429",
         "Multi-Agent Fusion — 3+ modelos raciocinam em paralelo com síntese por consenso",
         "Context Engineering — redução de 65–75% de tokens em fluxos avaliados internamente, mantendo coerência semântica e reduzindo custo operacional",
         "MCP & Agentes — integração segura de ferramentas, bancos PostgreSQL e APIs externas",
@@ -526,7 +526,7 @@ export const translations = {
       ],
     },
     footer: {
-      description: "Building software that thinks — Full Stack + Agentic AI with OmniRoute, MCP and autonomous agents.",
+      description: "Building digital systems for more efficient operations — Full Stack, Data and Applied AI.",
       rights: "All rights reserved.",
     },
     aiEcosystem: {
@@ -536,7 +536,7 @@ export const translations = {
       subtitle: "I run my own open source AI gateway, orchestrate multiple models in parallel and apply Context Engineering to reduce cost and latency in production.",
       proofTitle: "In practice:",
       proofs: [
-        "OmniRoute Gateway — automatic fallback across providers, zero downtime on HTTP 429 rate-limits",
+        "OmniRoute Gateway — automatic fallback across providers to reduce downtime caused by HTTP 429 rate-limits",
         "Multi-Agent Fusion — 3+ models reason in parallel with consensus synthesis",
         "Context Engineering — 65–75% token reduction in internally evaluated flows, maintaining semantic coherence and reducing operational cost",
         "MCP & Agents — secure integration of tools, PostgreSQL databases, and external APIs",

@@ -37,7 +37,7 @@ const ecosystemNodes = [
     title: "OmniRoute AI Gateway",
     subtitle: "Gateway Multi-Model com Fallback Automático",
     description:
-      "Gateway open source que roteia requisições entre Claude, OpenAI, Gemini e DeepSeek com fallback automático em rate-limits (HTTP 429) e Circuit Breaker — zero downtime por falha de provedor.",
+      "Gateway open source que roteia requisições entre Claude, OpenAI, Gemini e DeepSeek com fallback automático em rate-limits (HTTP 429) e Circuit Breaker — resiliência a falhas de provedor.",
     metrics: [
       { label: "Provedores", value: "4+" },
       { label: "Endpoint", value: ":20128" },
