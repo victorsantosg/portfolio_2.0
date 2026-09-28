@@ -57,7 +57,7 @@ export function Navbar() {
           <div className="flex items-center justify-between">
             <motionFramer.button
               onClick={() => scrollToSection("#inicio")}
-              className="flex items-center gap-2.5 text-xl font-bold tracking-tight"
+              className="flex items-center gap-2.5 text-xl font-bold tracking-tight shrink-0"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -75,7 +75,7 @@ export function Navbar() {
               </div>
             </motionFramer.button>
 
-            <div className="hidden lg:flex items-center gap-1">
+            <div className="hidden lg:flex items-center gap-1 pl-4">
               {navLinks.map((link) => (
                 <NavLink
                   key={link.href}
