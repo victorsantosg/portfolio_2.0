@@ -12,7 +12,6 @@ import {
   ChevronLeft,
   Activity,
   CheckCircle2,
-  Map,
   Shrink,
 } from "lucide-react"
 import {
@@ -36,13 +35,13 @@ const ecosystemNodes = [
     borderHover: "hover:border-sky-400/60",
     badge: "CORE GATEWAY",
     title: "OmniRoute AI Gateway",
-    subtitle: "Gateway Multi-Model Agnóstico",
+    subtitle: "Gateway Multi-Model com Fallback Automático",
     description:
-      "Gateway de IA open source rodando localmente — roteamento inteligente entre Anthropic Claude, OpenAI, Google Gemini e DeepSeek em uma única API universal com fallback automático contra rate-limits (HTTP 429) e Circuit Breaker.",
+      "Gateway open source que roteia requisições entre Claude, OpenAI, Gemini e DeepSeek com fallback automático em rate-limits (HTTP 429) e Circuit Breaker — zero downtime por falha de provedor.",
     metrics: [
-      { label: "Provedores Orquestrados", value: "4+" },
-      { label: "Endpoint Local", value: ":20128" },
-      { label: "Estratégia de Uptime", value: "Circuit Breaker" },
+      { label: "Provedores", value: "4+" },
+      { label: "Endpoint", value: ":20128" },
+      { label: "Resiliência", value: "Circuit Breaker" },
     ],
     tags: ["Anthropic Claude", "OpenAI", "Google Gemini", "DeepSeek", "Circuit Breaker"],
   },
@@ -56,10 +55,10 @@ const ecosystemNodes = [
     title: "Model Context Protocol (MCP)",
     subtitle: "Integração de Agentes com APIs & Bancos",
     description:
-      "Servidores MCP conectando agentes autônomos de IA diretamente a bancos de dados PostgreSQL, sistemas de arquivos, ferramentas e APIs externas com tipagem rígida e execução segura.",
+      "Servidores MCP que conectam agentes de IA a bancos PostgreSQL, sistemas de arquivos e APIs externas com tipagem rígida e execução isolada.",
     metrics: [
       { label: "Protocolo", value: "Anthropic MCP" },
-      { label: "Conexões", value: "Bancos, APIs & CLI" },
+      { label: "Integrações", value: "BD, APIs & CLI" },
       { label: "Segurança", value: "Isolamento Estrito" },
     ],
     tags: ["MCP Protocol", "PostgreSQL", "Tool Calling", "Extensibilidade"],
@@ -72,15 +71,15 @@ const ecosystemNodes = [
     borderHover: "hover:border-cyan-400/60",
     badge: "CONTEXT ENGINEERING",
     title: "Context Engineering",
-    subtitle: "Otimização de Contexto e Redução de Tokens (−70%)",
+    subtitle: "Redução de Tokens sem perda semântica",
     description:
-      "Técnicas cirúrgicas de empacotamento de contexto que eliminam até 70% dos tokens desnecessários com 100% de preservação semântica — acelerando respostas e reduzindo custos operacionais.",
+      "Estratégias de empacotamento de contexto que reduzem em até 65–75% os tokens enviados (benchmarks internos), preservando precisão semântica e reduzindo custo operacional.",
     metrics: [
-      { label: "Redução de Tokens", value: "65–75%" },
-      { label: "Fidelidade Semântica", value: "100%" },
-      { label: "Eficiência", value: "Alta Densidade" },
+      { label: "Redução (interno)", value: "65–75%" },
+      { label: "Precisão", value: "Preservada" },
+      { label: "Impacto", value: "Custo & Latência" },
     ],
-    tags: ["Token Reduction", "Context Packaging", "Semantic Compression", "Cost Efficiency"],
+    tags: ["Token Reduction", "Context Packaging", "Cost Efficiency"],
   },
   {
     id: "pipeline",
@@ -92,31 +91,13 @@ const ecosystemNodes = [
     title: "Multi-Agent Pipelines",
     subtitle: "Execução Paralela & Síntese por Consenso",
     description:
-      "Execução encadeada e paralela entre múltiplos modelos especialistas — cada modelo refinando o raciocínio do anterior com síntese por consenso para validação de lógica crítica.",
+      "Múltiplos modelos especialistas executados em cadeia ou paralelo, com síntese por consenso para validação de lógica crítica e raciocínio composto.",
     metrics: [
       { label: "Padrão", value: "Think → Code → Validate" },
       { label: "Síntese", value: "Consenso Multi-LLM" },
-      { label: "Confiabilidade", value: "Alta Precisão" },
+      { label: "Aplicação", value: "Lógica Crítica" },
     ],
-    tags: ["Step Chaining", "Multi-Agent", "Consensus", "Pipeline Resiliente"],
-  },
-  {
-    id: "graphify",
-    icon: Map,
-    color: "from-rose-500 to-pink-600",
-    glow: "shadow-[0_0_30px_rgba(251,113,133,0.35)]",
-    borderHover: "hover:border-rose-400/60",
-    badge: "KNOWLEDGE GRAPH",
-    title: "Knowledge Graphs & GraphRAG",
-    subtitle: "Mapeamento Semântico de Bases de Código",
-    description:
-      "Transformação de repositórios em grafos de conhecimento navegáveis — detectando nós centrais, acoplamentos e fluxos críticos para análise e refatorações complexas sem perda de contexto.",
-    metrics: [
-      { label: "Mapeamento", value: "AST + Grafo Semântico" },
-      { label: "Detecção", value: "Dependências Críticas" },
-      { label: "Aplicação", value: "Auditoria & Refatoração" },
-    ],
-    tags: ["Knowledge Graph", "AST", "GraphRAG", "Análise de Código"],
+    tags: ["Step Chaining", "Multi-Agent", "Consensus"],
   },
 ]
 
@@ -330,28 +311,6 @@ export function AiEcosystemSection() {
           </p>
         </motion.div>
 
-        {/* Proof Points Banner */}
-        <motion.div
-          variants={jarvisVariants}
-          custom={{ direction: "bottom", delay: 0.15 }}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="glass rounded-2xl border border-primary/25 p-5 mb-8 md:mb-12 max-w-4xl mx-auto bg-gradient-to-r from-primary/8 via-transparent to-transparent"
-        >
-          <div className="flex items-center gap-2 mb-3">
-            <Zap className="h-4 w-4 text-primary" />
-            <span className="text-sm font-bold text-foreground">{tEco.proofTitle}</span>
-          </div>
-          <div className="grid sm:grid-cols-2 gap-2">
-            {tEco.proofs.map((proof: string, i: number) => (
-              <div key={i} className="flex items-start gap-2">
-                <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
-                <p className="text-xs text-muted-foreground leading-relaxed">{proof}</p>
-              </div>
-            ))}
-          </div>
-        </motion.div>
 
         {/* Mobile Quick Bar */}
         <div className="lg:hidden flex items-center justify-between mb-3 px-1">
@@ -379,7 +338,7 @@ export function AiEcosystemSection() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3"
+            className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3"
           >
             {ecosystemNodes.map((node) => (
               <EcosystemCard

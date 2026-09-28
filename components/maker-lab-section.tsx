@@ -50,7 +50,7 @@ export function MakerLabSection() {
     {
       icon: <TrendingUp className="w-5 h-5 text-orange-400" />,
       title: "Impacto Operacional & Otimização de Picking",
-      description: "Redução de até 42% no tempo de deslocamento de operadores no armazém, eliminando pontos cegos e acelerando o fluxo de expedição corporativa.",
+      description: "Até 42% de redução no tempo médio de deslocamento dos operadores no CD Cometa, com reorganização da curva ABC e eliminação de pontos cegos no fluxo de expedição.",
     },
     {
       icon: <Printer className="w-5 h-5 text-amber-400" />,

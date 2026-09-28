@@ -51,7 +51,7 @@ export function TechStackSection() {
       systemId: "SYSTEM.BACKEND // RUNNING",
       icon: Server,
       techs: [
-        { name: "Node.js & Fastify", highlight: "28ms Latência / Microserviços" },
+        { name: "Node.js & Fastify", highlight: "~28ms lat. média / Microserviços" },
         { name: "PostgreSQL & Prisma ORM", highlight: "Modelagem ACID & Partições" },
         { name: "REST APIs & Webhooks", highlight: "Integrações ERP / Auth JWT" },
         { name: "Supabase & Firebase", highlight: "BaaS & Realtime Data" },
@@ -64,7 +64,7 @@ export function TechStackSection() {
       techs: [
         { name: "OmniRoute Gateway", highlight: "Multi-Model / Circuit Breaker" },
         { name: "Model Context Protocol (MCP)", highlight: "Conexão de Tools & DBs" },
-        { name: "Context Engineering", highlight: "Token Compression (-70%)" },
+        { name: "Context Engineering", highlight: "Até 70% menos tokens (benchmarks internos)" },
         { name: "Multi-Agent Pipelines", highlight: "Orquestração & Avaliação" },
       ],
     },
