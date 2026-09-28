@@ -318,6 +318,11 @@ export function MakerLabSection() {
                 </div>
               </div>
 
+              {/* Proven Operational Transparency Note */}
+              <div className="mb-5 px-3 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[10px] font-mono text-amber-300/90 leading-relaxed">
+                <span className="font-bold text-amber-400">✓ Dados Operacionais Reais:</span> Medição realizada no Centro de Distribuição do Cometa Supermercados sobre 11.270 posições mapeadas no ERP RPINFO. A redução de 42% no tempo de picking reflete a otimização de rotas e separação por calor de giro (Curva ABC).
+              </div>
+
               {/* Concise Highlights */}
               <div className="space-y-3 font-mono text-xs mb-5">
                 <div className="flex items-start gap-3 p-3 rounded-xl bg-black/40 border border-border/40">

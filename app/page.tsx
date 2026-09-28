@@ -44,8 +44,8 @@ export default function Home() {
         <HeroSection isLoaded={!isLoading} />
         <AboutSection />
         <TechStackSection />
-        <AiEcosystemSection />
         <MakerLabSection />
+        <AiEcosystemSection />
         <ProjectsSection />
         <QuoteSection />
         <Footer />

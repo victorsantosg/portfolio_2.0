@@ -203,45 +203,14 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
   // J.A.R.V.I.S. Iron Man Armor Assembly System
   const [assemblyState, setAssemblyState] = useState<"disassembled" | "assembling" | "assembled">("disassembled")
 
-  // Stats Counters - Inicializados com valores reais para evitar 0+ em SSR / crawlers
-  const [reposCount, setReposCount] = useState(60)
-  const [yearsCount, setYearsCount] = useState(2)
-  const [autoCount, setAutoCount] = useState(100)
-
   useEffect(() => {
     if (!isLoaded) return
 
-    // Small delay (150ms) after loading screen ends to let the user see the pieces fly in!
     const timerStart = setTimeout(() => {
       setAssemblyState("assembling")
-      setReposCount(0)
-      setYearsCount(0)
-      setAutoCount(0)
-
-      const duration = 1800
-      const steps = 30
-      const intervalTime = duration / steps
-      let currentStep = 0
-
-      const counterInterval = setInterval(() => {
-        currentStep++
-        const progress = currentStep / steps
-        setReposCount(Math.round(progress * 60))
-        setYearsCount(Math.round(progress * 2))
-        setAutoCount(Math.round(progress * 100))
-
-        if (currentStep >= steps) {
-          clearInterval(counterInterval)
-          setReposCount(60)
-          setYearsCount(2)
-          setAutoCount(100)
-          setAssemblyState("assembled")
-        }
-      }, intervalTime)
-
-      return () => {
-        clearInterval(counterInterval)
-      }
+      setTimeout(() => {
+        setAssemblyState("assembled")
+      }, 1800)
     }, 150)
 
     return () => clearTimeout(timerStart)
@@ -476,9 +445,9 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
             >
               <div className="inline-flex items-center gap-0 glass rounded-2xl border border-border/40 overflow-hidden divide-x divide-border/40 w-full max-w-sm sm:max-w-none sm:w-auto hover:border-[#ee7112]/40 transition-colors shadow-lg">
                 {[
-                  { value: `${reposCount}+`, label: t.hero.stats.repos },
-                  { value: `${yearsCount}+`, label: t.hero.stats.exp },
-                  { value: `${autoCount}%`, label: t.hero.stats.automation },
+                  { value: "60+", label: t.hero.stats.repos },
+                  { value: "2+", label: t.hero.stats.exp },
+                  { value: "100%", label: t.hero.stats.automation },
                 ].map((stat, i) => (
                   <div
                     key={stat.label}

@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     const { name, company, projectType, budget, urgency, description } = await req.json()
 
     const prompt = `
-Você é o J.A.R.V.I.S., assistente de inteligência e engenharia técnica de Victor Santos (Full Stack & AI Systems Architect).
+Você é o J.A.R.V.I.S., assistente de inteligência e engenharia técnica de Victor Santos (Full Stack Developer | AI & Automation).
 Analise a seguinte solicitação de projeto de um cliente em potencial e gere um Diagnóstico Técnico de Arquitetura e Pré-Proposta conciso, elegante e altamente profissional.
 
 DADOS DO PROJETO:

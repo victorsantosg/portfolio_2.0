@@ -7,13 +7,13 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Victor Santos | Software Engineer • Full Stack & AI Systems',
-  description: 'Portfólio de Victor Santos. Software Engineer especializado em arquitetura Full Stack (Next.js, Fastify, Python, PostgreSQL) e Sistemas de IA (OmniRoute, Agentes Autônomos, MCP Protocol).',
-  keywords: ['software engineer', 'full stack', 'next.js', 'fastify', 'python', 'ai systems', 'ai agents', 'mcp protocol', 'docker', 'postgresql'],
+  title: 'Victor Santos | Full Stack Developer • AI & Automation',
+  description: 'Portfólio de Victor Santos. Full Stack Developer especializado em aplicações web e microsserviços (Next.js, Python, PostgreSQL, Docker) e soluções de IA (OmniRoute, Agentes Autônomos, MCP Protocol).',
+  keywords: ['full stack developer', 'next.js', 'python', 'postgresql', 'docker', 'ai automation', 'ai agents', 'mcp protocol', 'fastify'],
   authors: [{ name: 'Victor Santos' }],
   openGraph: {
-    title: 'Victor Santos | Software Engineer • Full Stack & AI Systems',
-    description: 'Engenheiro de Software focado em sistemas web de alta concorrência com Next.js & Fastify, gateways de IA resilientes (OmniRoute) e agentes autônomos.',
+    title: 'Victor Santos | Full Stack Developer • AI & Automation',
+    description: 'Desenvolvedor Full Stack focado em sistemas corporativos com Next.js, Python, PostgreSQL, Docker e agentes autônomos de IA.',
     url: 'https://victorsantos.dev',
     siteName: 'Victor Santos Portfolio',
     images: [
@@ -29,8 +29,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Victor Santos | Software Engineer • Full Stack & AI Systems',
-    description: 'Software Engineer focado em Next.js, Fastify, Python, PostgreSQL e Arquitetura de Sistemas de IA.',
+    title: 'Victor Santos | Full Stack Developer • AI & Automation',
+    description: 'Full Stack Developer focado em Next.js, Python, PostgreSQL, Docker e Automação com Agentes de IA.',
     images: ['/chatbot_ia_cover.png'],
   },
   icons: {
@@ -56,7 +56,7 @@ export default function RootLayout({
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: 'Victor Santos',
-    jobTitle: 'Software Engineer | Full Stack & AI Systems',
+    jobTitle: 'Full Stack Developer | AI & Automation',
     url: 'https://victorsantos.dev',
     sameAs: [
       'https://github.com/victorsantosg',

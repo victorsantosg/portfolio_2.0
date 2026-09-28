@@ -186,7 +186,7 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
             VICTOR SANTOS
           </div>
           <div className="text-[10px] sm:text-sm font-mono text-muted-foreground tracking-widest mt-1">
-            SOFTWARE ENGINEER • FULL STACK & AI SYSTEMS
+            FULL STACK DEVELOPER • AI & AUTOMATION
           </div>
         </motion.div>
 

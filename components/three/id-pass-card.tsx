@@ -217,7 +217,7 @@ export function IdPassCard() {
                   Victor Santos
                 </h3>
                 <p className="text-xs font-mono text-primary font-medium">
-                  Software Engineer | Full Stack & AI Systems
+                  Full Stack Developer | AI & Automation
                 </p>
               </div>
 
