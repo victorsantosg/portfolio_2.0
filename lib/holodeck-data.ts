@@ -49,18 +49,18 @@ export const HOLODECK_REGISTRY: Record<string, HoloProjectData> = {
     tags: ["Open Source", "Next.js 16", "AI Gateway", "Token Compression", "Circuit Breakers", "TypeScript"],
     metrics: [
       { label: "Economia de Tokens", value: "-68% a -75%", color: "text-emerald-400" },
-      { label: "Combos Dominados", value: "Fusion, Pipe & Think", color: "text-sky-400" },
+      { label: "Estratégias de Combo", value: "Fusion, Pipe & Think", color: "text-sky-400" },
       { label: "Tolerância a Falhas", value: "Zero Downtime (429)", color: "text-amber-400" },
     ],
     architecture:
-      "Engenharia e aplicação corporativa do gateway open source OmniRoute com normalização de formatos (OpenAI, Claude, Gemini), motor de combos paralelos (Fusion com Juiz), pipeline sequencial e compressão semântica via RTK e Caveman.",
+      "Gateway open source OmniRoute com normalização de formatos (OpenAI, Claude, Gemini), motor de combos paralelos com síntese por modelo coordenador, pipeline sequencial e compressão de tokens via RTK e Caveman.",
     solution:
       "Elimina dependência de provedor único, previne indisponibilidades por rate limit através de Circuit Breakers e reduz drasticamente custos de inferência com compressão cirúrgica de tokens.",
     ttsBriefing:
       "Holodeck ativado: Ecossistema Open Source OmniRoute. Visualizando barramento neural de alta velocidade. Camada base de roteamento e Circuit Breakers, motor central de fusão de modelos com juiz de consenso, e estúdio de compressão com economia de até 75% em tokens.",
     layers: [
       { name: "Gateway & Tradutor Universal", tech: "OpenAI ↔ Claude ↔ Gemini", description: "Normalização de streaming SSE e conversão de schemas em tempo real", color: "#38bdf8" },
-      { name: "Motor de Combos (Fusion & Pipe)", tech: "Ensemble & Judge Router", description: "Disparo paralelo de múltiplos modelos com síntese por IA Juiz", color: "#a855f7" },
+      { name: "Motor de Combos (Fusion & Pipe)", tech: "Ensemble & Coordinator Model", description: "Execução paralela de múltiplos modelos com síntese por modelo coordenador", color: "#a855f7" },
       { name: "Estúdio de Compressão de Tokens", tech: "RTK / Caveman Standard", description: "Compactação cirúrgica de contexto reduzindo até 75% de custos", color: "#10b981" },
       { name: "Radar de Saúde & Circuit Breakers", tech: "Health Check & Fallback", description: "Mitigação instantânea de erros 429 com comutação de provedor", color: "#f59e0b" },
     ],

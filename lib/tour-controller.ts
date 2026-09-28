@@ -66,7 +66,7 @@ export const TOUR_STEPS: TourStep[] = [
     subtitle: "Orquestração Avançada de IA, Fusion de Modelos & Economia de Tokens",
     targetSection: "#projetos",
     narration:
-      "Atenção aos sensores: projetando no Holodeck o domínio e engenharia de IA de Victor no ecossistema open source OmniRoute. Ele implementa e opera este orquestrador de alto throughput para solucionar o maior pesadelo das empresas: quedas de serviço por instabilidade de provedores e custos astronômicos de tokens. Observe no holograma o motor de Combos executando a estratégia Fusion, onde múltiplos modelos operam em paralelo e uma IA Juiz sintetiza o melhor consenso técnico. Tudo isso integrado a Circuit Breakers automáticos contra erros quatrocentos e vinte e nove e ao estúdio de compressão Caveman, que reduz até setenta e cinco por cento dos tokens sem perder contexto.",
+      "Projetando no Holodeck a arquitetura OmniRoute — gateway open source que Victor opera para orquestrar múltiplos provedores de IA. O motor de Combos executa modelos em paralelo com síntese por modelo coordenador, Circuit Breakers automáticos contra rate limits e compressão de tokens de até setenta e cinco por cento em fluxos avaliados internamente.",
     duration: 18500,
     threePreset: "geral",
   },

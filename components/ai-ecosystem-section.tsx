@@ -73,7 +73,7 @@ const ecosystemNodes = [
     title: "Context Engineering",
     subtitle: "Redução de Tokens sem perda semântica",
     description:
-      "Estratégias de empacotamento de contexto que reduzem em até 65–75% os tokens enviados (benchmarks internos), preservando precisão semântica e reduzindo custo operacional.",
+      "Estratégias de empacotamento de contexto que reduzem em até 65–75% os tokens enviados (fluxos avaliados internamente), mantendo coerência semântica e reduzindo custo operacional.",
     metrics: [
       { label: "Redução (interno)", value: "65–75%" },
       { label: "Precisão", value: "Preservada" },

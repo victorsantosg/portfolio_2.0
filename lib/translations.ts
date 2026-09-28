@@ -112,7 +112,7 @@ export const translations = {
           title: "OmniRoute // Orquestração Open Source de IA ⚡",
           description: "Domínio e implementação avançada do ecossistema open source OmniRoute para orquestração de combos (Fusion & Pipeline), tolerância a falhas e compressão de tokens.",
           challenge: "Evitar vendor lock-in e quedas de serviço corporativas por instabilidade de provedores de IA ou rate limits (HTTP 429), configurando e estendendo o gateway open source OmniRoute para normalizar chamadas heterogêneas (OpenAI, Claude, Gemini) em uma única API universal.",
-          solution: "Apliquei e dominei na prática as capacidades do ecossistema open source OmniRoute: configurei o motor de Combos com estratégia Fusion (execução paralela de múltiplos modelos sintetizados por uma IA Juiz de consenso), pipelines encadeados de 3 etapas, Circuit Breakers com mitigação de erros 429 e o estúdio de compressão com algoritmos RTK e padrão Caveman (reduzindo até 75% dos custos de tokens com fidelidade semântica total).",
+          solution: "Configurei o motor de Combos do OmniRoute com estratégia Fusion (execução paralela de 2+ modelos com síntese por modelo coordenador), pipelines encadeados de 3 etapas, Circuit Breakers com mitigação automática de erros 429 e o estúdio de compressão com algoritmos RTK e padrão Caveman (redução de até 75% dos tokens em fluxos avaliados internamente, com preservação de coerência semântica).",
         },
         erp: {
           title: "Inventário Corporativo & Auditoria (Cometa)",
@@ -266,7 +266,7 @@ export const translations = {
       proofs: [
         "OmniRoute Gateway — fallback automático entre provedores, zero downtime em rate-limits HTTP 429",
         "Multi-Agent Fusion — 3+ modelos raciocinam em paralelo com síntese por consenso",
-        "Context Engineering — redução de 65–75% de tokens em benchmarks internos, preservando 100% de precisão semântica",
+        "Context Engineering — redução de 65–75% de tokens em fluxos avaliados internamente, mantendo coerência semântica e reduzindo custo operacional",
         "MCP & Agentes — integração segura de ferramentas, bancos PostgreSQL e APIs externas",
       ],
     },
@@ -384,7 +384,7 @@ export const translations = {
           title: "OmniRoute // Open Source AI Orchestration ⚡",
           description: "Advanced engineering and practical mastery of the open-source OmniRoute ecosystem for combo orchestration (Fusion & Pipeline), fault tolerance, and token compression.",
           challenge: "Prevent enterprise vendor lock-in and service downtime caused by provider outages or rate limits (HTTP 429), configuring and extending the open-source OmniRoute gateway to normalize heterogeneous APIs (OpenAI, Claude, Gemini) into a unified standard.",
-          solution: "Applied and mastered the capabilities of the open-source OmniRoute ecosystem in real-world scenarios: configured the Combo engine with Fusion (parallel multi-model inference synthesized by an LLM Judge with consensus scoring), sequential 3-stage Pipelines, automated zero-downtime Circuit Breakers against 429 errors, and the Compression Studio (RTK and Caveman standards delivering up to 75% token reduction with zero semantic loss).",
+          solution: "Configured OmniRoute's Combo engine with Fusion strategy (parallel 2+ model inference with synthesis by a coordinator model), sequential 3-stage Pipelines, automated zero-downtime Circuit Breakers against 429 errors, and the Compression Studio (RTK and Caveman standards delivering up to 75% token reduction in internally evaluated flows, with semantic coherence preserved).",
         },
         erp: {
           title: "Corporate Inventory & Auditing (Cometa)",
@@ -538,7 +538,7 @@ export const translations = {
       proofs: [
         "OmniRoute Gateway — automatic fallback across providers, zero downtime on HTTP 429 rate-limits",
         "Multi-Agent Fusion — 3+ models reason in parallel with consensus synthesis",
-        "Context Engineering — 65–75% token reduction in internal benchmarks, 100% semantic precision preserved",
+        "Context Engineering — 65–75% token reduction in internally evaluated flows, maintaining semantic coherence and reducing operational cost",
         "MCP & Agents — secure integration of tools, PostgreSQL databases, and external APIs",
       ],
     },
