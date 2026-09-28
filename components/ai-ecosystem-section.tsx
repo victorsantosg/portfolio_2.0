@@ -371,13 +371,13 @@ export function AiEcosystemSection() {
 
         {/* Mobile Detail Modal ("Tela Principal") */}
         <Dialog open={isMobileModalOpen} onOpenChange={setIsMobileModalOpen}>
-          <DialogContent className="glass-amber bg-background/95 backdrop-blur-2xl border-primary/40 p-5 max-h-[88vh] overflow-y-auto w-[92vw] max-w-lg rounded-2xl">
+          <DialogContent className="glass-amber bg-background/95 backdrop-blur-2xl border-primary/40 p-5 max-h-[88vh] overflow-y-auto overflow-x-hidden w-[calc(100vw-2rem)] max-w-lg rounded-2xl">
             <DialogHeader className="text-left pb-1">
               <div className="flex items-center gap-3">
                 <div className={`p-2.5 rounded-xl bg-gradient-to-br ${activeData.color} shadow-lg shrink-0`}>
                   <activeData.icon className="h-6 w-6 text-white" />
                 </div>
-                <div className="min-w-0 flex-1 pr-6">
+                <div className="min-w-0 flex-1 overflow-hidden pr-6">
                   <div className="flex items-center gap-2 mb-0.5">
                     <span className="text-[9px] font-mono font-bold tracking-widest text-primary/80 border border-primary/25 bg-primary/8 px-1.5 py-0.5 rounded">
                       {activeData.badge}
@@ -386,40 +386,40 @@ export function AiEcosystemSection() {
                       {currentIndex + 1} de {ecosystemNodes.length}
                     </span>
                   </div>
-                  <DialogTitle className="text-lg font-bold text-foreground truncate">
+                  <DialogTitle className="text-base font-bold text-foreground break-words leading-snug">
                     {activeData.title}
                   </DialogTitle>
-                  <DialogDescription className="text-xs text-muted-foreground font-mono truncate">
+                  <DialogDescription className="text-xs text-muted-foreground font-mono break-words">
                     {activeData.subtitle}
                   </DialogDescription>
                 </div>
               </div>
             </DialogHeader>
 
-            <div className="flex flex-col gap-4 py-1">
+            <div className="flex flex-col gap-4 py-1 overflow-x-hidden">
               {/* Description */}
-              <div className="bg-secondary/30 p-3 rounded-xl border border-border/30">
+              <div className="bg-secondary/30 p-3 rounded-xl border border-border/30 overflow-hidden">
                 <div className="text-[10px] font-mono uppercase text-muted-foreground tracking-wider mb-1">
                   Arquitetura & Operação
                 </div>
-                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                <p className="text-xs text-muted-foreground leading-relaxed break-words">
                   {activeData.description}
                 </p>
               </div>
 
               {/* Metrics */}
-              <div>
+              <div className="overflow-hidden">
                 <div className="text-[10px] font-mono uppercase text-muted-foreground tracking-wider mb-1.5">
                   Métricas Operacionais
                 </div>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 gap-1.5">
                   {activeData.metrics.map((metric) => (
                     <div
                       key={metric.label}
-                      className="glass rounded-xl border border-border/40 p-2 text-center bg-secondary/20"
+                      className="glass rounded-xl border border-border/40 p-2 text-center bg-secondary/20 overflow-hidden"
                     >
-                      <div className="text-sm font-bold text-primary font-mono">{metric.value}</div>
-                      <div className="text-[9px] text-muted-foreground mt-0.5 leading-tight">{metric.label}</div>
+                      <div className="text-xs font-bold text-primary font-mono truncate">{metric.value}</div>
+                      <div className="text-[9px] text-muted-foreground mt-0.5 leading-tight break-words">{metric.label}</div>
                     </div>
                   ))}
                 </div>
@@ -443,7 +443,7 @@ export function AiEcosystemSection() {
               </div>
 
               {/* Status */}
-              <div className="flex items-center justify-between pt-2 border-t border-border/20">
+              <div className="flex items-center justify-between pt-2 border-t border-border/20 flex-wrap gap-1">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
                   <span className="text-[11px] font-mono text-emerald-400 font-semibold">
