@@ -299,10 +299,14 @@ export function AiEcosystemSection() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="inline-block text-primary font-mono text-sm mb-4"
+            className="inline-block text-primary font-mono text-sm mb-2"
           >
             {tEco.tagline}
           </motion.span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-mono text-primary font-semibold tracking-wider mb-4 ml-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+            LAB // PESQUISA &amp; ENGENHARIA EXPERIMENTAL
+          </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-5 text-balance">
             {tEco.title} <span className="text-gradient">{tEco.titleGradient}</span>
           </h2>

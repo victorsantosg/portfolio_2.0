@@ -163,7 +163,7 @@ export function IdPassCard() {
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-primary animate-pulse" />
                   <span className="text-[11px] font-mono font-bold tracking-wider text-primary">
-                    ENGINEERING CREDENTIAL
+                    DEVELOPER CREDENTIAL
                   </span>
                 </div>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-primary/20 text-primary border border-primary/40 font-semibold">
@@ -200,7 +200,7 @@ export function IdPassCard() {
                   </div>
 
                   <div className="space-y-0.5">
-                    <div className="text-[10px] font-mono text-muted-foreground">ENGINEER ID</div>
+                    <div className="text-[10px] font-mono text-muted-foreground">DEV ID</div>
                     <div className="text-xs font-mono font-bold text-foreground">VS-2026-X09</div>
                   </div>
 

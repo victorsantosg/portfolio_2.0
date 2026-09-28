@@ -18,7 +18,7 @@ export const TOUR_STEPS: TourStep[] = [
     subtitle: "Arquitetura Full Stack & Sistemas de IA",
     targetSection: "#inicio",
     narration:
-      "Iniciando telemetria e navegação guiada. Bem-vindo ao portfólio de Victor Santos, Software Engineer focado em Full Stack e Sistemas de IA. Ele projeta aplicações modernas de ponta a ponta: interfaces em Next.js, microsserviços em Fastify operando a 28 milissegundos, clusters PostgreSQL e gateways agnósticos de IA.",
+      "Iniciando telemetria e navegação guiada. Bem-vindo ao portfólio de Victor Santos, Full Stack Developer especializado em Dados, Automação e IA. Ele projeta aplicações web, APIs e automações para transformar processos corporativos em sistemas mais eficientes.",
     duration: 10500,
     threePreset: "geral",
   },

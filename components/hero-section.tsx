@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
-import { ArrowRight, ExternalLink, Cpu } from "lucide-react"
+import { ArrowRight, ExternalLink, Cpu, Github, Download, Linkedin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { useLanguage } from "@/hooks/use-language"
@@ -436,7 +436,43 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
               </motion.div>
             </div>
 
-            {/* Stats Bar */}
+            {/* Recruiter Quick-Access Strip */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={assemblyState === "disassembled" ? { opacity: 0 } : { opacity: 1, y: 0 }}
+              transition={getTransition(1.05)}
+              className="flex items-center justify-center lg:justify-start gap-4 mt-4"
+            >
+              <a
+                href="https://github.com/victorsantosg"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors group"
+              >
+                <Github className="h-3.5 w-3.5 group-hover:scale-110 transition-transform" />
+                <span className="font-mono">{(t.hero as any).ctaGithub ?? "GitHub"}</span>
+              </a>
+              <span className="text-border">·</span>
+              <a
+                href="https://www.linkedin.com/in/victorpeixotog/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors group"
+              >
+                <Linkedin className="h-3.5 w-3.5 group-hover:scale-110 transition-transform" />
+                <span className="font-mono">{(t.hero as any).ctaLinkedin ?? "LinkedIn"}</span>
+              </a>
+              <span className="text-border">·</span>
+              <a
+                href="/Victor_Santos_CV.pdf"
+                download
+                className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors group"
+              >
+                <Download className="h-3.5 w-3.5 group-hover:scale-110 transition-transform" />
+                <span className="font-mono">{(t.hero as any).ctaCv ?? "Baixar CV"}</span>
+              </a>
+            </motion.div>
+
             <motion.div
               initial={{ y: 120, opacity: 0 }}
               animate={assemblyState === "disassembled" ? { y: 120, opacity: 0 } : { y: 0, opacity: 1 }}
