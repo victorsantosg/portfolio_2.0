@@ -447,7 +447,7 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
                 {[
                   { value: "60+", label: t.hero.stats.repos },
                   { value: "2+", label: t.hero.stats.exp },
-                  { value: "100%", label: t.hero.stats.automation },
+                  { value: "20+", label: t.hero.stats.automation },
                 ].map((stat, i) => (
                   <div
                     key={stat.label}

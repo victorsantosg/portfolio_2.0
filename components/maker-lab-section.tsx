@@ -312,8 +312,8 @@ export function MakerLabSection() {
                   <span className="text-lg sm:text-xl font-extrabold text-emerald-400 block font-mono">
                     60 FPS
                   </span>
-                  <span className="text-[10px] text-muted-foreground uppercase font-mono block mt-0.5">
-                    Three.js WebGL
+                  <span className="text-[10px] text-muted-foreground uppercase font-mono block mt-0.5 leading-tight">
+                    WebGL · 11.2k posições
                   </span>
                 </div>
               </div>

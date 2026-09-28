@@ -17,6 +17,8 @@ import {
   Building2,
   Phone,
   Download,
+  Cpu,
+  Database,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -720,12 +722,19 @@ ${
               viewport={{ once: true }}
             >
               <div className="rounded-2xl bg-gradient-to-br from-primary/15 via-primary/5 to-transparent border border-primary/25 p-5 sm:p-8 flex flex-col">
-                <h3 className="text-xl font-semibold mb-6">{t.quote.whyChooseMe}</h3>
-                <ul className="space-y-4">
-                  {t.quote.reasons.map((item) => (
-                    <li key={item} className="flex items-center gap-3">
-                      <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
-                      <span className="text-muted-foreground">{item}</span>
+                <h3 className="text-xl font-semibold mb-5">{t.quote.whyChooseMe}</h3>
+                <ul className="space-y-3">
+                  {[
+                    { icon: Globe, text: t.quote.reasons[0] },
+                    { icon: Database, text: t.quote.reasons[1] },
+                    { icon: Cog, text: t.quote.reasons[2] },
+                    { icon: Cpu, text: t.quote.reasons[3] },
+                  ].map(({ icon: Icon, text }) => (
+                    <li key={text} className="flex items-start gap-3 p-3 rounded-xl bg-black/20 border border-border/30 hover:border-primary/30 transition-colors">
+                      <div className="p-1.5 rounded-lg bg-primary/10 text-primary shrink-0 mt-0.5">
+                        <Icon className="h-4 w-4" />
+                      </div>
+                      <span className="text-sm text-muted-foreground leading-snug">{text}</span>
                     </li>
                   ))}
                 </ul>
