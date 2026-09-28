@@ -233,3 +233,41 @@ picture img {
   backface-visibility: hidden;
   transform: translateZ(0);
 }
+
+/* ─── Mobile Performance Globals ──────────────────────────────────── */
+
+/* Prevent horizontal overflow globally */
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+@media (max-width: 767px) {
+  /* Reduce glass blur on mobile to save GPU */
+  .glass {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  /* Disable heavy looping animations on mobile (saves battery & improves scroll FPS) */
+  .animate-gradient {
+    animation: none;
+    background-position: 0% 50%;
+  }
+
+  .animate-float {
+    animation: none;
+    transform: none;
+  }
+
+  /* Reduce glow pulse frequency on mobile */
+  .animate-pulse-glow {
+    animation: pulse-glow 4s ease-in-out infinite;
+  }
+
+  /* Reduce box-shadow blur radius globally */
+  * {
+    --tw-shadow: none;
+  }
+}

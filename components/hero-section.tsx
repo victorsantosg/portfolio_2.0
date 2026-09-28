@@ -281,7 +281,7 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
   return (
     <section
       id="inicio"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden py-24"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-12 sm:py-24"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background z-0" />
 
@@ -295,7 +295,7 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
             className="lg:col-span-7 text-center lg:text-left flex flex-col items-center lg:items-start"
           >
             {/* Avatar - Mobile Only */}
-            <div className="relative group mb-8 lg:hidden">
+            <div className="relative group mb-5 lg:hidden">
               <InteractiveHeroAvatar
                 assemblyState={assemblyState}
                 getTransition={getTransition}
@@ -354,11 +354,11 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
                 initial={{ opacity: 0, y: 40 }}
                 animate={assemblyState === "disassembled" ? { opacity: 0, y: 40 } : { opacity: 1, y: 0 }}
                 transition={getTransition(0.75)}
-                className="inline-flex flex-wrap items-center justify-center lg:justify-start gap-1.5 sm:gap-2 px-3.5 py-2 rounded-xl border border-primary/30 bg-secondary/25 backdrop-blur-md text-xs sm:text-sm font-mono mb-5 shadow-[0_0_15px_rgba(238,113,18,0.12)] text-center lg:text-left"
+                className="flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-1 sm:gap-2 px-3 py-2 rounded-xl border border-primary/30 bg-secondary/25 backdrop-blur-md text-xs font-mono mb-5 shadow-[0_0_15px_rgba(238,113,18,0.12)] text-center lg:text-left w-full sm:w-auto"
               >
                 <span className="text-primary font-bold">{(t.hero as any).headline.role}</span>
                 <span className="text-border/80 hidden sm:inline">|</span>
-                <span className="text-foreground/90 font-medium">{(t.hero as any).headline.stack}</span>
+                <span className="text-foreground/90 font-medium hidden sm:inline">{(t.hero as any).headline.stack}</span>
                 <span className="text-border/80 hidden sm:inline">|</span>
                 <span className="text-amber-400 font-semibold">{(t.hero as any).headline.focus}</span>
               </motion.div>
@@ -375,7 +375,7 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
             </motion.p>
 
             {/* CTA Buttons with Armor Assembly Flight - Empilhados um embaixo do outro no mobile */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-2.5 sm:gap-3 w-full sm:w-auto">
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-2 sm:gap-3 w-full sm:w-auto">
               <motion.div
                 initial={{ x: -200, opacity: 0 }}
                 animate={assemblyState === "disassembled" ? { x: -200, opacity: 0 } : { x: 0, opacity: 1 }}
@@ -400,7 +400,7 @@ export function HeroSection({ isLoaded = true }: HeroSectionProps) {
                 transition={getTransition(0.95)}
                 whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.97 }}
-                className="w-full sm:w-auto flex justify-center"
+                className="hidden sm:flex w-full sm:w-auto justify-center"
               >
                 <Button
                   size="default"

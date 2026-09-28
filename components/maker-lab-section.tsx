@@ -26,9 +26,16 @@ import { Button } from "@/components/ui/button"
 import Image from "next/image"
 
 export function MakerLabSection() {
-  const [activeTab, setActiveTab] = useState<"3d_demo" | "real_app">("3d_demo")
+  const [activeTab, setActiveTab] = useState<"3d_demo" | "real_app">("real_app")
   const [selectedRealImage, setSelectedRealImage] = useState<string>("/wms-estoque-real-1.png")
   const [isRealFullscreenOpen, setIsRealFullscreenOpen] = useState(false)
+
+  // On desktop, default to the 3D interactive view; on mobile, keep the lighter real_app
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth >= 768) {
+      setActiveTab("3d_demo")
+    }
+  }, [])
 
   // ESC key listener for real app fullscreen
   useEffect(() => {
