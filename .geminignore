@@ -1,60 +1,23 @@
-# Dependências e logs do Node
+# Dependências e Builds
 node_modules/
-npm-debug.log
-yarn-error.log
-
-# Next.js e Builds de JS
-.next/
-out/
 dist/
 build/
-coverage/
+.next/
+.nuxt/
+out/
 
-# Arquivos de mídia pesados (binários não processáveis pelo agente)
-*.mp4
-*.webm
-*.mov
-*.avi
-*.png
-*.jpg
-*.jpeg
-*.webp
-*.gif
-*.svg
-*.ico
-*.woff
-*.woff2
-*.ttf
-*.eot
-
-# Lock files (ruído sem valor de contexto para o agente)
-package-lock.json
-pnpm-lock.yaml
-yarn.lock
-
-# Build artifacts TypeScript
-*.tsbuildinfo
-tsconfig.tsbuildinfo
-
-# Ambientes virtuais e cache do Python
+# Python
 __pycache__/
 *.pyc
-*.pyo
 .venv/
 venv/
-env/
+.env
+.env.*
 
-# Sistema Operacional
+# Logs e Arquivos Temporários
+*.log
 .DS_Store
 Thumbs.db
-
-# IDEs e Editores (mantém .vscode/ acessível para o agente!)
-.idea/
-
-# Outros
-*.log
-*.sqlite
-*.sqlite3
 
 # Graphify
 graphify-out/
