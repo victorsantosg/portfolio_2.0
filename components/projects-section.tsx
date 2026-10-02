@@ -68,8 +68,6 @@ export function ProjectsSection() {
       category: "corporate",
       image: "/inventario_img_enhanced.png",
       tags: ["Next.js", "Fastify", "Prisma ORM", "PostgreSQL", "Tailwind CSS v4"],
-      github: "https://github.com/victorsantosg/erp-ui",
-      demo: "https://github.com/victorsantosg/erp-ui",
       details: {
         challenge: t.projects.list.erp.challenge,
         solution: t.projects.list.erp.solution,
@@ -84,8 +82,6 @@ export function ProjectsSection() {
       category: "corporate",
       image: "/portal-lojista.png",
       tags: ["Next.js 16", "Prisma ORM", "PostgreSQL", "Tailwind CSS v4", "Docker"],
-      github: "https://github.com/victorsantosg/portal_Logista",
-      demo: "https://github.com/victorsantosg/portal_Logista",
       details: {
         challenge: t.projects.list.bi.challenge,
         solution: t.projects.list.bi.solution,
@@ -100,8 +96,6 @@ export function ProjectsSection() {
       category: "corporate",
       image: "/mapa_calor_img_enhanced.png",
       tags: ["Next.js 16", "Supabase", "Prisma", "Recharts", "Maps"],
-      github: "https://github.com/victorsantosg/projectGestao",
-      demo: "https://github.com/victorsantosg/projectGestao",
       details: {
         challenge: t.projects.list.projects.challenge,
         solution: t.projects.list.projects.solution,
@@ -116,8 +110,6 @@ export function ProjectsSection() {
       category: "corporate",
       image: "/ouvidoria.png",
       tags: ["Next.js 16", "React 19", "Prisma ORM", "PostgreSQL"],
-      github: "https://github.com/victorsantosg/nps_solares",
-      demo: "https://github.com/victorsantosg/nps_solares",
       details: {
         challenge: t.projects.list.laudo.challenge,
         solution: t.projects.list.laudo.solution,
@@ -132,8 +124,6 @@ export function ProjectsSection() {
       category: "corporate",
       image: "/monitoramento_img_enhanced.png",
       tags: ["Next.js 16", "PostgreSQL", "Tailwind CSS v4", "SWR"],
-      github: "https://github.com/victorsantosg/Monitoramento",
-      demo: "https://github.com/victorsantosg/Monitoramento",
       details: {
         challenge: t.projects.list.rpa.challenge,
         solution: t.projects.list.rpa.solution,

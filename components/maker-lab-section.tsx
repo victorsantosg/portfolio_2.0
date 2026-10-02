@@ -57,7 +57,7 @@ export function MakerLabSection() {
     {
       icon: <TrendingUp className="w-5 h-5 text-orange-400" />,
       title: "Impacto Operacional & Otimização de Picking",
-      description: "Até 42% de redução no tempo médio de deslocamento dos operadores no CD Cometa, com reorganização da curva ABC e eliminação de pontos cegos no fluxo de expedição.",
+      description: "Até 42% de redução no tempo médio de deslocamento dos operadores no Centro de Distribuição em Empresas que eu já trabalhei, com reorganização da curva ABC e eliminação de pontos cegos no fluxo de expedição.",
     },
     {
       icon: <Printer className="w-5 h-5 text-amber-400" />,
@@ -146,7 +146,7 @@ export function MakerLabSection() {
                     <div className="flex items-center gap-2.5">
                       <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
                       <span className="text-xs font-mono font-bold text-emerald-400 uppercase">
-                        SISTEMA WMS EM PRODUÇÃO • CD COMETA
+                        SISTEMA WMS EM PRODUÇÃO • CENTRO DE DISTRIBUIÇÃO
                       </span>
                     </div>
 
@@ -232,7 +232,7 @@ export function MakerLabSection() {
                       </div>
 
                       <span className="text-[11px] font-mono text-amber-300 bg-black/85 px-2.5 py-1 rounded-lg border border-amber-500/30 backdrop-blur-md hidden sm:inline">
-                        100% Integrado ao ERP Cometa
+                        100% Integrado ao ERP Corporativo
                       </span>
                     </div>
                   </div>
@@ -327,7 +327,7 @@ export function MakerLabSection() {
 
               {/* Proven Operational Transparency Note */}
               <div className="mb-5 px-3 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[10px] font-mono text-amber-300/90 leading-relaxed">
-                <span className="font-bold text-amber-400">✓ Dados Operacionais Reais:</span> Medição realizada no Centro de Distribuição do Cometa Supermercados sobre 11.270 posições mapeadas no ERP RPINFO. A redução de 42% no tempo de picking reflete a otimização de rotas e separação por calor de giro (Curva ABC).
+                <span className="font-bold text-amber-400">✓ Dados Operacionais Reais:</span> Medição realizada no Centro de Distribuição em Empresas que eu já trabalhei sobre 11.270 posições mapeadas no ERP Corporativo. A redução de 42% no tempo de picking reflete a otimização de rotas e separação por calor de giro (Curva ABC).
               </div>
 
               {/* Concise Highlights */}
@@ -363,7 +363,7 @@ export function MakerLabSection() {
                   <ShieldCheck className="w-4 h-4 text-primary shrink-0" />
                   <span className="font-semibold text-foreground">Padrão Industrial Estanque</span>
                 </div>
-                <span className="text-[10px] font-bold uppercase tracking-wider">RPINFO &bull; POSTGRES</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider">ERP &bull; POSTGRES</span>
               </div>
 
               {/* Launch in Holodeck 3D Button */}
@@ -387,7 +387,7 @@ export function MakerLabSection() {
         </div>
       </div>
 
-      {/* FULLSCREEN LIGHTBOX MODAL: Aplicação Real em Produção (WMS Cometa) */}
+      {/* FULLSCREEN LIGHTBOX MODAL: Aplicação Real em Produção (WMS) */}
       {typeof document !== "undefined" &&
         createPortal(
           <AnimatePresence>
@@ -405,7 +405,7 @@ export function MakerLabSection() {
                     <span className="w-3 h-3 rounded-full bg-emerald-400 animate-ping" />
                     <div>
                       <div className="text-xs sm:text-sm font-mono font-bold text-emerald-400 uppercase">
-                        SISTEMA WMS EM PRODUÇÃO • CD COMETA (TELA CHEIA FULL HD)
+                        SISTEMA WMS EM PRODUÇÃO • CENTRO DE DISTRIBUIÇÃO (TELA CHEIA FULL HD)
                       </div>
                       <div className="text-[11px] text-muted-foreground font-mono">
                         Renderização WebGL 3D • Auditoria de Estoque em Tempo Real
@@ -463,7 +463,7 @@ export function MakerLabSection() {
                 <div className="flex-1 relative rounded-2xl overflow-hidden bg-black border border-amber-500/20 shadow-2xl flex items-center justify-center">
                   <img
                     src={selectedRealImage}
-                    alt="WMS Cometa Produção Fullscreen"
+                    alt="WMS Produção Fullscreen"
                     className="w-full h-full object-contain"
                   />
                 </div>
@@ -475,7 +475,7 @@ export function MakerLabSection() {
                       +11.270 POSIÇÕES ATIVAS
                     </span>
                     <span className="text-muted-foreground hidden sm:inline">
-                      Integração Direta: ERP RPINFO • PostgreSQL • Three.js WebGL 60 FPS
+                      Integração Direta: ERP Corporativo • PostgreSQL • Three.js WebGL 60 FPS
                     </span>
                   </div>
 

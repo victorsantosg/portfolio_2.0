@@ -77,7 +77,7 @@ export const HOLODECK_REGISTRY: Record<string, HoloProjectData> = {
   // 1. Digital Twin WMS
   wms_3d: {
     id: "wms_3d",
-    title: "DIGITAL TWIN WMS // 3D COMETA",
+    title: "DIGITAL TWIN WMS // 3D ENTERPRISE",
     subtitle: "Gêmeo Digital de Armazém Logístico com 11.200 Posições Reais",
     image: "/wms-estoque-real-1.png",
     archetype: "wms_logistics",
@@ -90,7 +90,7 @@ export const HOLODECK_REGISTRY: Record<string, HoloProjectData> = {
     architecture:
       "Three.js WebGL + Shaders customizados para renderização de estantes porta-paletes, câmaras de frios e docas com mapa de calor térmico e telemetria tridimensional.",
     solution:
-      "Eliminou perdas por vencimento e otimizou rotas de empilhadeiras em armazéns de alta rotação no Cometa Supermercados.",
+      "Eliminou perdas por vencimento e otimizou rotas de empilhadeiras em armazéns de alta rotação em Empresas que eu já trabalhei.",
     ttsBriefing:
       "Iniciando Holodeck 3D: Gêmeo Digital WMS. Renderizando mais de 11 mil posições de estoque em tempo real. Observe as estantes porta-paletes multicamadas, o gradiente térmico de demanda da Curva ABC e a câmara fria automatizada.",
     layers: [
@@ -139,8 +139,6 @@ export const HOLODECK_REGISTRY: Record<string, HoloProjectData> = {
       layerHeight: "0.16mm Fine",
       infill: "20% Grid",
     },
-    liveDemoHref: "https://github.com/victorsantosg/erp-ui",
-    githubHref: "https://github.com/victorsantosg/erp-ui",
   },
 
   // 3. Portal do Lojista
@@ -174,8 +172,6 @@ export const HOLODECK_REGISTRY: Record<string, HoloProjectData> = {
       layerHeight: "0.20mm Standard",
       infill: "15% Gyroid",
     },
-    liveDemoHref: "https://github.com/victorsantosg/portal_Logista",
-    githubHref: "https://github.com/victorsantosg/portal_Logista",
   },
 
   // 4. Gestão de Projetos & Mapa de Calor
@@ -209,8 +205,6 @@ export const HOLODECK_REGISTRY: Record<string, HoloProjectData> = {
       layerHeight: "0.20mm Standard",
       infill: "15% Honeycomb",
     },
-    liveDemoHref: "https://github.com/victorsantosg/projectGestao",
-    githubHref: "https://github.com/victorsantosg/projectGestao",
   },
 
   // 5. Laudo Técnico / Ouvidoria
@@ -244,8 +238,6 @@ export const HOLODECK_REGISTRY: Record<string, HoloProjectData> = {
       layerHeight: "0.20mm Standard",
       infill: "15% Grid",
     },
-    liveDemoHref: "https://github.com/victorsantosg/nps_solares",
-    githubHref: "https://github.com/victorsantosg/nps_solares",
   },
 
   // 6. RPA Monitoramento & Telemetria
@@ -279,8 +271,6 @@ export const HOLODECK_REGISTRY: Record<string, HoloProjectData> = {
       layerHeight: "0.16mm Fine",
       infill: "20% Gyroid",
     },
-    liveDemoHref: "https://github.com/victorsantosg/Monitoramento",
-    githubHref: "https://github.com/victorsantosg/Monitoramento",
   },
 
   // 7. Barbearia Dom Barbeiro
@@ -508,7 +498,7 @@ export const HOLODECK_REGISTRY: Record<string, HoloProjectData> = {
     architecture:
       "Processamento de cupons fiscais cancelados no ERP com geração dinâmica de relatórios em PDF com tabelas analíticas e assinaturas.",
     solution:
-      "Permite identificar padrões suspeitos de cancelamento nos caixas de supermercado, garantindo compliance fiscal.",
+      "Permite identificar padrões suspeitos de cancelamento nos caixas de Empresas que eu já trabalhei, garantindo compliance fiscal.",
     ttsBriefing:
       "Holodeck: Auditoria de Cupons Cancelados. Sistema de segurança contra perdas no ponto de venda. Camadas de análise de logs de cancelamento e geração instantânea de relatórios fiscais.",
     layers: [
@@ -523,8 +513,6 @@ export const HOLODECK_REGISTRY: Record<string, HoloProjectData> = {
       layerHeight: "0.20mm Standard",
       infill: "15% Grid",
     },
-    liveDemoHref: "https://github.com/victorsantosg/cuponsCancelados",
-    githubHref: "https://github.com/victorsantosg/cuponsCancelados",
   },
 }
 

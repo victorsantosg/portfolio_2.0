@@ -52,38 +52,38 @@ export const translations = {
       titleGradient: "Trajetória",
       paragraph1: "Olá, eu sou o Victor! Sou formado em Análise e Desenvolvimento de Sistemas pela UNIFOR e tenho uma Pós-Graduação em Desenvolvimento Web Full Stack pela Faculdade INFNET, referência em tecnologia.",
       paragraph2: "Minha paixão por tecnologia começou cedo, aos 10 anos, quando comecei a desmontar um computador que eu tinha em casa para ver como funcionava. Hoje, atuo no desenvolvimento de soluções robustas utilizando Next.js, Flutter, Fastify, Prisma, PostgreSQL, Docker e Coolify, além de automação de processos e análise de dados com Python. Meu foco atual é buscar novos parceiros e clientes dispostos a avançar tecnologicamente, escalando e melhorando a eficiência de suas empresas.",
-      paragraph3: "Durante minha atuação como Desenvolvedor Web e Mobile Full Stack no Cometa Supermercados, desenvolvi do zero sistemas corporativos em produção para a rede:",
-      cometaProjects: [
+      paragraph3: "Durante minha atuação como Desenvolvedor Web e Mobile Full Stack em Empresas que eu já trabalhei, desenvolvi do zero sistemas corporativos em produção para a rede:",
+      workProjects: [
         {
-          title: "Inventário Corporativo (Cometa) 📦",
-          desc: "Painel gerencial integrado ao banco de dados ERP (RPINFO) para auditoria rigorosa de perdas, confrontando estoque físico com o sistêmico.",
+          title: "Inventário Corporativo 📦",
+          desc: "Painel gerencial integrado ao banco de dados ERP para auditoria rigorosa de perdas, confrontando estoque físico com o sistêmico.",
           techs: "Next.js, Fastify, Prisma ORM, PostgreSQL"
         },
         {
-          title: "Portal do Lojista (Solares) 🏪",
-          desc: "Plataforma centralizada de acesso operacional e administrativo para lojistas da rede Solares.",
+          title: "Portal do Lojista 🏪",
+          desc: "Plataforma centralizada de acesso operacional e administrativo para lojistas e parceiros da rede.",
           techs: "Next.js, React, Tailwind CSS"
         },
         {
-          title: "NPS Solares (Solares) 💬",
+          title: "Ouvidoria & Feedback NPS 💬",
           desc: "Aplicação voltada para experiência e satisfação do cliente, integrada à ouvidoria administrativa com envio de fotos.",
           techs: "React, Firebase Firestore"
         },
         {
-          title: "Analytics API & Banco de Dados (Cometa) 📊",
+          title: "Analytics API & Banco de Dados 📊",
           desc: "Migração completa de banco analítico legado (Firestore/BigQuery) para PostgreSQL no Coolify, estruturando dados de mais de 144 mil produtos.",
           techs: "Fastify, TypeScript, PostgreSQL, Coolify"
         },
         {
-          title: "Transmissão para TVs (Cometa) 📺",
+          title: "Transmissão para TVs 📺",
           desc: "App nativo multiplataforma com atualização remota de SDK para gerenciamento e exibição de mídia e anúncios nas filiais.",
           techs: "Tauri, Rust, TypeScript, SDK Updates"
         }
       ],
-      paragraph4: "Além disso, atuei estruturando rotinas de ETL diárias em Python com alertas no Telegram, e trabalhei em evolutivos de refatoração de alguns sistemas: App Cometa Checks (Flutter) para otimização de memória, integração do Laudo Técnico com a API do GLPI e assinatura digital, criação de Dashboards de Monitoramento do ERP em tempo real e um quadro Kanban integrado para a equipe de TI.",
+      paragraph4: "Além disso, atuei estruturando rotinas de ETL diárias em Python com alertas no Telegram, e trabalhei em evolutivos de refatoração de alguns sistemas: App de Inspeção e Auditoria (Flutter) para otimização de memória, integração do Laudo Técnico com a API do GLPI e assinatura digital, criação de Dashboards de Monitoramento do ERP em tempo real e um quadro Kanban integrado para a equipe de TI.",
       skillsTitle: "Principais Entregas & Soluções",
       skillsList: [
-        "Painel de Inventário: Auditoria de acuracidade de estoque físico versus sistêmico (ERP RPINFO) com cálculo de perdas sob custo de compra e filtros multidimensionais.",
+        "Painel de Inventário: Auditoria de acuracidade de estoque físico versus sistêmico (ERP Corporativo) com cálculo de perdas sob custo de compra e filtros multidimensionais.",
         "Portal do Lojista & NPS: Plataforma unificada de acesso operacional e sistema de pesquisa de satisfação integrado com suporte a fotos e ouvidoria centralizada.",
         "Infraestrutura & APIs: Migração de banco legado (Firestore/BigQuery) para PostgreSQL no Coolify e desenvolvimento da Analytics API para consumo otimizado de dados transacionais.",
         "Desktop TVs (Tauri): App nativo desenvolvido em Tauri (Rust/TypeScript) com pipeline de atualização remota de SDK para gerenciamento centralizado de telas nas filiais.",
@@ -115,37 +115,37 @@ export const translations = {
           solution: "Configurei o motor de Combos do OmniRoute com estratégia Fusion (execução paralela de 2+ modelos com síntese por modelo coordenador), pipelines encadeados de 3 etapas, Circuit Breakers com mitigação automática de erros 429 e o estúdio de compressão com algoritmos RTK e padrão Caveman (redução de até 75% dos tokens em fluxos avaliados internamente, com preservação de coerência semântica).",
         },
         erp: {
-          title: "Inventário Corporativo & Auditoria (Cometa)",
+          title: "Inventário Corporativo & Auditoria",
           description: "Painel gerencial e de auditoria para monitoramento da acuracidade do estoque físico em comparação com o estoque sistêmico do ERP.",
-          challenge: "Centralizar e cruzar grandes volumes de dados de contagens físicas com os registros sistêmicos do ERP (banco de dados RPINFO) em tempo real, fornecendo relatórios de divergências operacionais e financeiras de alta complexidade.",
+          challenge: "Centralizar e cruzar grandes volumes de dados de contagens físicas com os registros sistêmicos do ERP em tempo real, fornecendo relatórios de divergências operacionais e financeiras de alta complexidade.",
           solution: "Desenvolvi uma plataforma analítica utilizando Next.js 15, React 19 e Fastify. O sistema calcula o 'Resultado Líquido' de perdas (confrontando sobras e faltas em R$ com base no custo de compra - audi_ctcompra) e fornece filtros multidimensionais por Loja/Unidade, Data, classificação de Curva ABC, Categorias, Departamentos e Compradores responsáveis para identificar o maior valor financeiro em perdas.",
         },
         bi: {
-          title: "Portal do Lojista (Solares)",
-          description: "Plataforma centralizada de acesso operacional e administrativo para lojistas e gestores da rede Solares.",
+          title: "Portal do Lojista",
+          description: "Plataforma centralizada de acesso operacional e administrativo para lojistas e gestores parceiros.",
           challenge: "Criar uma interface unificada, responsiva e segura que otimize a comunicação, o envio de solicitações e a rotina administrativa operacional dos lojistas.",
           solution: "Desenvolvi do zero uma plataforma web robusta utilizando Next.js 16, React 19 e Tailwind CSS v4 no front-end, integrada ao Prisma ORM e PostgreSQL no back-end. A arquitetura foi totalmente conteinerizada com Docker, contando com controle de acessos protegidos via Bcrypt.",
         },
         projects: {
-          title: "Performance Dashboard & Mapa de Calor de Vendas (Solares/Cometa)",
+          title: "Performance Dashboard & Mapa de Calor de Vendas",
           description: "Plataforma analítica e painel de monitoramento de performance de faturamento de toda a rede de lojas.",
           challenge: "Visualizar tendências de vendas, picos de faturamento por hora/dia/mês, ticket médio e comportamento do cliente de forma intuitiva, permitindo comparação rápida entre períodos históricos e diferentes lojas.",
           solution: "Desenvolvi um dashboard analítico completo em Next.js 16 integrado a banco PostgreSQL e Recharts. A aplicação conta com análise de picos de desempenho por fuso horário (UTC), ticket médio por hora, ranking de unidades de faturamento e mapeamento de calor de performance comercial.",
         },
         laudo: {
-          title: "Ouvidoria NPS Solares",
+          title: "Ouvidoria & Feedback NPS",
           description: "Canal integrado de feedback (NPS) e satisfação para clientes relatarem sugestões, reclamações e elogios.",
           challenge: "Criar uma plataforma anônima ou identificada de envio de críticas e sugestões com suporte a anexo de fotos, e integrar este canal em tempo real com o Portal do Lojista para auditoria centralizada.",
           solution: "Desenvolvi a ouvidoria em Next.js 16, React 19 e Prisma ORM com PostgreSQL. Implementei o sistema de avaliação NPS integrado ao painel administrativo do Portal do Lojista, permitindo que gestores analisem a satisfação do cliente e tratem ocorrências de forma direta.",
         },
         rpa: {
-          title: "Dashboard de Monitoramento ERP & Integrações (Cometa)",
+          title: "Dashboard de Monitoramento ERP & Integrações",
           description: "Painel gerencial de tempo real para acompanhar integrações, cargas de dados diárias e integridade de conexões das filiais.",
           challenge: "Centralizar o monitoramento de processamentos diários de 43 lojas, mitigando alarmes falsos causados por filiais temporariamente inoperantes e lidando com divergências de fuso horário entre banco e interface.",
           solution: "Refatorei o dashboard de monitoramento utilizando Next.js 16, Postgres e SWR para atualização em tempo real. Implementei rotinas de tratamento de datas usando UTC puro no front e back, criei alertas de estados críticos visuais quando o processamento cai a zero e flexibilizei conexões via SSL no endpoint de rotas.",
         },
         cupons: {
-          title: "Painel de Cupons Cancelados & Prevenção de Perdas (Cometa)",
+          title: "Painel de Cupons Cancelados & Prevenção de Perdas",
           description: "Plataforma de auditoria para prevenção de perdas que monitora e classifica cancelamentos de cupons e itens no PDV em tempo real.",
           challenge: "Identificar desvios operacionais ou padrões suspeitos de operadoras e fiscais no ponto de venda, permitindo a análise de cupons estornados e geração de relatórios de auditoria.",
           solution: "Desenvolvi um painel analítico usando Next.js 16, React 19 e PostgreSQL para monitoramento em tempo real de logs dos caixas. O painel inclui filtros avançados para avaliar o ticket médio cancelado e a frequência de estornos por PDV e loja, contando com a geração automatizada de relatórios em PDF via jsPDF e jsPDF-AutoTable.",
@@ -324,20 +324,20 @@ export const translations = {
       titleGradient: "Trajectory",
       paragraph1: "Hello, I'm Victor! I graduated in Analysis and Systems Development from UNIFOR and I'm currently pursuing a Post-Graduate degree in Full Stack Web Development at Faculdade INFNET, a reference in technology.",
       paragraph2: "My passion for technology started early, at age 10, when I began studying programming. Today, I build robust solutions using Next.js, Flutter, Fastify, Prisma, PostgreSQL, Docker, and Coolify, along with process automation and data analysis with Python. My current focus is on seeking new partners and clients who want to take their technology to the next level, scaling and improving their companies' efficiency.",
-      paragraph3: "During my time as a Web and Mobile Full Stack Developer at Cometa Supermercados, I developed from scratch critical systems and solutions for the network:",
-      cometaProjects: [
+      paragraph3: "During my time as a Web and Mobile Full Stack Developer at Companies I have worked for, I developed from scratch critical systems and solutions for the network:",
+      workProjects: [
         {
           title: "Corporate Inventory 📦",
-          desc: "Management dashboard integrated with ERP (RPINFO) database for strict loss auditing, comparing physical and system stock.",
+          desc: "Management dashboard integrated with ERP database for strict loss auditing, comparing physical and system stock.",
           techs: "Next.js, Fastify, Prisma ORM, PostgreSQL"
         },
         {
           title: "Shopkeeper Portal 🏪",
-          desc: "Centralized operational and administrative portal for Cometa network shopkeepers.",
+          desc: "Centralized operational and administrative portal for partner network shopkeepers.",
           techs: "Next.js, React, Tailwind CSS"
         },
         {
-          title: "NPS Solares 💬",
+          title: "NPS & Ombudsman 💬",
           desc: "Customer satisfaction and experience application integrated with photo uploads and centralized ombudsman desk.",
           techs: "React, Firebase Firestore"
         },
@@ -352,10 +352,10 @@ export const translations = {
           techs: "Tauri, Rust, TypeScript, SDK Updates"
         }
       ],
-      paragraph4: "Additionally, I worked on data engineering by structuring daily ETL pipelines in Python with Telegram monitoring, and worked on key product updates such as refactoring the Cometa Checks app (Flutter) for memory management, integrating Technical Reports with the GLPI API and digital signatures, building real-time ERP Health Dashboards, and an interactive Kanban board for the IT team.",
+      paragraph4: "Additionally, I worked on data engineering by structuring daily ETL pipelines in Python with Telegram monitoring, and worked on key product updates such as refactoring the Inspection App (Flutter) for memory management, integrating Technical Reports with the GLPI API and digital signatures, building real-time ERP Health Dashboards, and an interactive Kanban board for the IT team.",
       skillsTitle: "Key Deliverables & Solutions",
       skillsList: [
-        "Inventory Dashboard: Loss auditing panel comparing physical and systemic stock (ERP RPINFO) based on purchase costs and multidimensional filters.",
+        "Inventory Dashboard: Loss auditing panel comparing physical and systemic stock (Corporate ERP) based on purchase costs and multidimensional filters.",
         "Lojista Portal & NPS: Unified operational platform and customer feedback system with photo support integrated into a centralized ombudsman desk.",
         "Infrastructure & APIs: Migration of legacy database (Firestore/BigQuery) to PostgreSQL on Coolify and development of Analytics API for optimized transaction data consumption.",
         "Desktop TVs (Tauri): Native app built with Tauri (Rust/TypeScript) featuring a remote SDK update pipeline for centralized display management across stores.",
@@ -387,37 +387,37 @@ export const translations = {
           solution: "Configured OmniRoute's Combo engine with Fusion strategy (parallel 2+ model inference with synthesis by a coordinator model), sequential 3-stage Pipelines, automated zero-downtime Circuit Breakers against 429 errors, and the Compression Studio (RTK and Caveman standards delivering up to 75% token reduction in internally evaluated flows, with semantic coherence preserved).",
         },
         erp: {
-          title: "Corporate Inventory & Auditing (Cometa)",
+          title: "Corporate Inventory & Auditing",
           description: "Management and auditing dashboard to monitor physical stock accuracy against the ERP's systemic stock.",
-          challenge: "Centralize and cross large volumes of real-time physical stock counts with systemic records from the ERP (RPINFO database), providing complex financial and operational discrepancy analysis.",
+          challenge: "Centralize and cross large volumes of real-time physical stock counts with systemic records from the ERP database, providing complex financial and operational discrepancy analysis.",
           solution: "Developed an analytical platform using Next.js 15, React 19, and Fastify. The system calculates the 'Net Result' of losses (matching surpluses and deficits in USD/BRL based on purchase costs - audi_ctcompra) and offers multidimensional filters by Store, Date, ABC Curve, Categories, Departments, and Buyers to identify critical points and financial loss impact.",
         },
         bi: {
-          title: "Shopkeeper Portal (Solares)",
-          description: "Centralized operational and administrative portal for Solares network shopkeepers and managers.",
+          title: "Shopkeeper Portal",
+          description: "Centralized operational and administrative portal for partner shopkeepers and managers.",
           challenge: "Create a unified, responsive, and secure interface to streamline communication, request submissions, and the daily administrative operational routine for shopkeepers.",
           solution: "Developed a robust web platform from scratch using Next.js 16, React 19, and Tailwind CSS v4 on the frontend, integrated with Prisma ORM and PostgreSQL on the backend. The entire architecture was containerized using Docker, featuring secure access control via Bcrypt.",
         },
         projects: {
-          title: "Performance Dashboard & Sales Heatmap (Solares/Cometa)",
+          title: "Performance Dashboard & Sales Heatmap",
           description: "Analytical platform and performance monitoring dashboard tracking revenue across the entire store network.",
           challenge: "Visualize sales trends, hourly/daily/monthly revenue peaks, average ticket, and customer behavior intuitively, allowing quick comparisons between historical periods and different stores.",
           solution: "Developed a complete analytical dashboard using Next.js 16 integrated with PostgreSQL and Recharts. The application features performance peak analysis by timezone (UTC), hourly average ticket, store revenue ranking, and sales performance heatmaps.",
         },
         laudo: {
-          title: "Solares NPS Ombudsman",
+          title: "Customer Feedback & NPS Ombudsman",
           description: "Integrated feedback (NPS) and satisfaction channel for customers to report suggestions, complaints, and compliments.",
           challenge: "Create an anonymous or identified platform for submitting feedback and suggestions with photo attachment support, and integrate this channel in real time with the Shopkeeper Portal for centralized auditing.",
           solution: "Developed the ombudsman application using Next.js 16, React 19, and Prisma ORM with PostgreSQL. Integrated the NPS rating system directly with the Shopkeeper Portal administration panel, allowing managers to monitor customer satisfaction and handle reports directly.",
         },
         rpa: {
-          title: "ERP Monitoring & Integrations Dashboard (Cometa)",
+          title: "ERP Monitoring & Integrations Dashboard",
           description: "Real-time management dashboard to monitor integrations, daily data syncs, and store connection status across the network.",
           challenge: "Centralize the health monitoring of daily processing for 43 stores, preventing false alarms from temporarily offline branches and handling database-to-UI timezone shifts.",
           solution: "Refactored the monitoring dashboard using Next.js 16, Postgres, and SWR for real-time updates. Implemented timezone treatment routines using pure UTC on frontend and backend, built critical state visual warnings when daily sync counts hit zero, and enabled flexible SSL connections on database endpoints.",
         },
         cupons: {
-          title: "Cancelled Coupons & Loss Prevention Panel (Cometa)",
+          title: "Cancelled Coupons & Loss Prevention Panel",
           description: "Loss prevention auditing platform that monitors and classifies coupon and item cancellations at the POS in real time.",
           challenge: "Identify operational deviations or suspicious patterns of cashiers and supervisors at checkout lanes, enabling the analysis of reversed coupons and audit report generation.",
           solution: "Developed an analytical panel using Next.js 16, React 19, and PostgreSQL for real-time monitoring of register logs. The dashboard includes advanced filters to track average cancelled tickets and cancellation frequency per register and store, featuring automated PDF report generation via jsPDF and jsPDF-AutoTable.",

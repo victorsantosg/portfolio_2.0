@@ -121,7 +121,7 @@ export function AboutSection() {
 
               {/* Cases de Produção Corporativa — 2 colunas */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-5">
-                {t.about.cometaProjects?.map((proj: any, idx: number) => (
+                {t.about.workProjects?.map((proj: any, idx: number) => (
                   <div
                     key={idx}
                     className="p-4 rounded-xl border border-border/40 bg-secondary/15 flex flex-col justify-between gap-2 hover:border-primary/40 hover:bg-secondary/25 transition-all duration-300 group"

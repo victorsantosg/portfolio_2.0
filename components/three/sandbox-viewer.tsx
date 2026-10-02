@@ -916,7 +916,7 @@ export function SandboxViewer({ className = "" }: SandboxViewerProps) {
             size="sm"
             variant="outline"
             className="text-[10px] sm:text-xs h-7 sm:h-7.5 px-2 sm:px-2.5 justify-center gap-1 border-gray-700 hover:border-amber-400 text-foreground flex-1 sm:flex-initial shrink-0 cursor-pointer"
-            onClick={() => alert("Exportação do modelo 3D GLB do Armazém Cometa concluída!")}
+            onClick={() => alert("Exportação do modelo 3D GLB do Armazém concluída!")}
           >
             <Download className="w-3 h-3" />
             <span>.GLB</span>

@@ -28,7 +28,7 @@ export const TOUR_STEPS: TourStep[] = [
     subtitle: "Formação Técnica & Cases de Produção",
     targetSection: "#sobre",
     narration:
-      "Credenciais profissionais de Victor Santos: graduado em Análise e Desenvolvimento de Sistemas pela UNIFOR e pós-graduando em Full Stack Web pela INFNET. Trajetória com cases corporativos de alta relevância no Cometa Supermercados: painéis de inventário, portais B2B e APIs analíticas para bancos de alta concorrência.",
+      "Credenciais profissionais de Victor Santos: graduado em Análise e Desenvolvimento de Sistemas pela UNIFOR e pós-graduando em Full Stack Web pela INFNET. Trajetória com cases corporativos de alta relevância em Empresas que eu já trabalhei: painéis de inventário, portais B2B e APIs analíticas para bancos de alta concorrência.",
     duration: 12500,
   },
   {
@@ -46,7 +46,7 @@ export const TOUR_STEPS: TourStep[] = [
     subtitle: "Materializando Armazém Logístico no Holo-Deck",
     targetSection: "#maker-lab",
     narration:
-      "Materializando o Holo-Deck 3D de projetos. Observe no holograma: este é o Gêmeo Digital do armazém logístico do Cometa Supermercados com mais de 11.200 posições reais de estoque modeladas em Three.js, cálculo automático FEFO e mapa térmico em tempo real.",
+      "Materializando o Holo-Deck 3D de projetos. Observe no holograma: este é o Gêmeo Digital do armazém logístico desenvolvido para Empresas que eu já trabalhei, com mais de 11.200 posições reais de estoque modeladas em Three.js, cálculo automático FEFO e mapa térmico em tempo real.",
     duration: 13500,
     threePreset: "frios",
     threeLevel: "all",
